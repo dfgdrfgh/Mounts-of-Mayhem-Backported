@@ -57,11 +57,6 @@ public class Parched extends AbstractSkeleton implements EntityBridge {
     }
 
     @Override
-    protected boolean shouldDespawnInPeaceful() {
-        return false;
-    }
-
-    @Override
     protected int getHardAttackInterval() {
         return 50;
     }

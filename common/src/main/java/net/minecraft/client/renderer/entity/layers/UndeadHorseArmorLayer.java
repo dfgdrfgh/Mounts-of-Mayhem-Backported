@@ -11,16 +11,24 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.FastColor;
 import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.item.AnimalArmorItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.DyedItemColor;
 
 @Environment(EnvType.CLIENT)
 public class UndeadHorseArmorLayer extends RenderLayer<AbstractHorse, HorseModel<AbstractHorse>> {
+
+   private static final ResourceLocation LEATHER = ResourceLocation.withDefaultNamespace("textures/entity/equipment/horse_body/leather.png");
+   private static final ResourceLocation LEATHER_OVERLAY = ResourceLocation.withDefaultNamespace("textures/entity/equipment/horse_body/leather_overlay.png");
+   private static final ResourceLocation IRON = ResourceLocation.withDefaultNamespace("textures/entity/equipment/horse_body/iron.png");
+   private static final ResourceLocation GOLD = ResourceLocation.withDefaultNamespace("textures/entity/equipment/horse_body/gold.png");
+   private static final ResourceLocation DIAMOND = ResourceLocation.withDefaultNamespace("textures/entity/equipment/horse_body/diamond.png");
 
    private final HorseModel<AbstractHorse> model;
 
@@ -45,8 +53,23 @@ public class UndeadHorseArmorLayer extends RenderLayer<AbstractHorse, HorseModel
                m = -1;
             }
 
-            VertexConsumer vertexConsumer = multiBufferSource.getBuffer(RenderType.entityCutoutNoCull(animalArmorItem.getTexture()));
+            ResourceLocation texture = animalArmorItem.getTexture();
+            if (itemStack.is(Items.LEATHER_HORSE_ARMOR)) {
+               texture = LEATHER;
+            } else if (itemStack.is(Items.IRON_HORSE_ARMOR)) {
+               texture = IRON;
+            } else if (itemStack.is(Items.GOLDEN_HORSE_ARMOR)) {
+               texture = GOLD;
+            } else if (itemStack.is(Items.DIAMOND_HORSE_ARMOR)) {
+               texture = DIAMOND;
+            }
+
+            VertexConsumer vertexConsumer = multiBufferSource.getBuffer(RenderType.entityCutoutNoCull(texture));
             this.model.renderToBuffer(poseStack, vertexConsumer, i, OverlayTexture.NO_OVERLAY, m);
+            if (itemStack.is(Items.LEATHER_HORSE_ARMOR)) {
+               VertexConsumer overlay = multiBufferSource.getBuffer(RenderType.entityCutoutNoCull(LEATHER_OVERLAY));
+               this.model.renderToBuffer(poseStack, overlay, i, OverlayTexture.NO_OVERLAY, -1);
+            }
             return;
          }
       }

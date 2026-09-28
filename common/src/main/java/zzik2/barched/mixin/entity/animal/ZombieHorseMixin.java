@@ -11,6 +11,8 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.TemptGoal;
 import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.entity.animal.horse.ZombieHorse;
 import net.minecraft.world.entity.monster.Zombie;
@@ -42,6 +44,13 @@ public abstract class ZombieHorseMixin extends AbstractHorse implements EntityBr
 
     protected ZombieHorseMixin(EntityType<? extends AbstractHorse> entityType, Level level) {
         super(entityType, level);
+    }
+
+    @Inject(method = "addBehaviourGoals", at = @At("TAIL"))
+    private void barched$addBehaviourGoals(CallbackInfo ci) {
+        this.goalSelector.addGoal(0, new FloatGoal(this));
+        this.goalSelector.addGoal(3, new TemptGoal(this, 1.25D,
+                itemStack -> itemStack.is(Barched.ItemTags.ZOMBIE_HORSE_FOOD), false));
     }
 
     @Inject(method = "<init>", at = @At("TAIL"))
@@ -176,6 +185,11 @@ public abstract class ZombieHorseMixin extends AbstractHorse implements EntityBr
     @Override
     public boolean isFood(ItemStack itemStack) {
         return itemStack.is(Barched.ItemTags.ZOMBIE_HORSE_FOOD);
+    }
+
+    @Override
+    public boolean canFallInLove() {
+        return false;
     }
 
     @Override
