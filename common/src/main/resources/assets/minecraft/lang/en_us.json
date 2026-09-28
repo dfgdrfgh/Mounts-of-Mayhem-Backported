@@ -37,5 +37,6 @@
   "subtitles.item.spear.hit": "Spear hits",
   "subtitles.item.spear.lunge": "Spear lunges",
   "subtitles.item.spear.use": "Charges with Spear",
-  "enchantment.minecraft.lunge": "Lunge"
+  "enchantment.minecraft.lunge": "Lunge",
+  "subtitles.entity.parrot.imitate.zombie_horse": "Parrot imitates Zombie Horse"
 }
