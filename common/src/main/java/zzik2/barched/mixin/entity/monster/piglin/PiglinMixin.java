@@ -6,6 +6,7 @@ import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.monster.piglin.AbstractPiglin;
 import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import org.objectweb.asm.Opcodes;
@@ -37,6 +38,13 @@ public abstract class PiglinMixin extends AbstractPiglin {
 
     public PiglinMixin(EntityType<? extends AbstractPiglin> entityType, Level level) {
         super(entityType, level);
+    }
+
+    @Inject(method = "canReplaceCurrentItem(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemStack;)Z", at = @At("HEAD"), cancellable = true)
+    private void barched$compareGoldenSpearWithCrossbow(ItemStack candidate, ItemStack current, CallbackInfoReturnable<Boolean> cir) {
+        if (candidate.is(Barched.Items.GOLDEN_SPEAR) && current.is(Items.CROSSBOW)) {
+            cir.setReturnValue(super.canReplaceCurrentItem(candidate, current));
+        }
     }
 
     @ModifyArg(method = "createSpawnWeapon", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;<init>(Lnet/minecraft/world/level/ItemLike;)V", ordinal = 1))
