@@ -4,8 +4,12 @@ import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import dev.architectury.platform.Platform;
 import it.unimi.dsi.fastutil.objects.Object2LongMap;
 import it.unimi.dsi.fastutil.objects.Object2LongOpenHashMap;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.FluidTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
@@ -33,6 +37,10 @@ import java.util.function.Predicate;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity implements LivingEntityBridge {
+
+    @Unique
+    private static final TagKey<EntityType<?>> BARCHED_CAN_FLOAT_WHILE_RIDDEN =
+            TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.withDefaultNamespace("can_float_while_ridden"));
 
     @Shadow public abstract boolean isUsingItem();
 
@@ -74,6 +82,15 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityBr
     @Inject(method = "<init>", at = @At("TAIL"))
     private void barched$init(EntityType<?> entityType, Level level, CallbackInfo ci) {
         this.lastKineticHitFeedbackTime = -2147483648L;
+    }
+
+    @Inject(method = "travel", at = @At("TAIL"))
+    private void barched$floatIfRidden(Vec3 travelVector, CallbackInfo ci) {
+        if (this.getType().is(BARCHED_CAN_FLOAT_WHILE_RIDDEN)
+                && this.hasPassengers()
+                && this.getFluidHeight(FluidTags.WATER) > this.getSwimHeight()) {
+            this.setDeltaMovement(this.getDeltaMovement().add(0.0D, 0.04D, 0.0D));
+        }
     }
 
     @Inject(method = "startUsingItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;gameEvent(Lnet/minecraft/core/Holder;)V", shift = At.Shift.AFTER))
