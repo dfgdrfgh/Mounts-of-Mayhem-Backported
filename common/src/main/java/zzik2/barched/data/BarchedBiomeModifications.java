@@ -34,14 +34,49 @@ public final class BarchedBiomeModifications {
                 1,
                 1
         );
-        registerNaturalSpawn(
-                "parched",
-                config.parchedSpawnWeight,
-                config.parchedSpawnBiomes,
-                () -> Barched.EntityType.PARCHED,
-                4,
-                4
+        registerParchedSpawn(config);
+    }
+
+    private static void registerParchedSpawn(BarchedConfig config) {
+        int weight = config.parchedSpawnWeight;
+        if (weight <= 0) {
+            return;
+        }
+
+        BiomeSelection selection = parseBiomeSelection("parched", config.parchedSpawnBiomes);
+        if (selection.isEmpty()) {
+            LOGGER.warn("Natural spawning for parched is disabled because no valid biome selectors are configured");
+            return;
+        }
+
+        BiomeModifications.addProperties(
+                selection::matches,
+                (context, properties) -> properties.getSpawnProperties().addSpawn(
+                        MobCategory.MONSTER,
+                        new MobSpawnSettings.SpawnerData(Barched.EntityType.PARCHED, weight, 4, 4)
+                )
         );
+
+        // In 1.21.11, Parched replace part of the regular Skeleton population in Deserts:
+        // Skeleton weight 100 -> 50, with Parched added at weight 50.
+        ResourceLocation desert = ResourceLocation.withDefaultNamespace("desert");
+        if (selection.biomeIds().contains(desert)) {
+            int skeletonWeight = Math.max(0, 100 - Math.min(weight, 100));
+            BiomeModifications.replaceProperties(
+                    context -> context.getKey().map(desert::equals).orElse(false),
+                    (context, properties) -> {
+                        properties.getSpawnProperties().removeSpawns(
+                                (category, data) -> category == MobCategory.MONSTER && data.type == EntityType.SKELETON
+                        );
+                        if (skeletonWeight > 0) {
+                            properties.getSpawnProperties().addSpawn(
+                                    MobCategory.MONSTER,
+                                    new MobSpawnSettings.SpawnerData(EntityType.SKELETON, skeletonWeight, 4, 4)
+                            );
+                        }
+                    }
+            );
+        }
     }
 
     private static void registerNaturalSpawn(String name, int weight, List<String> configuredBiomes, Supplier<EntityType<?>> entityType, int minGroupSize, int maxGroupSize) {
