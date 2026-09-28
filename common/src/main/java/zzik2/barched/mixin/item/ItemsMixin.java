@@ -54,6 +54,6 @@ public abstract class ItemsMixin {
     private static final Item DIAMOND_SPEAR = registerItem("diamond_spear", new SpearItem(Tiers.DIAMOND, ((Item$PropertiesBridge) new Item.Properties()).spear(Tiers.DIAMOND, 1.05F, 1.075F, 0.5F, 3.0F, 7.5F, 6.5F, 5.1F, 10.0F, 4.6F)));
 
     @ModifyAccess(access = Opcodes.ACC_PUBLIC)
-    private static final Item NETHERITE_SPEAR = registerItem("netherite_spear", new SpearItem(Tiers.NETHERITE, ((Item$PropertiesBridge) new Item.Properties()).spear(Tiers.NETHERITE, 1.15F, 1.2F, 0.4F, 2.5F, 7.0F, 5.5F, 5.1F, 8.75F, 4.6F)));
+    private static final Item NETHERITE_SPEAR = registerItem("netherite_spear", new SpearItem(Tiers.NETHERITE, ((Item$PropertiesBridge) new Item.Properties()).spear(Tiers.NETHERITE, 1.15F, 1.2F, 0.4F, 2.5F, 7.0F, 5.5F, 5.1F, 8.75F, 4.6F).fireResistant()));
 
 }
