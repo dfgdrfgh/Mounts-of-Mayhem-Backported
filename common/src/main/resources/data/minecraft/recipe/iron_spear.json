@@ -6,7 +6,7 @@
       "item": "minecraft:stick"
     },
     "X": {
-      "item": "minecraft:iron_ingot"
+      "tag": "minecraft:iron_tool_materials"
     }
   },
   "pattern": [
