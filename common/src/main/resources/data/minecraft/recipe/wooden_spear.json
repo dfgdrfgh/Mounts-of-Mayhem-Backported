@@ -6,7 +6,7 @@
       "item": "minecraft:stick"
     },
     "X": {
-      "tag": "minecraft:planks"
+      "tag": "minecraft:wooden_tool_materials"
     }
   },
   "pattern": [
