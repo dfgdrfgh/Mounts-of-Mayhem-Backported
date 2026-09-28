@@ -41,6 +41,9 @@ public abstract class SoundEventsMixin {
     private static final SoundEvent PARROT_IMITATE_CAMEL_HUSK = register("entity.parrot.imitate.camel_husk");
 
     @ModifyAccess(access = Opcodes.ACC_PUBLIC)
+    private static final SoundEvent PARROT_IMITATE_ZOMBIE_HORSE = register("entity.parrot.imitate.zombie_horse");
+
+    @ModifyAccess(access = Opcodes.ACC_PUBLIC)
     private static final SoundEvent CAMEL_HUSK_AMBIENT = register("entity.camel_husk.ambient");
 
     @ModifyAccess(access = Opcodes.ACC_PUBLIC)
