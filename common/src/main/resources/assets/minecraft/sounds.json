@@ -16306,6 +16306,17 @@
     ],
     "subtitle": "subtitles.entity.parrot.imitate.zombie"
   },
+  "entity.parrot.imitate.zombie_horse": {
+    "sounds": [
+      {
+        "name": "entity.zombie_horse.ambient",
+        "pitch": 1.8,
+        "type": "event",
+        "volume": 0.6
+      }
+    ],
+    "subtitle": "subtitles.entity.parrot.imitate.zombie_horse"
+  },
   "entity.parrot.imitate.zombie_villager": {
     "sounds": [
       {
