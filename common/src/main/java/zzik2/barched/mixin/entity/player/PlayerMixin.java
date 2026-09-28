@@ -1,8 +1,10 @@
 package zzik2.barched.mixin.entity.player;
 
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.stats.Stats;
@@ -186,6 +188,26 @@ public abstract class PlayerMixin extends LivingEntity implements PlayerBridge {
                     return true;
                 }
             }
+        }
+    }
+
+    @Override
+    public void causeExtraKnockback(Entity entity, float f, Vec3 vec3) {
+        if (f > 0.0F) {
+            if (entity instanceof LivingEntity livingEntity) {
+                livingEntity.knockback((double)f, (double)Mth.sin(this.getYRot() * 0.017453292F), (double)(-Mth.cos(this.getYRot() * 0.017453292F)));
+            } else {
+                entity.push((double)(-Mth.sin(this.getYRot() * 0.017453292F) * f), 0.1D, (double)(Mth.cos(this.getYRot() * 0.017453292F) * f));
+            }
+
+            this.setDeltaMovement(this.getDeltaMovement().multiply(0.6D, 1.0D, 0.6D));
+            this.setSprinting(false);
+        }
+
+        if (entity instanceof ServerPlayer serverPlayer && entity.hurtMarked) {
+            serverPlayer.connection.send(new ClientboundSetEntityMotionPacket(entity));
+            entity.hurtMarked = false;
+            entity.setDeltaMovement(vec3);
         }
     }
 
