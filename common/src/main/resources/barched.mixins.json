@@ -73,6 +73,7 @@
     "entity.animal.HorseMixin",
     "entity.animal.ParrotMixin",
     "entity.animal.ZombieHorseMixin",
+    "entity.animal.ZombieHorseDaylightMixin",
     "entity.attributes.DefaultAttributesMixin",
     "entity.monster.AbstractSkeletonMixin",
     "entity.monster.DrownedMixin",
