@@ -24,6 +24,10 @@ public abstract class VanillaItemTagsProviderMixin extends ItemTagsProvider {
 
     @Inject(method = "addTags", at = @At("TAIL"))
     private void barched$addTags(HolderLookup.Provider provider, CallbackInfo ci) {
+        this.tag(Barched.ItemTags.SKELETON_PREFERRED_WEAPONS).add(Items.BOW);
+        this.tag(Barched.ItemTags.DROWNED_PREFERRED_WEAPONS).add(Items.TRIDENT);
+        this.tag(Barched.ItemTags.PIGLIN_PREFERRED_WEAPONS).add(Items.CROSSBOW, Barched.Items.GOLDEN_SPEAR);
+        this.tag(Barched.ItemTags.PILLAGER_PREFERRED_WEAPONS).add(Items.CROSSBOW);
         this.tag(Barched.ItemTags.CAMEL_HUSK_FOOD).add(Items.RABBIT_FOOT);
         this.tag(Barched.ItemTags.ZOMBIE_HORSE_FOOD).add(Items.RED_MUSHROOM);
         this.tag(Barched.ItemTags.SPEARS).add(Barched.Items.DIAMOND_SPEAR, Barched.Items.STONE_SPEAR, Barched.Items.GOLDEN_SPEAR, Barched.Items.NETHERITE_SPEAR, Barched.Items.WOODEN_SPEAR, Barched.Items.IRON_SPEAR, Barched.Items.COPPER_SPEAR);

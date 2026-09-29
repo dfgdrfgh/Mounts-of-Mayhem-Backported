@@ -5,8 +5,10 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.monster.piglin.AbstractPiglin;
 import net.minecraft.world.entity.monster.piglin.Piglin;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import org.objectweb.asm.Opcodes;
@@ -41,10 +43,22 @@ public abstract class PiglinMixin extends AbstractPiglin {
     }
 
     @Inject(method = "canReplaceCurrentItem(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemStack;)Z", at = @At("HEAD"), cancellable = true)
-    private void barched$compareGoldenSpearWithCrossbow(ItemStack candidate, ItemStack current, CallbackInfoReturnable<Boolean> cir) {
-        if (candidate.is(Barched.Items.GOLDEN_SPEAR) && current.is(Items.CROSSBOW)) {
-            cir.setReturnValue(super.canReplaceCurrentItem(candidate, current));
+    private void barched$compareSpearWeapons(ItemStack candidate, ItemStack current, CallbackInfoReturnable<Boolean> cir) {
+        if (!candidate.has(Barched.DataComponents.PIERCING_WEAPON) && !current.has(Barched.DataComponents.PIERCING_WEAPON)) {
+            return;
         }
+        if (EnchantmentHelper.has(current, EnchantmentEffectComponents.PREVENT_ARMOR_CHANGE)) {
+            cir.setReturnValue(false);
+            return;
+        }
+
+        // Adult piglins prefer crossbows and golden spears. Loved items are
+        // considered first, then Mob compares preferred weapons and damage.
+        boolean candidateLoved = candidate.is(ItemTags.PIGLIN_LOVED)
+                || (!this.isBaby() && candidate.is(Barched.ItemTags.PIGLIN_PREFERRED_WEAPONS));
+        boolean currentLoved = current.is(ItemTags.PIGLIN_LOVED)
+                || (!this.isBaby() && current.is(Barched.ItemTags.PIGLIN_PREFERRED_WEAPONS));
+        cir.setReturnValue(candidateLoved != currentLoved ? candidateLoved : super.canReplaceCurrentItem(candidate, current));
     }
 
     @ModifyArg(method = "createSpawnWeapon", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;<init>(Lnet/minecraft/world/level/ItemLike;)V", ordinal = 1))

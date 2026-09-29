@@ -40,4 +40,16 @@ public abstract class ItemTagsMixin {
 
     @ModifyAccess(access = Opcodes.ACC_PUBLIC)
     private static final TagKey<Item> MELEE_WEAPON_ENCHANTABLE = bind("enchantable/melee_weapon");
+
+    @ModifyAccess(access = Opcodes.ACC_PUBLIC)
+    private static final TagKey<Item> SKELETON_PREFERRED_WEAPONS = bind("skeleton_preferred_weapons");
+
+    @ModifyAccess(access = Opcodes.ACC_PUBLIC)
+    private static final TagKey<Item> DROWNED_PREFERRED_WEAPONS = bind("drowned_preferred_weapons");
+
+    @ModifyAccess(access = Opcodes.ACC_PUBLIC)
+    private static final TagKey<Item> PIGLIN_PREFERRED_WEAPONS = bind("piglin_preferred_weapons");
+
+    @ModifyAccess(access = Opcodes.ACC_PUBLIC)
+    private static final TagKey<Item> PILLAGER_PREFERRED_WEAPONS = bind("pillager_preferred_weapons");
 }

@@ -4,7 +4,13 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.monster.AbstractSkeleton;
+import net.minecraft.world.entity.monster.Drowned;
+import net.minecraft.world.entity.monster.Pillager;
+import net.minecraft.world.entity.monster.WitherSkeleton;
+import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.core.component.DataComponents;
@@ -14,6 +20,7 @@ import net.minecraft.world.level.Level;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -56,9 +63,16 @@ public abstract class MobMixin extends LivingEntity implements MobBridge {
 
         ItemAttributeModifiers candidateModifiers = candidate.getOrDefault(DataComponents.ATTRIBUTE_MODIFIERS, ItemAttributeModifiers.EMPTY);
         ItemAttributeModifiers currentModifiers = current.getOrDefault(DataComponents.ATTRIBUTE_MODIFIERS, ItemAttributeModifiers.EMPTY);
-        double baseDamage = this.getAttributeBaseValue(Attributes.ATTACK_DAMAGE);
-        double candidateDamage = candidateModifiers.compute(baseDamage, EquipmentSlot.MAINHAND);
-        double currentDamage = currentModifiers.compute(baseDamage, EquipmentSlot.MAINHAND);
+        TagKey<Item> preferredWeapons = this.barched$preferredWeapons();
+        if (preferredWeapons != null && candidate.is(preferredWeapons) != current.is(preferredWeapons)) {
+            cir.setReturnValue(candidate.is(preferredWeapons));
+            return;
+        }
+
+        double baseDamage = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE)
+                ? this.getAttributeBaseValue(Attributes.ATTACK_DAMAGE) : 0.0D;
+        double candidateDamage = barched$attackDamage(candidateModifiers, baseDamage);
+        double currentDamage = barched$attackDamage(currentModifiers, baseDamage);
 
         if (candidateDamage != currentDamage) {
             cir.setReturnValue(candidateDamage > currentDamage);
@@ -80,6 +94,36 @@ public abstract class MobMixin extends LivingEntity implements MobBridge {
         }
 
         cir.setReturnValue(candidate.has(DataComponents.CUSTOM_NAME) && !current.has(DataComponents.CUSTOM_NAME));
+    }
+
+    @Unique
+    private TagKey<Item> barched$preferredWeapons() {
+        Object self = this;
+        if (self instanceof WitherSkeleton) return null;
+        if (self instanceof AbstractSkeleton) return Barched.ItemTags.SKELETON_PREFERRED_WEAPONS;
+        if (self instanceof Drowned) return Barched.ItemTags.DROWNED_PREFERRED_WEAPONS;
+        if (self instanceof Pillager) return Barched.ItemTags.PILLAGER_PREFERRED_WEAPONS;
+        if (self instanceof Piglin piglin && !piglin.isBaby()) return Barched.ItemTags.PIGLIN_PREFERRED_WEAPONS;
+        return null;
+    }
+
+    @Unique
+    private static double barched$attackDamage(ItemAttributeModifiers modifiers, double baseDamage) {
+        // 1.21.1 compute(base, slot) combines every attribute. 1.21.11 also
+        // filters by attribute, so attack speed must not affect weapon choice.
+        double damage = baseDamage;
+        for (ItemAttributeModifiers.Entry entry : modifiers.modifiers()) {
+            if (!entry.slot().test(EquipmentSlot.MAINHAND) || !entry.attribute().equals(Attributes.ATTACK_DAMAGE)) {
+                continue;
+            }
+            double amount = entry.modifier().amount();
+            damage += switch (entry.modifier().operation()) {
+                case ADD_VALUE -> amount;
+                case ADD_MULTIPLIED_BASE -> amount * baseDamage;
+                case ADD_MULTIPLIED_TOTAL -> amount * damage;
+            };
+        }
+        return damage;
     }
 
     @Override
