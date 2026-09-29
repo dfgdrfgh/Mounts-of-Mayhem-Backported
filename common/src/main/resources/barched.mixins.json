@@ -69,6 +69,7 @@
     "entity.animal.AbstractHorseMixin",
     "entity.animal.CamelAi$CamelPanicMixin",
     "entity.animal.CamelMixin",
+    "entity.animal.HorseMixin",
     "entity.animal.ParrotMixin",
     "entity.animal.ZombieHorseMixin",
     "entity.attributes.DefaultAttributesMixin",
