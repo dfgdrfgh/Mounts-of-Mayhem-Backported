@@ -1,5 +1,6 @@
 package zzik2.barched.mixin.entity.animal;
 
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
@@ -185,6 +186,11 @@ public abstract class ZombieHorseMixin extends AbstractHorse implements EntityBr
     @Override
     public boolean isFood(ItemStack itemStack) {
         return itemStack.is(Barched.ItemTags.ZOMBIE_HORSE_FOOD);
+    }
+
+    @Override
+    public @Nullable AgeableMob getBreedOffspring(ServerLevel serverLevel, AgeableMob ageableMob) {
+        return null;
     }
 
     @Override
