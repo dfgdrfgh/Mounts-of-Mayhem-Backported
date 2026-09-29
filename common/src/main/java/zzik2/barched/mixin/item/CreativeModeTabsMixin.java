@@ -35,6 +35,10 @@ public class CreativeModeTabsMixin {
     @Inject(method = "method_51325", at = @At(value = "FIELD", target = "Lnet/minecraft/world/item/Items;DIAMOND_HORSE_ARMOR:Lnet/minecraft/world/item/Item;", opcode = Opcodes.GETSTATIC, shift = At.Shift.AFTER))
     private static void barched$acceptNetheriteHorseArmor(CreativeModeTab.ItemDisplayParameters itemDisplayParameters, CreativeModeTab.Output output, CallbackInfo ci) {
         output.accept(Barched.Items.NETHERITE_HORSE_ARMOR);
+    }
+
+    @Inject(method = "method_51325", at = @At(value = "FIELD", target = "Lnet/minecraft/world/item/Items;WOLF_ARMOR:Lnet/minecraft/world/item/Item;", opcode = Opcodes.GETSTATIC, shift = At.Shift.AFTER))
+    private static void barched$acceptNautilusArmor(CreativeModeTab.ItemDisplayParameters itemDisplayParameters, CreativeModeTab.Output output, CallbackInfo ci) {
         output.accept(Barched.Items.COPPER_NAUTILUS_ARMOR);
         output.accept(Barched.Items.IRON_NAUTILUS_ARMOR);
         output.accept(Barched.Items.GOLDEN_NAUTILUS_ARMOR);
