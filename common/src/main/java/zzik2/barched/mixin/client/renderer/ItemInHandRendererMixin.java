@@ -35,8 +35,8 @@ public abstract class ItemInHandRendererMixin {
 
     @Shadow protected abstract void applyItemArmTransform(PoseStack poseStack, HumanoidArm humanoidArm, float f);
 
-    @ModifyVariable(method = "renderArmWithItem", at = @At("HEAD"), argsOnly = true, ordinal = 3)
-    private float barched$spearSwapAnimationScale(float equippedProgress, AbstractClientPlayer player, float partialTick, float pitch, InteractionHand hand, float swingProgress, ItemStack itemStack) {
+    @ModifyVariable(method = "renderArmWithItem", at = @At("HEAD"), argsOnly = true, index = 7)
+    private float barched$spearSwapAnimationScale(float equippedProgress, @Local(argsOnly = true) ItemStack itemStack) {
         return itemStack.is(Barched.ItemTags.SPEARS) ? equippedProgress * 1.95F : equippedProgress;
     }
 
