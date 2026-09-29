@@ -24,7 +24,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.pathfinder.PathType;
-import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -210,11 +209,6 @@ public abstract class ZombieHorseMixin extends AbstractHorse implements EntityBr
         this.burnUndead();
     }
 
-    @Override
-    protected Vec3 getPassengerAttachmentPoint(Entity passenger, EntityDimensions dimensions, float partialTick) {
-        Vec3 position = super.getPassengerAttachmentPoint(passenger, dimensions, partialTick);
-        return this.isBaby() ? position.add(0.0D, 0.125D, 0.0D) : position;
-    }
 
     @Override
     public float chargeSpeedModifier() {
