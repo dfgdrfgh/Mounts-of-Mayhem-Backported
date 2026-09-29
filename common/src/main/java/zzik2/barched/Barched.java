@@ -209,6 +209,13 @@ public final class Barched {
         public static final TagKey<Item> SPEARS = ZReflectionTool.getStaticFieldValue(net.minecraft.tags.ItemTags.class, "SPEARS");
         public static final TagKey<Item> LUNGE_ENCHANTABLE = ZReflectionTool.getStaticFieldValue(net.minecraft.tags.ItemTags.class, "LUNGE_ENCHANTABLE");
         public static final TagKey<Item> MELEE_WEAPON_ENCHANTABLE = ZReflectionTool.getStaticFieldValue(net.minecraft.tags.ItemTags.class, "MELEE_WEAPON_ENCHANTABLE");
+        public static final TagKey<Item> WOODEN_TOOL_MATERIALS = TagKey.create(Registries.ITEM, ResourceLocation.withDefaultNamespace("wooden_tool_materials"));
+        public static final TagKey<Item> STONE_TOOL_MATERIALS = TagKey.create(Registries.ITEM, ResourceLocation.withDefaultNamespace("stone_tool_materials"));
+        public static final TagKey<Item> COPPER_TOOL_MATERIALS = TagKey.create(Registries.ITEM, ResourceLocation.withDefaultNamespace("copper_tool_materials"));
+        public static final TagKey<Item> IRON_TOOL_MATERIALS = TagKey.create(Registries.ITEM, ResourceLocation.withDefaultNamespace("iron_tool_materials"));
+        public static final TagKey<Item> GOLD_TOOL_MATERIALS = TagKey.create(Registries.ITEM, ResourceLocation.withDefaultNamespace("gold_tool_materials"));
+        public static final TagKey<Item> DIAMOND_TOOL_MATERIALS = TagKey.create(Registries.ITEM, ResourceLocation.withDefaultNamespace("diamond_tool_materials"));
+        public static final TagKey<Item> NETHERITE_TOOL_MATERIALS = TagKey.create(Registries.ITEM, ResourceLocation.withDefaultNamespace("netherite_tool_materials"));
     }
 
     public static class BlockTags {
