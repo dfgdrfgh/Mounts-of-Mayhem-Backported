@@ -31,16 +31,6 @@ public abstract class ItemsMixin {
     }
 
     @ModifyAccess(access = Opcodes.ACC_PUBLIC)
-    private static final Item COPPER_HORSE_ARMOR = registerItem("copper_horse_armor", new BackportedHorseArmorItem(
-            ArmorMaterials.IRON,
-            4,
-            0.0F,
-            0.0F,
-            net.minecraft.resources.ResourceLocation.withDefaultNamespace("textures/entity/equipment/horse_body/copper.png"),
-            new Item.Properties()
-    ));
-
-    @ModifyAccess(access = Opcodes.ACC_PUBLIC)
     private static final Item NETHERITE_HORSE_ARMOR = registerItem("netherite_horse_armor", new BackportedHorseArmorItem(
             ArmorMaterials.NETHERITE,
             19,
