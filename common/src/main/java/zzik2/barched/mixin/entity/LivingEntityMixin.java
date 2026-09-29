@@ -220,8 +220,8 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityBr
 
             if (entity instanceof LivingEntity livingEntity) {
                 LivingEntity attacker = (LivingEntity) (Object) this;
-                if (itemStack.hurtEnemy(livingEntity, attacker)) {
-                    itemStack.postHurtEnemy(livingEntity, attacker);
+                if (itemStack.getItem().hurtEnemy(itemStack, livingEntity, attacker)) {
+                    itemStack.getItem().postHurtEnemy(itemStack, livingEntity, attacker);
                 }
             }
 
