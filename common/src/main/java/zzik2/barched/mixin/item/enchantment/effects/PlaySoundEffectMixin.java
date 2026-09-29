@@ -3,6 +3,7 @@ package zzik2.barched.mixin.item.enchantment.effects;
 import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.valueproviders.FloatProvider;
 import net.minecraft.world.entity.Entity;
@@ -34,7 +35,7 @@ public abstract class PlaySoundEffectMixin implements EnchantmentEntityEffect {
         if (this.soundEvent == Barched.SoundEvents.LUNGE) {
             RandomSource randomSource = entity.getRandom();
             if (!entity.isSilent()) {
-                int j = randomSource.nextInt(SPEAR_SOUNDS.size());
+                int j = Mth.clamp(i - 1, 0, SPEAR_SOUNDS.size() - 1);
                 ((LevelBridge) serverLevel).playSound(null, vec3.x(), vec3.y(), vec3.z(), SPEAR_SOUNDS.get(j), entity.getSoundSource(), this.volume.sample(randomSource), this.pitch.sample(randomSource));
                 ci.cancel();
             }
