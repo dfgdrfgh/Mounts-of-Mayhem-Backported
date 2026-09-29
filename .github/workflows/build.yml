@@ -50,6 +50,9 @@ jobs:
         with:
           cache-read-only: ${{ github.event_name == 'pull_request' }}
 
+      - name: Make Gradle wrapper executable
+        run: chmod +x gradlew
+
       - name: Build Fabric and NeoForge
         run: ./gradlew build --build-cache --stacktrace
 
