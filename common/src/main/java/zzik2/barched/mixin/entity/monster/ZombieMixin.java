@@ -10,6 +10,7 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ItemLike;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -43,16 +44,15 @@ public class ZombieMixin extends Monster {
         return i;
     }
 
-    @Inject(method = "populateDefaultEquipmentSlots", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/util/RandomSource;nextInt(I)I"))
-    private void barched$setItemSlot(RandomSource randomSource, DifficultyInstance difficultyInstance, CallbackInfo ci, @Local(ordinal = 0) int i) {
-        if (i == 1) {
-            this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Barched.Items.IRON_SPEAR));
-        }
+    @ModifyArg(method = "populateDefaultEquipmentSlots", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;<init>(Lnet/minecraft/world/level/ItemLike;)V", ordinal = 1), index = 0)
+    private ItemLike barched$useSpearForEquipmentRoll(ItemLike original, @Local(ordinal = 0) int i) {
+        return i == 1 ? Barched.Items.IRON_SPEAR : original;
     }
 
     @Inject(method = "populateDefaultEquipmentSlots", at = @At("TAIL"))
     private void barched$overrideSpearByConfig(RandomSource randomSource, DifficultyInstance difficultyInstance, CallbackInfo ci) {
-        if (randomSource.nextFloat() < Barched.getConfig().getZombieOverrideSpearSpawnChanceAsFloat()) {
+        float overrideChance = Barched.getConfig().getZombieOverrideSpearSpawnChanceAsFloat();
+        if (overrideChance > 0.0F && randomSource.nextFloat() < overrideChance) {
             this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Barched.Items.IRON_SPEAR));
         }
     }
