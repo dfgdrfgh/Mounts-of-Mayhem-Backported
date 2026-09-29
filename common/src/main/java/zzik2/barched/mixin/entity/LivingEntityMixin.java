@@ -52,6 +52,8 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityBr
 
     @Shadow protected abstract float getKnockback(Entity arg, DamageSource arg2);
 
+    @Shadow protected abstract void playAttackSound();
+
     @Shadow public abstract void setLastHurtMob(Entity arg);
 
     @Shadow public abstract ItemStack getItemInHand(InteractionHand arg);
@@ -231,7 +233,7 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityBr
                 return false;
             } else {
                 this.setLastHurtMob(entity);
-//                this.playAttackSound(); // TODO?
+                this.playAttackSound();
                 return true;
             }
         }
