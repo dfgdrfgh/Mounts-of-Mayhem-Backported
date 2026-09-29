@@ -212,6 +212,9 @@ public final class Barched {
     public static class ItemTags {
         public static final TagKey<Item> CAMEL_HUSK_FOOD = ZReflectionTool.getStaticFieldValue(net.minecraft.tags.ItemTags.class, "CAMEL_HUSK_FOOD");
         public static final TagKey<Item> ZOMBIE_HORSE_FOOD = ZReflectionTool.getStaticFieldValue(net.minecraft.tags.ItemTags.class, "ZOMBIE_HORSE_FOOD");
+        public static final TagKey<Item> NAUTILUS_FOOD = ZReflectionTool.getStaticFieldValue(net.minecraft.tags.ItemTags.class, "NAUTILUS_FOOD");
+        public static final TagKey<Item> NAUTILUS_BUCKET_FOOD = ZReflectionTool.getStaticFieldValue(net.minecraft.tags.ItemTags.class, "NAUTILUS_BUCKET_FOOD");
+        public static final TagKey<Item> NAUTILUS_TAMING_ITEMS = ZReflectionTool.getStaticFieldValue(net.minecraft.tags.ItemTags.class, "NAUTILUS_TAMING_ITEMS");
         public static final TagKey<Item> SPEARS = ZReflectionTool.getStaticFieldValue(net.minecraft.tags.ItemTags.class, "SPEARS");
         public static final TagKey<Item> LUNGE_ENCHANTABLE = ZReflectionTool.getStaticFieldValue(net.minecraft.tags.ItemTags.class, "LUNGE_ENCHANTABLE");
         public static final TagKey<Item> MELEE_WEAPON_ENCHANTABLE = ZReflectionTool.getStaticFieldValue(net.minecraft.tags.ItemTags.class, "MELEE_WEAPON_ENCHANTABLE");
