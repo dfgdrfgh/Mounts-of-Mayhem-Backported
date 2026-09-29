@@ -218,10 +218,10 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityBr
                 entity.stopRiding();
             }
 
-            if (entity instanceof LivingEntity) {
-                LivingEntity livingEntity = (LivingEntity)entity;
-                if ((LivingEntity) (Object) this instanceof Player player) {
-                    itemStack.hurtEnemy(livingEntity, player);
+            if (entity instanceof LivingEntity livingEntity) {
+                LivingEntity attacker = (LivingEntity) (Object) this;
+                if (itemStack.hurtEnemy(livingEntity, attacker)) {
+                    itemStack.postHurtEnemy(livingEntity, attacker);
                 }
             }
 
