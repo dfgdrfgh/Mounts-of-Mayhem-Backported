@@ -1,6 +1,8 @@
 package zzik2.barched.mixin.entity.monster;
 
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.monster.Drowned;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.item.ItemStack;
@@ -32,6 +34,15 @@ public abstract class DrownedMixin extends Zombie {
 
     @com.llamalad7.mixinextras.injector.ModifyReturnValue(method = "isVisuallySwimming", at = @org.spongepowered.asm.mixin.injection.At("RETURN"))
     private boolean barched$keepRiderUpright(boolean original) { return original && !this.isPassenger(); }
+
+
+    @org.spongepowered.asm.mixin.injection.Inject(method = "rideTick", at = @org.spongepowered.asm.mixin.injection.At("TAIL"))
+    private void barched$matchMountedBodyRotation(org.spongepowered.asm.mixin.injection.callback.CallbackInfo ci) {
+        Entity vehicle = this.getVehicle();
+        if (vehicle instanceof PathfinderMob mount) {
+            this.yBodyRot = mount.yBodyRot;
+        }
+    }
 
     @Override
     public boolean wantsToPickUp(ItemStack itemStack) {
