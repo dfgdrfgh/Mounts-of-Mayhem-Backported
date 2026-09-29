@@ -24,6 +24,15 @@ public abstract class ItemTagsMixin {
     private static final TagKey<Item> ZOMBIE_HORSE_FOOD = bind("zombie_horse_food");
 
     @ModifyAccess(access = Opcodes.ACC_PUBLIC)
+    private static final TagKey<Item> NAUTILUS_FOOD = bind("nautilus_food");
+
+    @ModifyAccess(access = Opcodes.ACC_PUBLIC)
+    private static final TagKey<Item> NAUTILUS_BUCKET_FOOD = bind("nautilus_bucket_food");
+
+    @ModifyAccess(access = Opcodes.ACC_PUBLIC)
+    private static final TagKey<Item> NAUTILUS_TAMING_ITEMS = bind("nautilus_taming_items");
+
+    @ModifyAccess(access = Opcodes.ACC_PUBLIC)
     private static final TagKey<Item> SPEARS = bind("spears");
 
     @ModifyAccess(access = Opcodes.ACC_PUBLIC)
