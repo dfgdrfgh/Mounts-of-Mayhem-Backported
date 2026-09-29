@@ -57,6 +57,11 @@ public class Parched extends AbstractSkeleton implements EntityBridge {
     }
 
     @Override
+    protected boolean isSunBurnTick() {
+        return false;
+    }
+
+    @Override
     protected int getHardAttackInterval() {
         return 50;
     }
