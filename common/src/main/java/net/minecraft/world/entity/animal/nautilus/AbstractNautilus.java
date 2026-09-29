@@ -562,6 +562,18 @@ PlayerRideableJumping, Saddleable, ContainerListener {
     public SimpleContainer getInventory() { return this.inventory; }
 
     @Override
+    public @Nullable SlotAccess getSlot(int slot) {
+        int inventorySlot = slot - INVENTORY_SLOT_OFFSET;
+        return inventorySlot >= 0 && inventorySlot < this.inventory.getContainerSize()
+                ? SlotAccess.forContainer(this.inventory, inventorySlot)
+                : super.getSlot(slot);
+    }
+
+    public boolean hasInventoryChanged(Container oldInventory) {
+        return this.inventory != oldInventory;
+    }
+
+    @Override
     public void containerChanged(Container container) {
         boolean saddled = this.inventory.getItem(0).is(Items.SADDLE);
         boolean wasSaddled = this.isSaddled();
