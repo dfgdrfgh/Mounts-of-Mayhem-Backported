@@ -53,6 +53,8 @@
     "data.tags.EntityTypeTagsProviderMixin",
     "data.tags.VanillaEnchantmentTagsProviderMixin",
     "data.tags.VanillaItemTagsProviderMixin",
+    "effect.MobEffectsMixin",
+    "effect.MobEffectUtilMixin",
     "entity.EntityMixin",
     "entity.EntityTypeMixin",
     "entity.LivingEntityMixin",
