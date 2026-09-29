@@ -1,6 +1,7 @@
 package net.minecraft.world.entity.animal.nautilus;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
@@ -31,6 +32,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.PlayerRideableJumping;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.SlotAccess;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.TamableAnimal;
@@ -47,6 +49,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Saddleable;
+import net.minecraft.world.entity.vehicle.DismountHelper;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.ContainerListener;
 import zzik2.barched.Barched;
@@ -64,6 +67,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.pathfinder.PathType;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
@@ -156,8 +160,39 @@ PlayerRideableJumping, Saddleable, ContainerListener {
 
 
     @Override
-    protected boolean canAddPassenger(Entity $$0) {
+    protected boolean canAddPassenger(Entity $0) {
         return !this.isVehicle();
+    }
+
+    @Override
+    public Vec3 getDismountLocationForPassenger(LivingEntity passenger) {
+        Direction direction = this.getMotionDirection();
+        if (direction.getAxis() == Direction.Axis.Y) {
+            return super.getDismountLocationForPassenger(passenger);
+        }
+
+        int[][] offsets = DismountHelper.offsetsForDirection(direction);
+        BlockPos origin = this.blockPosition();
+        BlockPos.MutableBlockPos candidate = new BlockPos.MutableBlockPos();
+
+        for (Pose pose : passenger.getDismountPoses()) {
+            AABB bounds = passenger.getLocalBoundsForPose(pose);
+            for (int[] offset : offsets) {
+                candidate.set(origin.getX() + offset[0], origin.getY(), origin.getZ() + offset[1]);
+                double floorHeight = this.level().getBlockFloorHeight(candidate);
+                if (!DismountHelper.isBlockFloorValid(floorHeight)) {
+                    continue;
+                }
+
+                Vec3 location = Vec3.upFromBottomCenterOf(candidate, floorHeight);
+                if (DismountHelper.canDismountTo(this.level(), passenger, bounds.move(location))) {
+                    passenger.setPose(pose);
+                    return location;
+                }
+            }
+        }
+
+        return super.getDismountLocationForPassenger(passenger);
     }
 
     @Override
