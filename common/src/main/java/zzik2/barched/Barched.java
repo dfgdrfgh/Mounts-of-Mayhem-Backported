@@ -149,6 +149,11 @@ public final class Barched {
         public static final Item NETHERITE_SPEAR = ZReflectionTool.getStaticFieldValue(net.minecraft.world.item.Items.class, "NETHERITE_SPEAR");
     }
 
+    public static class MobEffects {
+        public static final Holder<net.minecraft.world.effect.MobEffect> BREATH_OF_THE_NAUTILUS =
+                ZReflectionTool.getStaticFieldValue(net.minecraft.world.effect.MobEffects.class, "BREATH_OF_THE_NAUTILUS");
+    }
+
     public static class Enchantments {
         public static final ResourceKey<Enchantment> LUNGE = ZReflectionTool.getStaticFieldValue(net.minecraft.world.item.enchantment.Enchantments.class, "LUNGE");
     }
