@@ -21,20 +21,62 @@ import java.util.function.Supplier;
 public final class BarchedBiomeModifications {
 
     private static final Logger LOGGER = LogUtils.getLogger();
+    private static final Set<ResourceLocation> VANILLA_ZOMBIE_HORSE_BIOMES = Set.of(
+            ResourceLocation.withDefaultNamespace("plains"),
+            ResourceLocation.withDefaultNamespace("sunflower_plains"),
+            ResourceLocation.withDefaultNamespace("snowy_plains"),
+            ResourceLocation.withDefaultNamespace("savanna"),
+            ResourceLocation.withDefaultNamespace("savanna_plateau"),
+            ResourceLocation.withDefaultNamespace("windswept_savanna")
+    );
 
     private BarchedBiomeModifications() {}
 
     public static void register() {
         BarchedConfig config = Barched.getConfig();
-        registerNaturalSpawn(
-                "zombie horse",
-                config.zombieHorseSpawnWeight,
-                config.zombieHorseSpawnBiomes,
-                () -> EntityType.ZOMBIE_HORSE,
-                1,
-                1
-        );
+        registerZombieHorseSpawn(config);
         registerParchedSpawn(config);
+    }
+
+    private static void registerZombieHorseSpawn(BarchedConfig config) {
+        int weight = config.zombieHorseSpawnWeight;
+        if (weight <= 0) {
+            return;
+        }
+
+        BiomeSelection selection = parseBiomeSelection("zombie horse", config.zombieHorseSpawnBiomes);
+        if (selection.isEmpty()) {
+            LOGGER.warn("Natural spawning for zombie horse is disabled because no valid biome selectors are configured");
+            return;
+        }
+
+        BiomeModifications.addProperties(
+                selection::matches,
+                (context, properties) -> properties.getSpawnProperties().addSpawn(
+                        MobCategory.MONSTER,
+                        new MobSpawnSettings.SpawnerData(EntityType.ZOMBIE_HORSE, weight, 1, 1)
+                )
+        );
+
+        // In 1.21.11, the vanilla Zombie Horse biomes reserve part of the normal
+        // Zombie spawn weight for Zombie Horses: Zombie 95 -> 90 and Zombie Horse 5.
+        // Preserve that relationship when backporting to 1.21.1.
+        int zombieWeight = Math.max(0, 95 - Math.min(weight, 95));
+        BiomeModifications.replaceProperties(
+                context -> selection.matches(context)
+                        && context.getKey().map(VANILLA_ZOMBIE_HORSE_BIOMES::contains).orElse(false),
+                (context, properties) -> {
+                    properties.getSpawnProperties().removeSpawns(
+                            (category, data) -> category == MobCategory.MONSTER && data.type == EntityType.ZOMBIE
+                    );
+                    if (zombieWeight > 0) {
+                        properties.getSpawnProperties().addSpawn(
+                                MobCategory.MONSTER,
+                                new MobSpawnSettings.SpawnerData(EntityType.ZOMBIE, zombieWeight, 4, 4)
+                        );
+                    }
+                }
+        );
     }
 
     private static void registerParchedSpawn(BarchedConfig config) {
