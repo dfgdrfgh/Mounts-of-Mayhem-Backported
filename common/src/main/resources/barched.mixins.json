@@ -65,6 +65,7 @@
     "entity.ai.util.GoalUtilsMixin",
     "entity.ai.util.LandRandomPosMixin",
     "entity.ai.util.RandomPosMixin",
+    "entity.ambient.BatMixin",
     "entity.animal.AbstractHorseMixin",
     "entity.animal.CamelAi$CamelPanicMixin",
     "entity.animal.CamelMixin",
