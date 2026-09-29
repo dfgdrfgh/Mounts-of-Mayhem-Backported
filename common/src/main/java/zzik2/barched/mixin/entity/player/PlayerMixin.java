@@ -31,6 +31,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import zzik2.barched.Barched;
 import zzik2.barched.bridge.InteractionHandBridge;
@@ -77,13 +78,18 @@ public abstract class PlayerMixin extends LivingEntity implements PlayerBridge {
     @Unique
     private int itemSwapTicker;
 
+    @Redirect(
+            method = "attack",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Player;resetAttackStrengthTicker()V")
+    )
+    private void barched$use12111AttackReset(Player player) {
+        this.onAttack();
+    }
+
     @Inject(method = "attack", at = @At("TAIL"))
     private void barched$attack(Entity entity, CallbackInfo ci) {
-        if (entity.isAttackable()) {
-            this.onAttack();
-            if (!entity.skipAttackInteraction((Player) (Object) this)) {
-                this.lungeForwardMaybe();
-            }
+        if (entity.isAttackable() && !entity.skipAttackInteraction((Player) (Object) this)) {
+            this.lungeForwardMaybe();
         }
     }
 
