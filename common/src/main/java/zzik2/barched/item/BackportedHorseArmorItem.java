@@ -1,7 +1,10 @@
 package zzik2.barched.item;
 
 import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -67,6 +70,11 @@ public class BackportedHorseArmorItem extends AnimalArmorItem {
     @Override
     public ResourceLocation getTexture() {
         return this.texture;
+    }
+
+    @Override
+    public Holder<SoundEvent> getEquipSound() {
+        return BuiltInRegistries.SOUND_EVENT.wrapAsHolder(SoundEvents.HORSE_ARMOR);
     }
 
     @Override
