@@ -262,10 +262,7 @@ PlayerRideableJumping, Saddleable, ContainerListener {
     }
 
     private int getNautilusRestrictionRadius() {
-        if (!this.isBaby() && !this.isSaddled()) {
-            return 32;
-        }
-        return 16;
+        return this.isSaddled() ? 16 : 32;
     }
 
     protected void checkRestriction() {
