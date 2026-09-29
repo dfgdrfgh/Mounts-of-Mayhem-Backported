@@ -118,8 +118,8 @@ extends Behavior<Animal> {
     }
 
     private void dealKnockBack(Animal $$0, LivingEntity $$1) {
-        int $$2 = $$0.hasEffect(MobEffects.SPEED) ? $$0.getEffect(MobEffects.SPEED).getAmplifier() + 1 : 0;
-        int $$3 = $$0.hasEffect(MobEffects.SLOWNESS) ? $$0.getEffect(MobEffects.SLOWNESS).getAmplifier() + 1 : 0;
+        int $$2 = $$0.hasEffect(MobEffects.MOVEMENT_SPEED) ? $$0.getEffect(MobEffects.MOVEMENT_SPEED).getAmplifier() + 1 : 0;
+        int $$3 = $$0.hasEffect(MobEffects.MOVEMENT_SLOWDOWN) ? $$0.getEffect(MobEffects.MOVEMENT_SLOWDOWN).getAmplifier() + 1 : 0;
         float $$4 = 0.25f * (float)($$2 - $$3);
         float $$5 = Mth.clamp(this.speed * (float)$$0.getAttributeValue(Attributes.MOVEMENT_SPEED), 0.2f, 2.0f) + $$4;
         ((LivingEntityBridge)$$0).causeExtraKnockback($$1, $$5 * this.knockbackForce, $$0.getDeltaMovement());

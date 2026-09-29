@@ -47,7 +47,7 @@ public class ZombieNautilus extends AbstractNautilus implements MobBridge {
     @Override public void readAdditionalSaveData(CompoundTag tag) { super.readAdditionalSaveData(tag); this.setCoral("minecraft:warm".equals(tag.getString("variant"))); }
     @Override public void addAdditionalSaveData(CompoundTag tag) { super.addAdditionalSaveData(tag); tag.putString("variant", this.isCoral() ? "minecraft:warm" : "minecraft:temperate"); }
     @Override public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData group) {
-        this.setCoral(level.getBiome(this.blockPosition()).is(Biomes.WARM_OCEAN));
+        this.setCoral(level.getBiome(this.blockPosition()).is(net.minecraft.tags.TagKey.create(net.minecraft.core.registries.Registries.BIOME, net.minecraft.resources.ResourceLocation.withDefaultNamespace("spawns_coral_variant_zombie_nautilus"))));
         return super.finalizeSpawn(level, difficulty, reason, group);
     }
     @Override public boolean canBeLeashed() { return !this.isAggravated() && !this.isMobControlled(); }

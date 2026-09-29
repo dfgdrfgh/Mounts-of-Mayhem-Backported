@@ -79,11 +79,11 @@ public class NautilusAi {
     }
 
     private static void initCoreActivity(Brain<Nautilus> $$0) {
-        $$0.addActivity(Activity.CORE, 0, ImmutableList.of(new AnimalPanic(1.6f), new LookAtTargetSink(45, 90), new MoveToTargetSink(), new CountDownCooldownTicks(MemoryModuleType.TEMPTATION_COOLDOWN_TICKS), new CountDownCooldownTicks(Barched.MemoryModuleType.CHARGE_COOLDOWN_TICKS), new CountDownCooldownTicks(Barched.MemoryModuleType.ATTACK_TARGET_COOLDOWN)));
+        $$0.addActivity(Activity.CORE, 0, ImmutableList.of(new AnimalPanic<Nautilus>(1.6f), new LookAtTargetSink(45, 90), new MoveToTargetSink(), new CountDownCooldownTicks(MemoryModuleType.TEMPTATION_COOLDOWN_TICKS), new CountDownCooldownTicks(Barched.MemoryModuleType.CHARGE_COOLDOWN_TICKS), new CountDownCooldownTicks(Barched.MemoryModuleType.ATTACK_TARGET_COOLDOWN)));
     }
 
     private static void initIdleActivity(Brain<Nautilus> $$02) {
-        $$02.addActivity(Activity.IDLE, ImmutableList.of(Pair.of(1, new AnimalMakeLove(Barched.EntityType.NAUTILUS, 0.4f)), Pair.of(2, new FollowTemptation($$0 -> Float.valueOf(1.3f), $$0 -> $$0.isBaby() ? 2.5 : 3.5)), Pair.of(3, StartAttacking.<Nautilus>create(mob -> NautilusAi.findNearestValidAttackTarget((ServerLevel)mob.level(), mob))), Pair.of(4, new GateBehavior(ImmutableMap.of(MemoryModuleType.WALK_TARGET, (MemoryStatus.VALUE_ABSENT)), ImmutableSet.of(), GateBehavior.OrderPolicy.ORDERED, GateBehavior.RunningPolicy.TRY_ALL, ImmutableList.of(Pair.of(RandomStroll.swim(1.0f), 2), Pair.of(SetWalkTargetFromLookTarget.create(1.0f, 3), 3))))));
+        $$02.addActivity(Activity.IDLE, ImmutableList.of(Pair.of(1, new AnimalMakeLove(Barched.EntityType.NAUTILUS, 0.4f, 2)), Pair.of(2, new FollowTemptation($$0 -> Float.valueOf(1.3f), $$0 -> $$0.isBaby() ? 2.5 : 3.5)), Pair.of(3, StartAttacking.<Nautilus>create(mob -> NautilusAi.findNearestValidAttackTarget((ServerLevel)mob.level(), mob))), Pair.of(4, new GateBehavior(ImmutableMap.of(MemoryModuleType.WALK_TARGET, (MemoryStatus.VALUE_ABSENT)), ImmutableSet.of(), GateBehavior.OrderPolicy.ORDERED, GateBehavior.RunningPolicy.TRY_ALL, ImmutableList.of(Pair.of(RandomStroll.swim(1.0f), 2), Pair.of(SetWalkTargetFromLookTarget.create(1.0f, 3), 3))))));
     }
 
     private static void initFightActivity(Brain<Nautilus> $$0) {

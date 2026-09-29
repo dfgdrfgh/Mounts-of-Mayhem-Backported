@@ -62,35 +62,35 @@ extends AbstractNautilus {
     @Override
     protected SoundEvent getAmbientSound() {
         if (this.isBaby()) {
-            return this.isUnderWater() ? Barched.SoundEvents.BABY_NAUTILUS_AMBIENT : Barched.SoundEvents.BABY_NAUTILUS_AMBIENT_ON_LAND;
+            return this.isUnderWater() ? Barched.SoundEvents.BABY_NAUTILUS_AMBIENT : Barched.SoundEvents.BABY_NAUTILUS_AMBIENT_LAND;
         }
-        return this.isUnderWater() ? Barched.SoundEvents.NAUTILUS_AMBIENT : Barched.SoundEvents.NAUTILUS_AMBIENT_ON_LAND;
+        return this.isUnderWater() ? Barched.SoundEvents.NAUTILUS_AMBIENT : Barched.SoundEvents.NAUTILUS_AMBIENT_LAND;
     }
 
     @Override
     protected SoundEvent getHurtSound(DamageSource $$0) {
         if (this.isBaby()) {
-            return this.isUnderWater() ? Barched.SoundEvents.BABY_NAUTILUS_HURT : Barched.SoundEvents.BABY_NAUTILUS_HURT_ON_LAND;
+            return this.isUnderWater() ? Barched.SoundEvents.BABY_NAUTILUS_HURT : Barched.SoundEvents.BABY_NAUTILUS_HURT_LAND;
         }
-        return this.isUnderWater() ? Barched.SoundEvents.NAUTILUS_HURT : Barched.SoundEvents.NAUTILUS_HURT_ON_LAND;
+        return this.isUnderWater() ? Barched.SoundEvents.NAUTILUS_HURT : Barched.SoundEvents.NAUTILUS_HURT_LAND;
     }
 
     @Override
     protected SoundEvent getDeathSound() {
         if (this.isBaby()) {
-            return this.isUnderWater() ? Barched.SoundEvents.BABY_NAUTILUS_DEATH : Barched.SoundEvents.BABY_NAUTILUS_DEATH_ON_LAND;
+            return this.isUnderWater() ? Barched.SoundEvents.BABY_NAUTILUS_DEATH : Barched.SoundEvents.BABY_NAUTILUS_DEATH_LAND;
         }
-        return this.isUnderWater() ? Barched.SoundEvents.NAUTILUS_DEATH : Barched.SoundEvents.NAUTILUS_DEATH_ON_LAND;
+        return this.isUnderWater() ? Barched.SoundEvents.NAUTILUS_DEATH : Barched.SoundEvents.NAUTILUS_DEATH_LAND;
     }
 
     @Override
     protected SoundEvent getDashSound() {
-        return this.isUnderWater() ? Barched.SoundEvents.NAUTILUS_DASH : Barched.SoundEvents.NAUTILUS_DASH_ON_LAND;
+        return this.isUnderWater() ? Barched.SoundEvents.NAUTILUS_DASH : Barched.SoundEvents.NAUTILUS_DASH_LAND;
     }
 
     @Override
     protected SoundEvent getDashReadySound() {
-        return this.isUnderWater() ? Barched.SoundEvents.NAUTILUS_DASH_READY : Barched.SoundEvents.NAUTILUS_DASH_READY_ON_LAND;
+        return this.isUnderWater() ? Barched.SoundEvents.NAUTILUS_DASH_READY : Barched.SoundEvents.NAUTILUS_DASH_READY_LAND;
     }
 
     @Override

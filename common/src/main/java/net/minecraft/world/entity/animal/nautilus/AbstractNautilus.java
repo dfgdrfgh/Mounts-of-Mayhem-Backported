@@ -122,7 +122,7 @@ PlayerRideableJumping, Saddleable, ContainerListener {
     }
 
     public static AttributeSupplier.Builder createAttributes() {
-        return Animal.createAnimalAttributes().add(Attributes.MAX_HEALTH, 15.0).add(Attributes.MOVEMENT_SPEED, 1.0).add(Attributes.ATTACK_DAMAGE, 3.0).add(Attributes.KNOCKBACK_RESISTANCE, 0.3f);
+        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 15.0).add(Attributes.MOVEMENT_SPEED, 1.0).add(Attributes.ATTACK_DAMAGE, 3.0).add(Attributes.KNOCKBACK_RESISTANCE, 0.3f);
     }
 
     @Override
@@ -482,9 +482,6 @@ PlayerRideableJumping, Saddleable, ContainerListener {
     }
 
     @Override
-    public boolean canBreatheUnderwater() { return true; }
-
-    @Override
     public boolean canUseSlot(EquipmentSlot slot) {
         return slot == EquipmentSlot.BODY ? this.isSaddleable() : super.canUseSlot(slot);
     }
@@ -496,8 +493,8 @@ PlayerRideableJumping, Saddleable, ContainerListener {
     public boolean isSaddled() { return this.entityData.get(SADDLED); }
 
     @Override
-    public void equipSaddle(@Nullable SoundSource source) {
-        this.inventory.setItem(0, new ItemStack(Items.SADDLE));
+    public void equipSaddle(ItemStack saddle, @Nullable SoundSource source) {
+        this.inventory.setItem(0, saddle.copyWithCount(1));
 
     }
 
