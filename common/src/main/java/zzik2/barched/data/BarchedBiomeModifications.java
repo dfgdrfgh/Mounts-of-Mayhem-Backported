@@ -36,10 +36,40 @@ public final class BarchedBiomeModifications {
         BarchedConfig config = Barched.getConfig();
         registerZombieHorseSpawn(config);
         registerParchedSpawn(config);
+        registerNautilusSpawns();
+    }
+
+    private static void registerNautilusSpawns() {
+        Set<ResourceLocation> lowWeightOceans = Set.of(
+                ResourceLocation.withDefaultNamespace("cold_ocean"),
+                ResourceLocation.withDefaultNamespace("deep_cold_ocean"),
+                ResourceLocation.withDefaultNamespace("frozen_ocean"),
+                ResourceLocation.withDefaultNamespace("deep_frozen_ocean")
+        );
+
+        Set<ResourceLocation> normalWeightOceans = Set.of(
+                ResourceLocation.withDefaultNamespace("ocean"),
+                ResourceLocation.withDefaultNamespace("deep_ocean"),
+                ResourceLocation.withDefaultNamespace("lukewarm_ocean"),
+                ResourceLocation.withDefaultNamespace("deep_lukewarm_ocean"),
+                ResourceLocation.withDefaultNamespace("warm_ocean")
+        );
+
         BiomeModifications.addProperties(
-                context -> context.hasTag(net.minecraft.tags.BiomeTags.IS_OCEAN),
+                context -> context.getKey().map(lowWeightOceans::contains).orElse(false),
                 (context, properties) -> properties.getSpawnProperties().addSpawn(
-                        MobCategory.WATER_CREATURE, new MobSpawnSettings.SpawnerData(Barched.EntityType.NAUTILUS, 5, 1, 1)));
+                        MobCategory.WATER_CREATURE,
+                        new MobSpawnSettings.SpawnerData(Barched.EntityType.NAUTILUS, 2, 1, 1)
+                )
+        );
+
+        BiomeModifications.addProperties(
+                context -> context.getKey().map(normalWeightOceans::contains).orElse(false),
+                (context, properties) -> properties.getSpawnProperties().addSpawn(
+                        MobCategory.WATER_CREATURE,
+                        new MobSpawnSettings.SpawnerData(Barched.EntityType.NAUTILUS, 5, 1, 1)
+                )
+        );
     }
 
     private static void registerZombieHorseSpawn(BarchedConfig config) {
