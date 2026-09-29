@@ -61,8 +61,12 @@ jobs:
         uses: actions/upload-artifact@v7.0.1
         with:
           name: yarched-fabric
-          path: fabric/build/libs/*.jar
-          if-no-files-found: warn
+          path: |
+            fabric/build/libs/*.jar
+            !fabric/build/libs/*-sources.jar
+            !fabric/build/libs/*-all.jar
+            !fabric/build/libs/*-dev-shadow.jar
+          if-no-files-found: error
           archive: false
 
       - name: Upload NeoForge JARs
@@ -70,6 +74,10 @@ jobs:
         uses: actions/upload-artifact@v7.0.1
         with:
           name: yarched-neoforge
-          path: neoforge/build/libs/*.jar
-          if-no-files-found: warn
+          path: |
+            neoforge/build/libs/*.jar
+            !neoforge/build/libs/*-sources.jar
+            !neoforge/build/libs/*-all.jar
+            !neoforge/build/libs/*-dev-shadow.jar
+          if-no-files-found: error
           archive: false
