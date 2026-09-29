@@ -44,7 +44,9 @@ Release overview: https://www.minecraft.net/en-us/article/minecraft-java-edition
 ## Validation and remaining limits
 
 Resource JSON parses, and the four new tags match the official files exactly.
-The updated commit must pass the existing Fabric/NeoForge Actions build.
+Code commit `fb9586732fc15f604990f055281f49fcfa140d11` passed the existing
+Fabric and NeoForge build, including both artifact uploads:
+https://github.com/dfgdrfgh/Yarched/actions/runs/36618022728
 Compilation does not establish in-game parity; these runtime checks remain:
 
 1. Compare spear/sword pickup when attack damage ties but attack speed differs.
