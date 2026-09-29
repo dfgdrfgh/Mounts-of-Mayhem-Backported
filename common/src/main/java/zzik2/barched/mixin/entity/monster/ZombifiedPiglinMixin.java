@@ -37,6 +37,10 @@ public class ZombifiedPiglinMixin extends Zombie {
 
     @ModifyArg(method = "populateDefaultEquipmentSlots", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;<init>(Lnet/minecraft/world/level/ItemLike;)V", ordinal = 0), index = 0)
     private ItemLike barched$Item(ItemLike arg) {
-        return barched$randomSource.nextFloat() < Barched.getConfig().getZombifiedPiglinSpearSpawnChanceAsFloat() ? Barched.Items.GOLDEN_SPEAR : arg;
+        int configuredChance = Barched.getConfig().zombifiedPiglinSpearSpawnChance;
+        boolean useSpear = configuredChance == 5
+                ? this.barched$randomSource.nextInt(20) == 0
+                : configuredChance > 0 && this.barched$randomSource.nextFloat() < configuredChance / 100.0F;
+        return useSpear ? Barched.Items.GOLDEN_SPEAR : arg;
     }
 }
