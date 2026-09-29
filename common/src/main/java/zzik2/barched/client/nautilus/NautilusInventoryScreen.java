@@ -15,6 +15,8 @@ public class NautilusInventoryScreen extends AbstractContainerScreen<NautilusInv
         if (this.menu.nautilus.isSaddleable()) {
             graphics.blitSprite(ResourceLocation.withDefaultNamespace("container/slot"), this.leftPos + 7, this.topPos + 17, 18, 18);
             graphics.blitSprite(ResourceLocation.withDefaultNamespace("container/slot"), this.leftPos + 7, this.topPos + 35, 18, 18);
+            if (!this.menu.getSlot(0).hasItem()) graphics.blitSprite(ResourceLocation.withDefaultNamespace("container/slot/saddle"), this.leftPos + 8, this.topPos + 18, 16, 16);
+            if (!this.menu.getSlot(1).hasItem()) graphics.blitSprite(ResourceLocation.withDefaultNamespace("container/slot/nautilus_armor_inventory"), this.leftPos + 8, this.topPos + 36, 16, 16);
         }
         InventoryScreen.renderEntityInInventoryFollowsMouse(graphics, this.leftPos + 26, this.topPos + 18, this.leftPos + 78, this.topPos + 70, 17, 0.25F, mouseX, mouseY, this.menu.nautilus);
     }

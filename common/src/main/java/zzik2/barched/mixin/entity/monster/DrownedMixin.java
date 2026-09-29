@@ -15,6 +15,24 @@ public abstract class DrownedMixin extends Zombie {
         super(entityType, level);
     }
 
+    // 1.21.11 uses one amphibious navigator and keeps mounted drowned upright.
+    @org.spongepowered.asm.mixin.injection.Inject(method = "<init>", at = @org.spongepowered.asm.mixin.injection.At("TAIL"))
+    private void barched$amphibiousNavigation(EntityType<? extends Drowned> type, Level level, org.spongepowered.asm.mixin.injection.callback.CallbackInfo ci) {
+        this.navigation = new net.minecraft.world.entity.ai.navigation.AmphibiousPathNavigation(this, level);
+        this.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.STEP_HEIGHT).setBaseValue(1.0D);
+    }
+
+    @org.spongepowered.asm.mixin.Shadow abstract boolean wantsToSwim();
+
+    @org.spongepowered.asm.mixin.injection.Inject(method = "updateSwimming", at = @org.spongepowered.asm.mixin.injection.At("HEAD"), cancellable = true)
+    private void barched$updateSwimming(org.spongepowered.asm.mixin.injection.callback.CallbackInfo ci) {
+        if (!this.level().isClientSide()) this.setSwimming(this.isEffectiveAi() && this.isUnderWater() && this.wantsToSwim());
+        ci.cancel();
+    }
+
+    @com.llamalad7.mixinextras.injector.ModifyReturnValue(method = "isVisuallySwimming", at = @org.spongepowered.asm.mixin.injection.At("RETURN"))
+    private boolean barched$keepRiderUpright(boolean original) { return original && !this.isPassenger(); }
+
     @Override
     public boolean wantsToPickUp(ItemStack itemStack) {
         return itemStack.is(Barched.ItemTags.SPEARS) ? false : super.wantsToPickUp(itemStack);

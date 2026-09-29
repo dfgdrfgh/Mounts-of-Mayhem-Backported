@@ -16,6 +16,8 @@ public class V4656 extends NamespacedSchema {
         Map<String, Supplier<TypeTemplate>> map = super.registerEntities(schema);
         schema.registerSimple(map, "minecraft:camel_husk");
         schema.registerSimple(map, "minecraft:parched");
+        schema.registerSimple(map, "minecraft:nautilus");
+        schema.registerSimple(map, "minecraft:zombie_nautilus");
         return map;
     }
 }

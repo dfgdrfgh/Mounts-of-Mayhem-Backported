@@ -379,7 +379,7 @@ PlayerRideableJumping, Saddleable, ContainerListener {
     public InteractionResult mobInteract(Player $$0, InteractionHand $$1) {
         ItemStack $$2 = $$0.getItemInHand($$1);
         if (this.isBaby()) {
-            return super.mobInteract($$0, $$1);
+            return this.interactAsAnimal($$0, $$1);
         }
         if (this.isTame() && $$0.isSecondaryUseActive()) {
             this.openCustomInventoryScreen($$0);
@@ -414,7 +414,14 @@ PlayerRideableJumping, Saddleable, ContainerListener {
             this.doPlayerRide($$0);
             return InteractionResult.SUCCESS;
         }
-        return super.mobInteract($$0, $$1);
+        return this.interactAsAnimal($$0, $$1);
+    }
+
+    private InteractionResult interactAsAnimal(Player player, InteractionHand hand) {
+        boolean feeding = this.isFood(player.getItemInHand(hand)) && (this.isBaby() || this.getAge() == 0 && this.canFallInLove());
+        InteractionResult result = super.mobInteract(player, hand);
+        if (feeding && result.consumesAction() && !this.level().isClientSide()) this.playEatingSound();
+        return result;
     }
 
     private void tryToTame(Player $$0) {
@@ -504,6 +511,7 @@ PlayerRideableJumping, Saddleable, ContainerListener {
             this.moveRelative(this.getSpeed(), input);
             this.move(MoverType.SELF, this.getDeltaMovement());
             this.setDeltaMovement(this.getDeltaMovement().scale(0.9D));
+            this.calculateEntityAnimation(false);
         } else {
             super.travel(input);
         }
@@ -535,6 +543,7 @@ PlayerRideableJumping, Saddleable, ContainerListener {
         ItemStack previous = this.getItemBySlot(slot);
         super.setItemSlot(slot, stack);
         if (slot == EquipmentSlot.BODY && this.inventory != null) {
+            if (!stack.isEmpty()) this.setDropChance(EquipmentSlot.BODY, 2.0F);
             if (this.inventory.getItem(1) != stack) this.inventory.setItem(1, stack);
             if (this.tickCount > 20 && !ItemStack.isSameItemSameComponents(previous, stack)) {
                 this.playSound(stack.isEmpty() ? Barched.SoundEvents.NAUTILUS_ARMOR_UNEQUIP : Barched.SoundEvents.NAUTILUS_ARMOR_EQUIP);
@@ -568,7 +577,7 @@ PlayerRideableJumping, Saddleable, ContainerListener {
     @Override
     protected void dropEquipment() {
         super.dropEquipment();
-        if (this.isSaddled()) this.spawnAtLocation(this.inventory.getItem(0));
+        if (this.isSaddled() && !net.minecraft.world.item.enchantment.EnchantmentHelper.has(this.inventory.getItem(0), net.minecraft.world.item.enchantment.EnchantmentEffectComponents.PREVENT_EQUIPMENT_DROP)) this.spawnAtLocation(this.inventory.getItem(0));
         this.inventory.setItem(0, ItemStack.EMPTY);
     }
 }

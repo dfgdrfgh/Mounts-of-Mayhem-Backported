@@ -22,7 +22,6 @@ public class ZombieNautilus extends AbstractNautilus implements MobBridge {
     public ZombieNautilus(EntityType<? extends ZombieNautilus> type, Level level) { super(type, level); }
     public static AttributeSupplier.Builder createAttributes() { return AbstractNautilus.createAttributes().add(Attributes.MOVEMENT_SPEED, 1.1F); }
     @Override public @Nullable ZombieNautilus getBreedOffspring(ServerLevel level, AgeableMob other) { return null; }
-    @Override public boolean canFallInLove() { return false; }
     @Override public boolean isBaby() { return false; }
     @Override public EquipmentSlot sunProtectionSlot() { return EquipmentSlot.BODY; }
     @Override protected Brain.Provider<ZombieNautilus> brainProvider() { return ZombieNautilusAi.brainProvider(); }

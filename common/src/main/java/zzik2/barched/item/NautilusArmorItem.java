@@ -18,6 +18,17 @@ public class NautilusArmorItem extends Item implements Equipable {
     private final ResourceLocation texture;
     public NautilusArmorItem(String material, int defense, float toughness, float knockbackResistance, Properties properties) {
         super(properties.stacksTo(1).component(DataComponents.ATTRIBUTE_MODIFIERS, modifiers(defense, toughness, knockbackResistance)));
+        net.minecraft.world.level.block.DispenserBlock.registerBehavior(this, new net.minecraft.core.dispenser.DefaultDispenseItemBehavior() {
+            @Override protected net.minecraft.world.item.ItemStack execute(net.minecraft.core.dispenser.BlockSource source, net.minecraft.world.item.ItemStack stack) {
+                net.minecraft.core.BlockPos pos = source.pos().relative(source.state().getValue(net.minecraft.world.level.block.DispenserBlock.FACING));
+                var mounts = source.level().getEntitiesOfClass(net.minecraft.world.entity.animal.nautilus.AbstractNautilus.class, new net.minecraft.world.phys.AABB(pos), mount -> mount.isSaddleable() && mount.getBodyArmorItem().isEmpty());
+                if (mounts.isEmpty()) return super.execute(source, stack);
+                var mount = mounts.getFirst();
+                mount.setBodyArmorItem(stack.split(1));
+                mount.setPersistenceRequired();
+                return stack;
+            }
+        });
         this.texture = ResourceLocation.withDefaultNamespace("textures/entity/equipment/nautilus_body/" + material + ".png");
     }
     private static ItemAttributeModifiers modifiers(int defense, float toughness, float resistance) {

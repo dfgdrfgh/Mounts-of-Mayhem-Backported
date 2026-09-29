@@ -20,16 +20,20 @@ public class NautilusInventoryMenu extends AbstractContainerMenu {
         inventory.startOpen(playerInventory.player);
         this.addSlot(new Slot(inventory, 0, 8, 18) {
             @Override public boolean mayPlace(ItemStack stack) { return stack.is(Items.SADDLE) && !this.hasItem() && nautilus.isSaddleable(); }
+            @Override public boolean isActive() { return nautilus.isSaddleable(); }
+            @Override public boolean mayPickup(Player player) { return player.isCreative() || !net.minecraft.world.item.enchantment.EnchantmentHelper.has(this.getItem(), net.minecraft.world.item.enchantment.EnchantmentEffectComponents.PREVENT_ARMOR_CHANGE); }
             @Override public int getMaxStackSize() { return 1; }
         });
         this.addSlot(new Slot(inventory, 1, 8, 36) {
             @Override public boolean mayPlace(ItemStack stack) { return stack.getItem() instanceof NautilusArmorItem && nautilus.isSaddleable(); }
+            @Override public boolean isActive() { return nautilus.isSaddleable(); }
+            @Override public boolean mayPickup(Player player) { return player.isCreative() || !net.minecraft.world.item.enchantment.EnchantmentHelper.has(this.getItem(), net.minecraft.world.item.enchantment.EnchantmentEffectComponents.PREVENT_ARMOR_CHANGE); }
             @Override public int getMaxStackSize() { return 1; }
         });
         for (int row = 0; row < 3; row++) for (int col = 0; col < 9; col++) this.addSlot(new Slot(playerInventory, col + row * 9 + 9, 8 + col * 18, 84 + row * 18));
         for (int col = 0; col < 9; col++) this.addSlot(new Slot(playerInventory, col, 8 + col * 18, 142));
     }
-    @Override public boolean stillValid(Player player) { return nautilus.isAlive() && nautilus.distanceTo(player) < 8.0F && inventory.stillValid(player); }
+    @Override public boolean stillValid(Player player) { return nautilus.isAlive() && player.canInteractWithEntity(nautilus, 4.0D) && inventory.stillValid(player); }
     @Override public void removed(Player player) { super.removed(player); inventory.stopOpen(player); }
     @Override public ItemStack quickMoveStack(Player player, int index) {
         Slot slot = this.slots.get(index);
