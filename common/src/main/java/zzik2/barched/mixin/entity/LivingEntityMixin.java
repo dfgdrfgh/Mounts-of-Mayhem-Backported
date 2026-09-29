@@ -87,8 +87,8 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityBr
     @Inject(method = "travel", at = @At("TAIL"))
     private void barched$floatIfRidden(Vec3 travelVector, CallbackInfo ci) {
         if (this.getType().is(BARCHED_CAN_FLOAT_WHILE_RIDDEN)
-                && this.hasPassengers()
-                && this.getFluidHeight(FluidTags.WATER) > this.getSwimHeight()) {
+                && this.isVehicle()
+                && this.getFluidHeight(FluidTags.WATER) > this.getFluidJumpThreshold()) {
             this.setDeltaMovement(this.getDeltaMovement().add(0.0D, 0.04D, 0.0D));
         }
     }
