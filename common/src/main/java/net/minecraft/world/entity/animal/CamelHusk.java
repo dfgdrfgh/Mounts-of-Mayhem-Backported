@@ -41,7 +41,7 @@ public class CamelHusk extends Camel implements CamelBridge {
     @ModifyName(value = "interact")
     public InteractionResult interact0(Player player, InteractionHand interactionHand) {
         this.setPersistenceRequired();
-        return super.mobInteract(player, interactionHand);
+        return super.interact(player, interactionHand);
     }
 
     @Override
