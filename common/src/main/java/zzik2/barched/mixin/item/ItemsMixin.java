@@ -1,6 +1,7 @@
 package zzik2.barched.mixin.item;
 
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.food.Foods;
 import net.minecraft.world.item.*;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
@@ -20,6 +21,26 @@ public abstract class ItemsMixin {
     @Shadow
     public static Item registerItem(String string, Item arg) {
         return null;
+    }
+
+
+    @ModifyArgs(
+            method = "<clinit>",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/MobBucketItem;<init>(Lnet/minecraft/world/entity/EntityType;Lnet/minecraft/world/level/material/Fluid;Lnet/minecraft/sounds/SoundEvent;Lnet/minecraft/world/item/Item$Properties;)V")
+    )
+    private static void barched$addFishBucketFood(Args args) {
+        EntityType<?> type = args.get(0);
+        Item.Properties properties = args.get(3);
+
+        if (type == EntityType.PUFFERFISH) {
+            args.set(3, properties.food(Foods.PUFFERFISH));
+        } else if (type == EntityType.SALMON) {
+            args.set(3, properties.food(Foods.SALMON));
+        } else if (type == EntityType.COD) {
+            args.set(3, properties.food(Foods.COD));
+        } else if (type == EntityType.TROPICAL_FISH) {
+            args.set(3, properties.food(Foods.TROPICAL_FISH));
+        }
     }
 
     @ModifyArgs(method = "<clinit>", slice = @Slice(from = @At(value = "CONSTANT", args = "stringValue=zombie_horse_spawn_egg")), at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/SpawnEggItem;<init>(Lnet/minecraft/world/entity/EntityType;IILnet/minecraft/world/item/Item$Properties;)V"))
