@@ -98,7 +98,6 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityBr
                 && self.isEyeInFluid(FluidTags.WATER)
                 && !this.level().getBlockState(BlockPos.containing(self.getX(), self.getEyeY(), self.getZ())).is(Blocks.BUBBLE_COLUMN)
                 && self.getAirSupply() < self.getMaxAirSupply()
-                && !self.hasEffect(Barched.MobEffects.BREATH_OF_THE_NAUTILUS)
                 && (self.hasEffect(MobEffects.WATER_BREATHING) || self.hasEffect(MobEffects.CONDUIT_POWER))) {
             self.setAirSupply(this.increaseAirSupply(self.getAirSupply()));
         }
