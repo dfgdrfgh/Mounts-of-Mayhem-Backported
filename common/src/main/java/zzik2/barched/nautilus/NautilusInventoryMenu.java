@@ -33,7 +33,7 @@ public class NautilusInventoryMenu extends AbstractContainerMenu {
         for (int row = 0; row < 3; row++) for (int col = 0; col < 9; col++) this.addSlot(new Slot(playerInventory, col + row * 9 + 9, 8 + col * 18, 84 + row * 18));
         for (int col = 0; col < 9; col++) this.addSlot(new Slot(playerInventory, col, 8 + col * 18, 142));
     }
-    @Override public boolean stillValid(Player player) { return nautilus.isAlive() && player.canInteractWithEntity(nautilus, 4.0D) && inventory.stillValid(player); }
+    @Override public boolean stillValid(Player player) { return !nautilus.hasInventoryChanged(inventory) && nautilus.isAlive() && player.canInteractWithEntity(nautilus, 4.0D) && inventory.stillValid(player); }
     @Override public void removed(Player player) { super.removed(player); inventory.stopOpen(player); }
     @Override public ItemStack quickMoveStack(Player player, int index) {
         Slot slot = this.slots.get(index);
