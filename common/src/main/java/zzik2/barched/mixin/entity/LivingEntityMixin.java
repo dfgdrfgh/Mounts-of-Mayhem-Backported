@@ -4,6 +4,7 @@ import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import dev.architectury.platform.Platform;
 import it.unimi.dsi.fastutil.objects.Object2LongMap;
 import it.unimi.dsi.fastutil.objects.Object2LongOpenHashMap;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.resources.ResourceLocation;
@@ -14,12 +15,14 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.AttackRange;
 import net.minecraft.world.item.component.KineticWeapon;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
@@ -74,6 +77,8 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityBr
 
     @Shadow public abstract int getTicksUsingItem();
 
+    @Shadow protected abstract int increaseAirSupply(int air);
+
     @Nullable protected Object2LongMap<Entity> recentKineticEnemies;
     private long lastKineticHitFeedbackTime;
 
@@ -84,6 +89,19 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityBr
     @Inject(method = "<init>", at = @At("TAIL"))
     private void barched$init(EntityType<?> entityType, Level level, CallbackInfo ci) {
         this.lastKineticHitFeedbackTime = -2147483648L;
+    }
+
+    @Inject(method = "baseTick", at = @At("TAIL"))
+    private void barched$match12111BreathingRefill(CallbackInfo ci) {
+        LivingEntity self = (LivingEntity) (Object) this;
+        if (!this.level().isClientSide
+                && self.isEyeInFluid(FluidTags.WATER)
+                && !this.level().getBlockState(BlockPos.containing(self.getX(), self.getEyeY(), self.getZ())).is(Blocks.BUBBLE_COLUMN)
+                && self.getAirSupply() < self.getMaxAirSupply()
+                && !self.hasEffect(Barched.MobEffects.BREATH_OF_THE_NAUTILUS)
+                && (self.hasEffect(MobEffects.WATER_BREATHING) || self.hasEffect(MobEffects.CONDUIT_POWER))) {
+            self.setAirSupply(this.increaseAirSupply(self.getAirSupply()));
+        }
     }
 
     @Inject(method = "travel", at = @At("TAIL"))
