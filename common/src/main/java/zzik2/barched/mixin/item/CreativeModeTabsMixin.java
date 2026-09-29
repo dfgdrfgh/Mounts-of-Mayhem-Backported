@@ -12,11 +12,23 @@ import zzik2.barched.Barched;
 @Mixin(CreativeModeTabs.class)
 public class CreativeModeTabsMixin {
 
-    @Inject(method = "method_51318", at = @At(value = "FIELD", target = "Lnet/minecraft/world/item/Items;HUSK_SPAWN_EGG:Lnet/minecraft/world/item/Item;", opcode = Opcodes.GETSTATIC, shift = At.Shift.AFTER))
-    private static void barched$acceptSpawnEgg(CreativeModeTab.ItemDisplayParameters itemDisplayParameters, CreativeModeTab.Output output, CallbackInfo ci) {
-        output.accept(Barched.Items.PARCHED_SPAWN_EGG);
-        output.accept(Barched.Items.CAMEL_HUSK_SPAWN_EGG);
+    @Inject(method = "method_51318", at = @At(value = "FIELD", target = "Lnet/minecraft/world/item/Items;GLOW_SQUID_SPAWN_EGG:Lnet/minecraft/world/item/Item;", opcode = Opcodes.GETSTATIC, shift = At.Shift.AFTER))
+    private static void barched$acceptNautilusSpawnEgg(CreativeModeTab.ItemDisplayParameters itemDisplayParameters, CreativeModeTab.Output output, CallbackInfo ci) {
         output.accept(Barched.Items.NAUTILUS_SPAWN_EGG);
+    }
+
+    @Inject(method = "method_51318", at = @At(value = "FIELD", target = "Lnet/minecraft/world/item/Items;BOGGED_SPAWN_EGG:Lnet/minecraft/world/item/Item;", opcode = Opcodes.GETSTATIC, shift = At.Shift.AFTER))
+    private static void barched$acceptCamelHuskSpawnEgg(CreativeModeTab.ItemDisplayParameters itemDisplayParameters, CreativeModeTab.Output output, CallbackInfo ci) {
+        output.accept(Barched.Items.CAMEL_HUSK_SPAWN_EGG);
+    }
+
+    @Inject(method = "method_51318", at = @At(value = "FIELD", target = "Lnet/minecraft/world/item/Items;HUSK_SPAWN_EGG:Lnet/minecraft/world/item/Item;", opcode = Opcodes.GETSTATIC, shift = At.Shift.AFTER))
+    private static void barched$acceptParchedSpawnEgg(CreativeModeTab.ItemDisplayParameters itemDisplayParameters, CreativeModeTab.Output output, CallbackInfo ci) {
+        output.accept(Barched.Items.PARCHED_SPAWN_EGG);
+    }
+
+    @Inject(method = "method_51318", at = @At(value = "FIELD", target = "Lnet/minecraft/world/item/Items;ZOMBIE_HORSE_SPAWN_EGG:Lnet/minecraft/world/item/Item;", opcode = Opcodes.GETSTATIC, shift = At.Shift.AFTER))
+    private static void barched$acceptZombieNautilusSpawnEgg(CreativeModeTab.ItemDisplayParameters itemDisplayParameters, CreativeModeTab.Output output, CallbackInfo ci) {
         output.accept(Barched.Items.ZOMBIE_NAUTILUS_SPAWN_EGG);
     }
 
@@ -28,7 +40,6 @@ public class CreativeModeTabsMixin {
         output.accept(Barched.Items.GOLDEN_NAUTILUS_ARMOR);
         output.accept(Barched.Items.DIAMOND_NAUTILUS_ARMOR);
         output.accept(Barched.Items.NETHERITE_NAUTILUS_ARMOR);
-
     }
 
     @Inject(method = "method_51325", at = @At(value = "FIELD", target = "Lnet/minecraft/world/item/Items;NETHERITE_SWORD:Lnet/minecraft/world/item/Item;", opcode = Opcodes.GETSTATIC, shift = At.Shift.AFTER))
