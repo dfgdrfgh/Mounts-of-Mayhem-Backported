@@ -30,7 +30,7 @@ public abstract class EntityTypeMixin {
 
     @Unique
     @ModifyAccess(access = Opcodes.ACC_PUBLIC)
-    private static final EntityType<Parched> PARCHED = register("parched", EntityType.Builder.of(Parched::new, MobCategory.MONSTER).sized(0.6F, 1.99F).eyeHeight(1.74F).ridingOffset(-0.7F).clientTrackingRange(8));
+    private static final EntityType<Parched> PARCHED = register("parched", EntityType.Builder.of(Parched::new, MobCategory.MONSTER).sized(0.6F, 1.99F).eyeHeight(1.74F).ridingOffset(-0.7F).clientTrackingRange(8).notInPeaceful());
 
     @Unique
     @ModifyAccess(access = Opcodes.ACC_PUBLIC)
