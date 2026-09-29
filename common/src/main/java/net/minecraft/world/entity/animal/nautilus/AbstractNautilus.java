@@ -411,45 +411,45 @@ PlayerRideableJumping, Saddleable, ContainerListener {
     }
 
     @Override
-    public InteractionResult mobInteract(Player $$0, InteractionHand $$1) {
-        ItemStack $$2 = $$0.getItemInHand($$1);
+    public InteractionResult mobInteract(Player player, InteractionHand hand) {
+        ItemStack stack = player.getItemInHand(hand);
         if (this.isBaby()) {
-            return this.interactAsAnimal($$0, $$1);
+            return this.interactAsAnimal(player, hand);
         }
-        if (this.isTame() && $$0.isSecondaryUseActive()) {
-            this.openCustomInventoryScreen($$0);
+        if (this.isTame() && player.isSecondaryUseActive()) {
+            this.openCustomInventoryScreen(player);
             return InteractionResult.SUCCESS;
         }
-        if (!$$2.isEmpty()) {
-            if (this.isTame() && $$2.getItem() instanceof NautilusArmorItem && this.getBodyArmorItem().isEmpty()) {
+        if (!stack.isEmpty()) {
+            if (this.isTame() && stack.getItem() instanceof NautilusArmorItem && this.getBodyArmorItem().isEmpty()) {
                 if (!this.level().isClientSide()) {
-                    this.setItemSlot(EquipmentSlot.BODY, $$2.copyWithCount(1));
-                    $$2.consume(1, $$0);
+                    this.setItemSlot(EquipmentSlot.BODY, stack.copyWithCount(1));
+                    stack.consume(1, player);
                 }
                 return InteractionResult.sidedSuccess(this.level().isClientSide());
             }
-            if (!this.level().isClientSide() && !this.isTame() && this.isFood($$2)) {
-                this.usePlayerItem($$0, $$1, $$2);
-                this.tryToTame($$0);
+            if (!this.level().isClientSide() && !this.isTame() && this.isFood(stack)) {
+                this.usePlayerItem(player, hand, stack);
+                this.tryToTame(player);
                 return InteractionResult.CONSUME;
             }
-            if (this.isFood($$2) && this.getHealth() < this.getMaxHealth()) {
-                FoodProperties $$3 = $$2.get(DataComponents.FOOD);
-                this.heal($$3 != null ? (float)(2 * $$3.nutrition()) : 1.0f);
-                this.usePlayerItem($$0, $$1, $$2);
+            if (this.isFood(stack) && this.getHealth() < this.getMaxHealth()) {
+                FoodProperties food = stack.get(DataComponents.FOOD);
+                this.heal(food != null ? (float)(2 * food.nutrition()) : 1.0f);
+                this.usePlayerItem(player, hand, stack);
                 this.playEatingSound();
                 return InteractionResult.SUCCESS;
             }
-            InteractionResult $$4 = $$2.interactLivingEntity($$0, this, $$1);
-            if ($$4.consumesAction()) {
-                return $$4;
+            InteractionResult itemInteraction = stack.interactLivingEntity(player, this, hand);
+            if (itemInteraction.consumesAction()) {
+                return itemInteraction;
             }
         }
-        if (this.isTame() && !$0.isSecondaryUseActive() && !this.isFood($2)) {
-            this.doPlayerRide($$0);
+        if (this.isTame() && !player.isSecondaryUseActive() && !this.isFood(stack)) {
+            this.doPlayerRide(player);
             return InteractionResult.SUCCESS;
         }
-        return this.interactAsAnimal($$0, $$1);
+        return this.interactAsAnimal(player, hand);
     }
 
     private InteractionResult interactAsAnimal(Player player, InteractionHand hand) {
