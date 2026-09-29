@@ -442,7 +442,7 @@ PlayerRideableJumping, Saddleable, ContainerListener {
                 return $$4;
             }
         }
-        if (this.isTame() && !$$0.isSecondaryUseActive() && !this.isFood($$2)) {
+        if (this.isTame() && this.isSaddled() && !$0.isSecondaryUseActive() && !this.isFood($2)) {
             this.doPlayerRide($$0);
             return InteractionResult.SUCCESS;
         }
