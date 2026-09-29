@@ -1,0 +1,72 @@
+name: Build
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths: &build-paths
+      - ".github/workflows/build.yml"
+      - "common/**"
+      - "fabric/**"
+      - "neoforge/**"
+      - "gradle/**"
+      - "build.gradle"
+      - "settings.gradle"
+      - "gradle.properties"
+      - "gradlew"
+      - "gradlew.bat"
+  push:
+    branches: ["master", "fix-1.21.11-mob-accuracy"]
+    paths: *build-paths
+
+permissions:
+  contents: read
+
+concurrency:
+  group: build-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build Yarched
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
+          show-progress: false
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v6.0.1
+        with:
+          java-version: "21"
+          distribution: microsoft
+          verify-signature: true
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v6.3.0
+        with:
+          cache-read-only: ${{ github.event_name == 'pull_request' }}
+
+      - name: Build Fabric and NeoForge
+        run: ./gradlew build --build-cache --stacktrace
+
+      - name: Upload Fabric JARs
+        if: always()
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          name: yarched-fabric
+          path: fabric/build/libs/*.jar
+          if-no-files-found: warn
+          archive: false
+
+      - name: Upload NeoForge JARs
+        if: always()
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          name: yarched-neoforge
+          path: neoforge/build/libs/*.jar
+          if-no-files-found: warn
+          archive: false
