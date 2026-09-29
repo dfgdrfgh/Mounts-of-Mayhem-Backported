@@ -11,6 +11,7 @@ import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 import zzik2.barched.Barched;
 import zzik2.barched.bridge.item.Item$PropertiesBridge;
+import zzik2.barched.item.BackportedHorseArmorItem;
 import zzik2.zreflex.mixin.ModifyAccess;
 
 @Mixin(Items.class)
@@ -28,6 +29,26 @@ public abstract class ItemsMixin {
             args.set(2, 0xFFFFFF);
         }
     }
+
+    @ModifyAccess(access = Opcodes.ACC_PUBLIC)
+    private static final Item COPPER_HORSE_ARMOR = registerItem("copper_horse_armor", new BackportedHorseArmorItem(
+            ArmorMaterials.IRON,
+            4,
+            0.0F,
+            0.0F,
+            net.minecraft.resources.ResourceLocation.withDefaultNamespace("textures/entity/equipment/horse_body/copper.png"),
+            new Item.Properties()
+    ));
+
+    @ModifyAccess(access = Opcodes.ACC_PUBLIC)
+    private static final Item NETHERITE_HORSE_ARMOR = registerItem("netherite_horse_armor", new BackportedHorseArmorItem(
+            ArmorMaterials.NETHERITE,
+            19,
+            3.0F,
+            0.1F,
+            net.minecraft.resources.ResourceLocation.withDefaultNamespace("textures/entity/equipment/horse_body/netherite.png"),
+            new Item.Properties().fireResistant()
+    ));
 
     @ModifyAccess(access = Opcodes.ACC_PUBLIC)
     private static final Item PARCHED_SPAWN_EGG = registerItem("parched_spawn_egg", new SpawnEggItem(Barched.EntityType.PARCHED, 0xFFFFFF, 0xFFFFFF, new Item.Properties()));
