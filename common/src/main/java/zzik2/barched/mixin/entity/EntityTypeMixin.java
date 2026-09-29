@@ -5,6 +5,8 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.animal.CamelHusk;
 import net.minecraft.world.entity.monster.Parched;
+import net.minecraft.world.entity.animal.nautilus.Nautilus;
+import net.minecraft.world.entity.animal.nautilus.ZombieNautilus;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -35,4 +37,12 @@ public abstract class EntityTypeMixin {
     @Unique
     @ModifyAccess(access = Opcodes.ACC_PUBLIC)
     private static final EntityType<CamelHusk> CAMEL_HUSK = register("camel_husk", EntityType.Builder.of(CamelHusk::new, MobCategory.MONSTER).sized(1.7F, 2.375F).eyeHeight(2.275F).clientTrackingRange(10));
+
+    @Unique
+    @ModifyAccess(access = Opcodes.ACC_PUBLIC)
+    private static final EntityType<Nautilus> NAUTILUS = register("nautilus", EntityType.Builder.of(Nautilus::new, MobCategory.WATER_CREATURE).sized(0.875F, 0.95F).eyeHeight(0.2751F).passengerAttachments(1.1375F).clientTrackingRange(10));
+
+    @Unique
+    @ModifyAccess(access = Opcodes.ACC_PUBLIC)
+    private static final EntityType<ZombieNautilus> ZOMBIE_NAUTILUS = register("zombie_nautilus", EntityType.Builder.of(ZombieNautilus::new, MobCategory.MONSTER).sized(0.875F, 0.95F).eyeHeight(0.2751F).passengerAttachments(1.1375F).clientTrackingRange(10));
 }

@@ -44,4 +44,13 @@ public class ServerGamePacketListenerImplMixin {
             }
         }
     }
+
+    @Inject(method = "handlePlayerCommand", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/level/ServerPlayer;resetLastActionTime()V", shift = At.Shift.AFTER), cancellable = true)
+    private void barched$openNautilusInventory(net.minecraft.network.protocol.game.ServerboundPlayerCommandPacket packet, CallbackInfo ci) {
+        if (packet.getAction() == net.minecraft.network.protocol.game.ServerboundPlayerCommandPacket.Action.OPEN_INVENTORY
+                && this.player.getVehicle() instanceof net.minecraft.world.entity.animal.nautilus.AbstractNautilus nautilus) {
+            nautilus.openCustomInventoryScreen(this.player);
+            ci.cancel();
+        }
+    }
 }

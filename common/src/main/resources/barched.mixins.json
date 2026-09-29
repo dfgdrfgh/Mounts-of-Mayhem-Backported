@@ -30,7 +30,8 @@
     "client.renderer.entity.LivingEntityRendererMixin",
     "client.renderer.entity.PlayerRendererMixin",
     "client.renderer.entity.UndeadHorseRendererMixin",
-    "client.renderer.entity.layers.ItemInHandLayerMixin"
+    "client.renderer.entity.layers.ItemInHandLayerMixin",
+    "client.multiplayer.ClientPacketListenerMixin"
   ],
   "mixins": [
     "InteractionHandMixin",
@@ -108,7 +109,8 @@
     "sounds.SoundEventsMixin",
     "tags.BlockTagsMixin",
     "tags.ItemTagsMixin",
-    "util.datafix.DataFixersMixin"
+    "util.datafix.DataFixersMixin",
+    "entity.ai.sensing.SensorTypeMixin"
   ],
   "injectors": {
     "defaultRequire": 1

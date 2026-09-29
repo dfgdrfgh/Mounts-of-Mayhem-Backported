@@ -20,6 +20,8 @@ public abstract class EntityRenderersMixin {
     }
 
     static {
+        register(zzik2.barched.Barched.EntityType.NAUTILUS, zzik2.barched.client.nautilus.NautilusRenderer::new);
+        register(zzik2.barched.Barched.EntityType.ZOMBIE_NAUTILUS, zzik2.barched.client.nautilus.NautilusRenderer::new);
         register(ZReflectionTool.getStaticFieldValue(net.minecraft.world.entity.EntityType.class, "PARCHED"), ParchedRenderer::new);
         register(ZReflectionTool.getStaticFieldValue(net.minecraft.world.entity.EntityType.class, "CAMEL_HUSK"), context -> new CamelHuskRenderer(context, ModelLayers.CAMEL));
     }

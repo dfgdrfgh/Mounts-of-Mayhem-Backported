@@ -88,4 +88,25 @@ public abstract class ItemsMixin {
     @ModifyAccess(access = Opcodes.ACC_PUBLIC)
     private static final Item NETHERITE_SPEAR = registerItem("netherite_spear", new SpearItem(Tiers.NETHERITE, ((Item$PropertiesBridge) new Item.Properties()).spear(Tiers.NETHERITE, 1.15F, 1.2F, 0.4F, 2.5F, 7.0F, 5.5F, 5.1F, 8.75F, 4.6F).fireResistant()));
 
+
+    @ModifyAccess(access = Opcodes.ACC_PUBLIC)
+    private static final Item COPPER_NAUTILUS_ARMOR = registerItem("copper_nautilus_armor", new zzik2.barched.item.NautilusArmorItem("copper", 4, 0F, 0F, new Item.Properties()));
+
+    @ModifyAccess(access = Opcodes.ACC_PUBLIC)
+    private static final Item IRON_NAUTILUS_ARMOR = registerItem("iron_nautilus_armor", new zzik2.barched.item.NautilusArmorItem("iron", 5, 0F, 0F, new Item.Properties()));
+
+    @ModifyAccess(access = Opcodes.ACC_PUBLIC)
+    private static final Item GOLDEN_NAUTILUS_ARMOR = registerItem("golden_nautilus_armor", new zzik2.barched.item.NautilusArmorItem("gold", 7, 0F, 0F, new Item.Properties()));
+
+    @ModifyAccess(access = Opcodes.ACC_PUBLIC)
+    private static final Item DIAMOND_NAUTILUS_ARMOR = registerItem("diamond_nautilus_armor", new zzik2.barched.item.NautilusArmorItem("diamond", 11, 2F, 0F, new Item.Properties()));
+
+    @ModifyAccess(access = Opcodes.ACC_PUBLIC)
+    private static final Item NETHERITE_NAUTILUS_ARMOR = registerItem("netherite_nautilus_armor", new zzik2.barched.item.NautilusArmorItem("netherite", 19, 3F, 0.1F, new Item.Properties().fireResistant()));
+
+    @ModifyAccess(access = Opcodes.ACC_PUBLIC)
+    private static final Item NAUTILUS_SPAWN_EGG = registerItem("nautilus_spawn_egg", new SpawnEggItem(Barched.EntityType.NAUTILUS, 0xFFFFFF, 0xFFFFFF, new Item.Properties()));
+
+    @ModifyAccess(access = Opcodes.ACC_PUBLIC)
+    private static final Item ZOMBIE_NAUTILUS_SPAWN_EGG = registerItem("zombie_nautilus_spawn_egg", new SpawnEggItem(Barched.EntityType.ZOMBIE_NAUTILUS, 0xFFFFFF, 0xFFFFFF, new Item.Properties()));
 }

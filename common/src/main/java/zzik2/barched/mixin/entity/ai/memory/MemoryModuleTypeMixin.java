@@ -30,4 +30,13 @@ public abstract class MemoryModuleTypeMixin {
 
     @ModifyAccess(access = Opcodes.ACC_PUBLIC)
     private static final MemoryModuleType<SpearAttack.SpearStatus> SPEAR_STATUS = register("spear_status");
+
+    @Shadow
+    private static <U> MemoryModuleType<U> register(String id, com.mojang.serialization.Codec<U> codec) { return null; }
+
+    @ModifyAccess(access = Opcodes.ACC_PUBLIC)
+    private static final MemoryModuleType<Integer> CHARGE_COOLDOWN_TICKS = register("charge_cooldown_ticks", com.mojang.serialization.Codec.INT);
+
+    @ModifyAccess(access = Opcodes.ACC_PUBLIC)
+    private static final MemoryModuleType<Integer> ATTACK_TARGET_COOLDOWN = register("attack_target_cooldown", com.mojang.serialization.Codec.INT);
 }

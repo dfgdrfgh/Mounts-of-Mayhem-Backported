@@ -36,6 +36,10 @@ public final class BarchedBiomeModifications {
         BarchedConfig config = Barched.getConfig();
         registerZombieHorseSpawn(config);
         registerParchedSpawn(config);
+        BiomeModifications.addProperties(
+                context -> context.hasTag(net.minecraft.tags.BiomeTags.IS_OCEAN),
+                (context, properties) -> properties.getSpawnProperties().addSpawn(
+                        MobCategory.WATER_CREATURE, new MobSpawnSettings.SpawnerData(Barched.EntityType.NAUTILUS, 5, 1, 1)));
     }
 
     private static void registerZombieHorseSpawn(BarchedConfig config) {
