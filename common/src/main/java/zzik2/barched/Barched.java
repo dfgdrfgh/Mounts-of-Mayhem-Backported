@@ -137,6 +137,8 @@ public final class Barched {
     }
 
     public static class Items {
+        public static final Item COPPER_HORSE_ARMOR = ZReflectionTool.getStaticFieldValue(net.minecraft.world.item.Items.class, "COPPER_HORSE_ARMOR");
+        public static final Item NETHERITE_HORSE_ARMOR = ZReflectionTool.getStaticFieldValue(net.minecraft.world.item.Items.class, "NETHERITE_HORSE_ARMOR");
         public static final Item PARCHED_SPAWN_EGG = ZReflectionTool.getStaticFieldValue(net.minecraft.world.item.Items.class, "PARCHED_SPAWN_EGG");
         public static final Item CAMEL_HUSK_SPAWN_EGG = ZReflectionTool.getStaticFieldValue(net.minecraft.world.item.Items.class, "CAMEL_HUSK_SPAWN_EGG");
         public static final Item WOODEN_SPEAR = ZReflectionTool.getStaticFieldValue(net.minecraft.world.item.Items.class, "WOODEN_SPEAR");
