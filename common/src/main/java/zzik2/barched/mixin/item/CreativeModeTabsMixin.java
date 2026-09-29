@@ -18,11 +18,6 @@ public class CreativeModeTabsMixin {
         output.accept(Barched.Items.CAMEL_HUSK_SPAWN_EGG);
     }
 
-    @Inject(method = "method_51325", at = @At(value = "FIELD", target = "Lnet/minecraft/world/item/Items;LEATHER_HORSE_ARMOR:Lnet/minecraft/world/item/Item;", opcode = Opcodes.GETSTATIC, shift = At.Shift.AFTER))
-    private static void barched$acceptCopperHorseArmor(CreativeModeTab.ItemDisplayParameters itemDisplayParameters, CreativeModeTab.Output output, CallbackInfo ci) {
-        output.accept(Barched.Items.COPPER_HORSE_ARMOR);
-    }
-
     @Inject(method = "method_51325", at = @At(value = "FIELD", target = "Lnet/minecraft/world/item/Items;DIAMOND_HORSE_ARMOR:Lnet/minecraft/world/item/Item;", opcode = Opcodes.GETSTATIC, shift = At.Shift.AFTER))
     private static void barched$acceptNetheriteHorseArmor(CreativeModeTab.ItemDisplayParameters itemDisplayParameters, CreativeModeTab.Output output, CallbackInfo ci) {
         output.accept(Barched.Items.NETHERITE_HORSE_ARMOR);
