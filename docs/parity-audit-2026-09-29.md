@@ -223,3 +223,53 @@ Latest code validation for this sweep is commit
 GitHub Actions run 36663901605 completed successfully: Fabric and NeoForge
 compiled and both release-JAR artifact uploads succeeded.
 https://github.com/dfgdrfgh/Yarched/actions/runs/36663901605
+
+
+## Final compatibility verification after generated-data cross-check
+
+The final generated 1.21.11 data was checked directly in addition to the Java
+generators. This corrected one earlier inference and verified several
+1.21.1-specific compatibility shims:
+
+- Zombie Horse natural spawning uses the final generated biome set: Plains,
+  Sunflower Plains, Snowy Plains, Savanna, Savanna Plateau and Windswept
+  Savanna. Those biomes use Zombie 90 / Zombie Villager 5 / Zombie Horse 5.
+  Ice Spikes retains Zombie 95 / Zombie Villager 5 and has no Zombie Horse.
+- Nautilus Armor has one bootstrap-time dispenser implementation for all five
+  armor tiers. The older duplicate item-constructor registration was removed.
+  Dispenser-equipped Nautilus armor consumes one item, equips only a valid
+  empty BODY slot, remains guaranteed-drop equipment and marks the mount
+  persistent.
+- The 1.21.1 Saddle dispenser was adapted so a dispenser-saddled Nautilus is
+  also marked persistent, matching 1.21.11's generic equipment dispenser.
+- The Nautilus boat compatibility hook now reproduces both halves of the final
+  behavior: Nautilus/Zombie Nautilus do not auto-board, and the boat still
+  collision-pushes them when boarding is rejected.
+- The backport now registers a single compatibility DataFixer schema at the
+  1.21.1 data version for Camel Husk, Parched, Nautilus and Zombie Nautilus.
+  This avoids registering two different schemas at the same version key, where
+  DataFixerUpper would replace the earlier schema.
+- Final 1.21.11 marks Parched not-in-peaceful at the EntityType layer, but
+  1.21.1 has no equivalent EntityType.Builder method. No extra shim is needed:
+  Parched extends the 1.21.1 Monster path, whose hostile spawn rules reject
+  Peaceful and whose shouldDespawnInPeaceful implementation returns true.
+- A Git-blob comparison covered 27 matching new-mob/equipment PNG and OGG
+  assets. 26 are byte-for-byte identical to final 1.21.11. The sole difference
+  is the already-documented Camel Husk body texture adaptation needed by the
+  older 1.21.1 camel model. All five Nautilus Armor textures and the Nautilus
+  saddle texture are exact matches.
+- Nautilus swimming animation keyframes and Zombie Nautilus coral geometry
+  match final 1.21.11. The coral visibility rule also matches: coral is hidden
+  while BODY armor is equipped.
+- Nautilus and Zombie Nautilus loot tables and the all-effects advancement are
+  exact JSON matches. The smithing recipe advancements are also exact; the
+  smithing recipes themselves use 1.21.1's older ingredient-object syntax with
+  equivalent inputs/results.
+- The Shipwreck Map armor pool matches final 1.21.11 exactly: Copper 20, Iron
+  10, Gold 5 and Diamond 2, each with count 1.
+
+Latest code validation is commit
+`7e7eaa877245ea9e258a0920f3c1f25d11482584`.
+GitHub Actions run 36666275810 completed successfully: Fabric and NeoForge
+compiled and both release-JAR artifact uploads succeeded.
+https://github.com/dfgdrfgh/Yarched/actions/runs/36666275810
