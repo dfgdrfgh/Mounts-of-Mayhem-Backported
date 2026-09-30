@@ -121,7 +121,8 @@
     "stats.StatsMixin",
     "tags.BlockTagsMixin",
     "tags.ItemTagsMixin",
-    "util.datafix.DataFixersMixin"
+    "util.datafix.DataFixersMixin",
+    "inventory.HorseInventoryMenuMixin"
   ],
   "injectors": {
     "defaultRequire": 1
