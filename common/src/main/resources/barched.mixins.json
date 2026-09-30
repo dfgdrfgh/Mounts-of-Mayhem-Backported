@@ -83,6 +83,7 @@
     "entity.monster.piglin.PiglinMixin",
     "entity.player.PlayerMixin",
     "entity.vehicle.AbstractMinecartMixin",
+    "entity.vehicle.BoatMixin",
     "item.CreativeModeTabsMixin",
     "item.Item$PropertiesMixin",
     "item.ItemMixin",
