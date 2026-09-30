@@ -374,3 +374,39 @@ Latest code validation is commit
 GitHub Actions run 36675164787 completed successfully: Fabric and NeoForge
 compiled and both release-JAR artifact uploads succeeded.
 https://github.com/dfgdrfgh/Yarched/actions/runs/36675164787
+
+
+## Final dispenser eligibility cross-check
+
+A final comparison against the 1.21.11 generic equipment dispenser found two
+observable 1.21.1 compatibility differences and both are now corrected:
+
+- Horse Armor dispensing now uses the final Horse/Zombie Horse eligibility
+  rule for every horse-armor tier: the BODY slot must be valid and empty and
+  the horse must be tamed **or** allowed to pick up loot. This replaces the old
+  1.21.1 tame-only dispenser check while retaining the final
+  CAN_WEAR_HORSE_ARMOR entity set (Horse and Zombie Horse only). Leather, Iron,
+  Golden, Diamond and Netherite Horse Armor share the same compatibility path.
+- Saddle dispensing now preserves the final AbstractHorse dispenser gate for
+  Horse and Zombie Horse (tamed or can-pick-up-loot) instead of relying only on
+  1.21.1 Saddleable.isSaddleable(). Other saddleable mounts continue to use
+  their normal saddleability checks, and the existing compatibility path still
+  marks equipped mobs persistent.
+- 1.21.1 Mob.setBodyArmorItem already delegates to
+  setItemSlotAndDropWhenKilled, so dispenser-equipped Horse Armor remains
+  guaranteed-drop equipment and marks the mount persistent without an extra
+  compatibility write.
+
+The same final-source pass rechecked Nautilus adult/baby geometry, Nautilus
+Armor and Saddle geometry, Zombie Nautilus coral geometry/visibility, Nautilus
+swim animation inputs, Camel/Camel Husk synchronized Saddle ItemStack access,
+Horse/Nautilus armor material values, and shared mount-equipment shearing. No
+additional non-structural mismatch was found in those areas.
+
+Current code head for this cross-check is
+`cf3a9fe97cabe1766f65cc607cf44bcf50b56da4`. No pull-request-triggered GitHub
+Actions run was attached to this head at the time of the audit update, so the
+new dispenser commits are source-verified but not yet independently
+CI-validated. The preceding validated mount-equipment head remains
+`e54ed6365723048c8e43490ea051a6d3fe9578de`, whose Fabric and NeoForge build
+completed successfully in Actions run 36675164787.
