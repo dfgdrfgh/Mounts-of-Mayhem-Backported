@@ -421,9 +421,8 @@ Horse/Nautilus armor material values, and shared mount-equipment shearing. No
 additional non-structural mismatch was found in those areas.
 
 Current code head for this cross-check is
-`6c197a92cb5c20432c13ae799c277cd463c4a66a`. No pull-request-triggered GitHub
-Actions run was attached to this head at the time of the audit update, so the
-new dispenser commits are source-verified but not yet independently
-CI-validated. The preceding validated mount-equipment head remains
-`e54ed6365723048c8e43490ea051a6d3fe9578de`, whose Fabric and NeoForge build
-completed successfully in Actions run 36675164787.
+`6c197a92cb5c20432c13ae799c277cd463c4a66a`.
+GitHub Actions run 36678016565 completed successfully: the combined Fabric and
+NeoForge Gradle build passed, and both Fabric and NeoForge JAR artifact uploads
+succeeded.
+https://github.com/dfgdrfgh/Yarched/actions/runs/36678016565
