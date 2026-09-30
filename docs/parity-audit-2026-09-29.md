@@ -162,9 +162,9 @@ verification. Specifically exercise Drowned water/beach/water transitions,
 Nautilus saddle save/reload and remote glint visibility, and Camel Husk saddle
 shearing with passengers, sneaking and Binding Curse.
 
-The Zombie Nautilus backport represents the two built-in variants with a
-synchronized flag and vanilla variant IDs in saved data; it does not implement
-1.21.11's extensible variant registry/data-component system. The newer general quad-leash physics/renderer are not supplied by 1.21.1; the
+The original Zombie Nautilus flag-only implementation has been replaced by the
+data-driven variant implementation described below. The newer general
+quad-leash physics/renderer are not supplied by 1.21.1; the
 Zombie Horse quad offsets are not exercised by the scoped 1.21.1 leash holders.
 Copper Horse Armor remains excluded as previously requested; Netherite Horse
 Armor is part of the 1.21.11 scope.
@@ -426,3 +426,42 @@ GitHub Actions run 36678016565 completed successfully: the combined Fabric and
 NeoForge Gradle build passed, and both Fabric and NeoForge JAR artifact uploads
 succeeded.
 https://github.com/dfgdrfgh/Yarched/actions/runs/36678016565
+
+## Data-driven Zombie Nautilus variants
+
+The two-value coral flag is replaced with the `minecraft:zombie_nautilus_variant`
+dynamic registry. Definitions use the final 1.21.11 format: `model` (default
+`normal`, or `warm`), `asset_id`, and prioritized `spawn_conditions`. The built-in
+Temperate and Warm JSON files are copied byte-for-byte from the official client
+JAR. Both loaders load the registry through the shared vanilla registry loader
+and synchronize appearance definitions before entities are sent to clients.
+
+- Supports the three vanilla condition types: biome, structure and moon
+  brightness. The moon test uses 1.21.1's dimension-time moon brightness; newer
+  environment-attribute overrides are not present in the base engine.
+- Selection retains the highest matching priority, chooses randomly among ties,
+  and preserves duplicate matching selectors, as final `PriorityProvider` does.
+- Custom variant IDs survive entity saves, reloads and client tracking. Unknown
+  saved IDs retain the existing/default variant instead of inventing a variant.
+- The renderer resolves both model type and texture from the registry entry.
+- Adds `minecraft:zombie_nautilus/variant` as an item component with the vanilla
+  holder codec. Spawn-egg configuration applies it before `entity_data`, so
+  explicit entity NBT retains vanilla's final precedence. This common spawn
+  configuration also covers eggs dispensed by blocks.
+- Network definitions deliberately omit spawn conditions. Structure predicates
+  use a server-only registry and must not be decoded on clients.
+- Adds focused codec regressions for default models, custom texture namespaces,
+  biome conditions, structure-free network decoding, moon bounds and invalid
+  definitions. These run in the existing Gradle build.
+
+Compared against official 1.21.11 `ZombieNautilus`, `ZombieNautilusVariant`,
+`ZombieNautilusVariants`, `PriorityProvider`, all three spawn-condition classes,
+and `EntityType`; verified the adaptations against official 1.21.1 mappings and
+`RegistryDataLoader`, `RegistrySynchronization`, `EitherHolder`, and `EntityType`.
+
+Remaining runtime checks for this addition: world startup on both loaders,
+custom-data-pack spawning and save/reload, spawn-egg component/NBT precedence,
+and remote-client appearance after joining or changing worlds. Codec tests and
+compilation do not establish those runtime results. The older engine also has
+no generic entity-component predicate/command system; this addition implements
+the variant's item-component spawn path and entity NBT, not that engine-wide API.
