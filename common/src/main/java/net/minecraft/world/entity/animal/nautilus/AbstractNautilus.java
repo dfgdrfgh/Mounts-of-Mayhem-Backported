@@ -615,10 +615,14 @@ PlayerRideableJumping, Saddleable, ContainerListener, SaddleItemBridge {
 
     @Override
     public void setItemSlot(EquipmentSlot slot, ItemStack stack) {
+        ItemStack previous = slot == EquipmentSlot.BODY ? this.getItemBySlot(slot) : ItemStack.EMPTY;
         super.setItemSlot(slot, stack);
-        if (slot == EquipmentSlot.BODY && this.inventory != null) {
-            if (!stack.isEmpty()) this.setDropChance(EquipmentSlot.BODY, 2.0F);
-            if (this.inventory.getItem(1) != stack) this.inventory.setItem(1, stack);
+        if (slot == EquipmentSlot.BODY) {
+            this.onEquipItem(slot, previous, stack);
+            if (this.inventory != null) {
+                if (!stack.isEmpty()) this.setDropChance(EquipmentSlot.BODY, 2.0F);
+                if (this.inventory.getItem(1) != stack) this.inventory.setItem(1, stack);
+            }
         }
     }
 
