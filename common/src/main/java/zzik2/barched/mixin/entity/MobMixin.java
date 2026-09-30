@@ -12,6 +12,8 @@ import net.minecraft.world.entity.monster.Drowned;
 import net.minecraft.world.entity.monster.Pillager;
 import net.minecraft.world.entity.monster.WitherSkeleton;
 import net.minecraft.world.entity.monster.piglin.Piglin;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageSources;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.AnimalArmorItem;
@@ -27,10 +29,12 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import zzik2.barched.Barched;
 import zzik2.barched.item.NautilusArmorItem;
 import zzik2.barched.bridge.entity.MobBridge;
+import zzik2.barched.bridge.item.ItemStackBridge;
 import zzik2.zreflex.mixin.ModifyAccess;
 
 @Mixin(Mob.class)
@@ -60,6 +64,21 @@ public abstract class MobMixin extends LivingEntity implements MobBridge {
                 && !((Object) this instanceof ZombieHorse)) {
             cir.setReturnValue(ItemStack.EMPTY);
         }
+    }
+
+    @Redirect(
+            method = "doHurtTarget",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/world/damagesource/DamageSources;mobAttack(Lnet/minecraft/world/entity/LivingEntity;)Lnet/minecraft/world/damagesource/DamageSource;"
+            )
+    )
+    private DamageSource barched$weaponDamageSource(DamageSources sources, LivingEntity attacker) {
+        ItemStack weapon = this.getWeaponItem();
+        return ((ItemStackBridge) (Object) weapon).getDamageSource(
+                (LivingEntity) (Object) this,
+                () -> sources.mobAttack(attacker)
+        );
     }
 
     @Inject(method = "doHurtTarget", at = @At("TAIL"))
