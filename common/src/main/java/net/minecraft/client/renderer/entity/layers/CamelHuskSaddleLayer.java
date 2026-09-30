@@ -11,10 +11,13 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.animal.CamelHusk;
+import net.minecraft.world.item.ItemStack;
+import zzik2.barched.bridge.entity.AbstractHorseBridge;
 
 @Environment(EnvType.CLIENT)
 public class CamelHuskSaddleLayer extends RenderLayer<CamelHusk, CamelHuskModel<CamelHusk>> {
@@ -73,8 +76,12 @@ public class CamelHuskSaddleLayer extends RenderLayer<CamelHusk, CamelHuskModel<
         this.bridle.visible = true;
         this.reins.visible = camelHusk.isVehicle();
 
-        VertexConsumer vertexConsumer =
-                bufferSource.getBuffer(RenderType.entityCutoutNoCull(SADDLE_TEXTURE));
+        ItemStack saddleStack = ((AbstractHorseBridge) (Object) camelHusk).barched$getSaddleItem();
+        VertexConsumer vertexConsumer = ItemRenderer.getArmorFoilBuffer(
+                bufferSource,
+                RenderType.armorCutoutNoCull(SADDLE_TEXTURE),
+                saddleStack.hasFoil()
+        );
         this.model.renderToBuffer(
                 poseStack,
                 vertexConsumer,
