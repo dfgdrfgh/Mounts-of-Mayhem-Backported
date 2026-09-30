@@ -413,6 +413,30 @@ PlayerRideableJumping, Saddleable, ContainerListener {
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
+        if (stack.is(Items.SHEARS) && !player.isSecondaryUseActive() && !this.isVehicle()) {
+            ItemStack armor = this.getBodyArmorItem();
+            if (!armor.isEmpty()) {
+                if (!this.level().isClientSide()) {
+                    ItemStack removed = armor.copy();
+                    this.setItemSlot(EquipmentSlot.BODY, ItemStack.EMPTY);
+                    this.spawnAtLocation(removed);
+                    this.gameEvent(GameEvent.SHEAR, player);
+                    stack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(hand));
+                }
+                return InteractionResult.sidedSuccess(this.level().isClientSide());
+            }
+            if (this.isSaddled()) {
+                if (!this.level().isClientSide()) {
+                    ItemStack removed = this.inventory.getItem(0).copy();
+                    this.inventory.setItem(0, ItemStack.EMPTY);
+                    this.spawnAtLocation(removed);
+                    this.gameEvent(GameEvent.SHEAR, player);
+                    this.playSound(Barched.SoundEvents.SADDLE_UNEQUIP);
+                    stack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(hand));
+                }
+                return InteractionResult.sidedSuccess(this.level().isClientSide());
+            }
+        }
         if (this.isBaby()) {
             return this.interactAsAnimal(player, hand);
         }
