@@ -11,6 +11,8 @@ import net.minecraft.world.entity.animal.Pig;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.ItemLike;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
@@ -74,6 +76,9 @@ public abstract class PigMixin implements SaddleItemBridge {
     )
     private ItemEntity barched$dropStoredSaddle(Entity entity, ItemLike ignored) {
         ItemStack saddle = this.barched$getSaddleItem();
+        if (!saddle.isEmpty() && EnchantmentHelper.has(saddle, EnchantmentEffectComponents.PREVENT_EQUIPMENT_DROP)) {
+            return null;
+        }
         return entity.spawnAtLocation(saddle.isEmpty() ? new ItemStack(Items.SADDLE) : saddle.copy());
     }
 
