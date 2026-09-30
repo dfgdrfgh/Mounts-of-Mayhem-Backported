@@ -168,3 +168,56 @@ synchronized flag and vanilla variant IDs in saved data; it does not implement
 Zombie Horse quad offsets are not exercised by the scoped 1.21.1 leash holders.
 Copper Horse Armor remains excluded as previously requested; Netherite Horse
 Armor is part of the 1.21.11 scope.
+
+
+## Final non-weapon compatibility sweep
+
+A later compatibility sweep found and closed two more 1.21.1 adaptation gaps:
+
+- Nautilus Armor now has a dedicated dispenser behavior on 1.21.1. Vanilla
+  1.21.1 already knows how to dispense Saddles onto any Saddleable, but its
+  armor dispenser path only understands the older horse-armor system. The
+  backport now equips any of the five Nautilus Armor tiers onto a valid adult,
+  tamed Nautilus or Zombie Nautilus with an empty BODY slot, consumes one item,
+  preserves the guaranteed-drop behavior supplied by the mount's BODY-slot
+  setter, and marks the equipped mount persistent like 1.21.11's generic
+  equipment dispenser.
+- Nautilus entities no longer auto-board boats, and the rejected boarding path
+  now applies the normal boat collision push. The first backport prevented
+  startRiding but did not reproduce 1.21.11's else-branch push because 1.21.1
+  ignores startRiding's return value in that loop.
+
+Additional final-release checks:
+
+- The 1.21.1 entity-tag graph already defines UNDEAD as SKELETONS + ZOMBIES and
+  CAN_BREATHE_UNDER_WATER, IGNORES_POISON_AND_REGEN,
+  INVERTED_HEALING_AND_HARM, WITHER_FRIENDS and SENSITIVE_TO_SMITE in terms of
+  UNDEAD. Therefore the additive Parched/Zombie Horse/Camel Husk/Zombie
+  Nautilus tag entries automatically inherit the intended final behavior.
+- 1.21.1 Pufferfish already reads NOT_SCARY_FOR_PUFFERFISH. The additive
+  Nautilus and Zombie Nautilus entries therefore work without another code
+  hook.
+- The safe land-dismount algorithm in AbstractNautilus is behavior-identical to
+  the final 1.21.11 Animal implementation added before release.
+- Adult and baby Nautilus model geometry, Nautilus Armor geometry and Nautilus
+  Saddle geometry match the final 1.21.11 values, including the late
+  head/shell clipping adjustment.
+- Zombie Nautilus is forced non-baby in both implementations, covering the
+  negative-age hitbox fix.
+- Drowned-created Zombie Nautilus is marked persistent for structure spawns,
+  matching the release-candidate persistence fix.
+- The Zombie Horse daylight routine delegates to 1.21.1's isSunBurnTick, which
+  already requires actual daytime before sky/brightness checks and therefore
+  does not reproduce the late 1.21.11 light-source false-positive.
+- Zombie Horse natural placement, Parched/Camel Husk surface placement and
+  Nautilus water placement match the final SpawnPlacements table. Zombie
+  Nautilus intentionally has no standalone natural SpawnPlacement entry.
+- The final Zombie Horse biome set was rechecked from OverworldBiomes:
+  Snowy Plains (but not Ice Spikes) and all three Savanna variants. Normal
+  Plains and Sunflower Plains use their existing plains spawn table.
+
+Latest code validation for this sweep is commit
+`1b8b1c8041a9e39de4a73b10dbbb8cd23d43ae68`.
+GitHub Actions run 36663901605 completed successfully: Fabric and NeoForge
+compiled and both release-JAR artifact uploads succeeded.
+https://github.com/dfgdrfgh/Yarched/actions/runs/36663901605
