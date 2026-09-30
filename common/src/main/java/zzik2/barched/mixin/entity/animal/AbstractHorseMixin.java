@@ -9,6 +9,9 @@ import net.minecraft.world.entity.ai.goal.GoalSelector;
 import net.minecraft.world.entity.ai.goal.PanicGoal;
 import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.level.gameevent.GameEvent;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -40,6 +43,17 @@ public abstract class AbstractHorseMixin implements AbstractHorseBridge {
         ItemStack saddle = horse.getSlot(400).get();
         if (!ItemStack.matches(horse.getEntityData().get(BARCHED_SADDLE_ITEM), saddle)) {
             horse.getEntityData().set(BARCHED_SADDLE_ITEM, saddle.copy());
+        }
+    }
+
+    @Inject(method = "dropEquipment", at = @At("TAIL"))
+    private void barched$clearDroppedSaddle(CallbackInfo ci) {
+        AbstractHorse horse = (AbstractHorse) (Object) this;
+        ItemStack saddle = this.barched$getSaddleItem();
+        if (!saddle.isEmpty()
+                && !EnchantmentHelper.has(saddle, EnchantmentEffectComponents.PREVENT_EQUIPMENT_DROP)) {
+            this.barched$setSaddleItem(ItemStack.EMPTY);
+            horse.gameEvent(GameEvent.UNEQUIP);
         }
     }
 
