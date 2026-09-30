@@ -267,6 +267,7 @@ public final class Barched {
         public static final TagKey<Item> DROWNED_PREFERRED_WEAPONS = ZReflectionTool.getStaticFieldValue(net.minecraft.tags.ItemTags.class, "DROWNED_PREFERRED_WEAPONS");
         public static final TagKey<Item> PIGLIN_PREFERRED_WEAPONS = ZReflectionTool.getStaticFieldValue(net.minecraft.tags.ItemTags.class, "PIGLIN_PREFERRED_WEAPONS");
         public static final TagKey<Item> PILLAGER_PREFERRED_WEAPONS = ZReflectionTool.getStaticFieldValue(net.minecraft.tags.ItemTags.class, "PILLAGER_PREFERRED_WEAPONS");
+        public static final TagKey<Item> WITHER_SKELETON_DISLIKED_WEAPONS = ZReflectionTool.getStaticFieldValue(net.minecraft.tags.ItemTags.class, "WITHER_SKELETON_DISLIKED_WEAPONS");
         public static final TagKey<Item> SPEARS = ZReflectionTool.getStaticFieldValue(net.minecraft.tags.ItemTags.class, "SPEARS");
         public static final TagKey<Item> LUNGE_ENCHANTABLE = ZReflectionTool.getStaticFieldValue(net.minecraft.tags.ItemTags.class, "LUNGE_ENCHANTABLE");
         public static final TagKey<Item> MELEE_WEAPON_ENCHANTABLE = ZReflectionTool.getStaticFieldValue(net.minecraft.tags.ItemTags.class, "MELEE_WEAPON_ENCHANTABLE");
