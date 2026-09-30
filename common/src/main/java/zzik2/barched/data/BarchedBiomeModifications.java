@@ -26,13 +26,9 @@ public final class BarchedBiomeModifications {
 
     public static void register() {
         BarchedConfig config = Barched.getConfig();
-        registerNaturalSpawn(
-                "zombie horse",
+        registerZombieHorseSpawn(
                 config.zombieHorseSpawnWeight,
-                config.zombieHorseSpawnBiomes,
-                () -> EntityType.ZOMBIE_HORSE,
-                1,
-                1
+                config.zombieHorseSpawnBiomes
         );
         registerNaturalSpawn(
                 "parched",
@@ -41,6 +37,55 @@ public final class BarchedBiomeModifications {
                 () -> Barched.EntityType.PARCHED,
                 4,
                 4
+        );
+    }
+
+    private static void registerZombieHorseSpawn(int weight, List<String> configuredBiomes) {
+        if (weight <= 0) {
+            return;
+        }
+
+        BiomeSelection selection = parseBiomeSelection("zombie horse", configuredBiomes);
+        if (selection.isEmpty()) {
+            LOGGER.warn("Natural spawning for zombie horse is disabled because no valid biome selectors are configured");
+            return;
+        }
+
+        BiomeModifications.replaceProperties(
+                selection::matches,
+                (context, properties) -> {
+                    var spawnProperties = properties.getSpawnProperties();
+                    var monsterSpawns = spawnProperties.getSpawners().get(MobCategory.MONSTER);
+                    if (monsterSpawns != null) {
+                        var zombieSpawns = monsterSpawns.stream()
+                                .filter(data -> data.type == EntityType.ZOMBIE)
+                                .toList();
+                        if (!zombieSpawns.isEmpty()) {
+                            spawnProperties.removeSpawns(
+                                    (category, data) -> category == MobCategory.MONSTER && data.type == EntityType.ZOMBIE
+                            );
+                            for (MobSpawnSettings.SpawnerData zombieSpawn : zombieSpawns) {
+                                int adjustedWeight = Math.max(0, zombieSpawn.getWeight().asInt() - weight);
+                                if (adjustedWeight > 0) {
+                                    spawnProperties.addSpawn(
+                                            MobCategory.MONSTER,
+                                            new MobSpawnSettings.SpawnerData(
+                                                    EntityType.ZOMBIE,
+                                                    adjustedWeight,
+                                                    zombieSpawn.minCount,
+                                                    zombieSpawn.maxCount
+                                            )
+                                    );
+                                }
+                            }
+                        }
+                    }
+
+                    spawnProperties.addSpawn(
+                            MobCategory.MONSTER,
+                            new MobSpawnSettings.SpawnerData(EntityType.ZOMBIE_HORSE, weight, 1, 1)
+                    );
+                }
         );
     }
 
