@@ -44,6 +44,6 @@ public class NautilusRidingSoundInstance extends AbstractTickableSoundInstance {
         }
 
         float speed = (float)this.nautilus.getDeltaMovement().length();
-        this.volume = speed >= 0.01F ? 5.0F * Mth.clampedLerp(speed, 0.0F, 1.0F) : 0.0F;
+        this.volume = speed >= 0.01F ? 5.0F * Mth.clampedLerp(0.0F, 1.0F, speed) : 0.0F;
     }
 }
