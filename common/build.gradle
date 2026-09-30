@@ -2,6 +2,10 @@ architectury {
     common rootProject.enabled_platforms.split(',')
 }
 
+tasks.withType(Test).configureEach {
+    testLogging.exceptionFormat = 'full'
+}
+
 dependencies {
     testImplementation 'junit:junit:4.13.2'
 
