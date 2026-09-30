@@ -430,6 +430,7 @@ PlayerRideableJumping, Saddleable, ContainerListener {
                 if (!this.level().isClientSide()) {
                     ItemStack removed = this.inventory.getItem(0).copy();
                     this.inventory.setItem(0, ItemStack.EMPTY);
+                    this.gameEvent(GameEvent.UNEQUIP);
                     this.spawnAtLocation(removed, (float) this.getAttachments().get(EntityAttachment.PASSENGER, 0, 0.0F).y);
                     this.gameEvent(GameEvent.SHEAR, player);
                     this.playSound(Barched.SoundEvents.SADDLE_UNEQUIP);
