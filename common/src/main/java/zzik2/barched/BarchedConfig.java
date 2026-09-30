@@ -12,6 +12,8 @@ public class BarchedConfig implements ConfigData {
 
     private static final int MAX_NATURAL_SPAWN_WEIGHT = 1000;
     private static final List<String> DEFAULT_ZOMBIE_HORSE_SPAWN_BIOMES = List.of(
+            "minecraft:plains",
+            "minecraft:sunflower_plains",
             "minecraft:snowy_plains",
             "minecraft:savanna",
             "minecraft:savanna_plateau",
