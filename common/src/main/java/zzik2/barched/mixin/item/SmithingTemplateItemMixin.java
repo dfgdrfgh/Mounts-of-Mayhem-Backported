@@ -18,10 +18,14 @@ public class SmithingTemplateItemMixin {
     @ModifyAccess(access = Opcodes.ACC_PUBLIC)
     private static final ResourceLocation EMPTY_SLOT_SPEAR = ResourceLocation.withDefaultNamespace("container/slot/spear");
 
+    @ModifyAccess(access = Opcodes.ACC_PUBLIC)
+    private static final ResourceLocation EMPTY_SLOT_NAUTILUS_ARMOR = ResourceLocation.withDefaultNamespace("container/slot/nautilus_armor");
+
     @Inject(method = "createNetheriteUpgradeIconList", at = @At("RETURN"), cancellable = true)
     private static void barched$addIcons(CallbackInfoReturnable<List<ResourceLocation>> cir) {
         List<ResourceLocation> originalList = cir.getReturnValue();
         List<ResourceLocation> newList = new ArrayList<>(originalList);
+        newList.add(EMPTY_SLOT_NAUTILUS_ARMOR);
         newList.add(EMPTY_SLOT_SPEAR);
         cir.setReturnValue(newList);
     }
