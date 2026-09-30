@@ -42,24 +42,18 @@ public final class BarchedBiomeModifications {
     private static void registerNautilusSpawns() {
         addNautilusSpawns(Set.of(
                 ResourceLocation.withDefaultNamespace("ocean"),
-                ResourceLocation.withDefaultNamespace("deep_ocean")
-        ), 1);
-
-        addNautilusSpawns(Set.of(
+                ResourceLocation.withDefaultNamespace("deep_ocean"),
                 ResourceLocation.withDefaultNamespace("lukewarm_ocean"),
-                ResourceLocation.withDefaultNamespace("deep_lukewarm_ocean")
-        ), 2);
+                ResourceLocation.withDefaultNamespace("deep_lukewarm_ocean"),
+                ResourceLocation.withDefaultNamespace("warm_ocean")
+        ), 5);
 
         addNautilusSpawns(Set.of(
                 ResourceLocation.withDefaultNamespace("cold_ocean"),
                 ResourceLocation.withDefaultNamespace("deep_cold_ocean"),
                 ResourceLocation.withDefaultNamespace("frozen_ocean"),
                 ResourceLocation.withDefaultNamespace("deep_frozen_ocean")
-        ), 3);
-
-        addNautilusSpawns(Set.of(
-                ResourceLocation.withDefaultNamespace("warm_ocean")
-        ), 10);
+        ), 2);
     }
 
     private static void addNautilusSpawns(Set<ResourceLocation> biomes, int weight) {
@@ -67,7 +61,7 @@ public final class BarchedBiomeModifications {
                 context -> context.getKey().map(biomes::contains).orElse(false),
                 (context, properties) -> properties.getSpawnProperties().addSpawn(
                         MobCategory.WATER_CREATURE,
-                        new MobSpawnSettings.SpawnerData(Barched.EntityType.NAUTILUS, weight, 1, 3)
+                        new MobSpawnSettings.SpawnerData(Barched.EntityType.NAUTILUS, weight, 1, 1)
                 )
         );
     }
