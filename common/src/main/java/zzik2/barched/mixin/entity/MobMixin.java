@@ -14,6 +14,7 @@ import net.minecraft.world.entity.monster.WitherSkeleton;
 import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.AnimalArmorItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.core.component.DataComponents;
@@ -53,7 +54,8 @@ public abstract class MobMixin extends LivingEntity implements MobBridge {
             cir.setReturnValue(ItemStack.EMPTY);
             return;
         }
-        if (stack.is(Barched.Items.NETHERITE_HORSE_ARMOR)
+        if (stack.getItem() instanceof AnimalArmorItem animalArmor
+                && animalArmor.getBodyType() == AnimalArmorItem.BodyType.EQUESTRIAN
                 && !((Object) this instanceof Horse)
                 && !((Object) this instanceof ZombieHorse)) {
             cir.setReturnValue(ItemStack.EMPTY);
