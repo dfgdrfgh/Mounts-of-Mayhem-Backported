@@ -118,8 +118,8 @@ public interface DispenseItemBehaviorMixin {
             return false;
         }
 
-        // Horse and ZombieHorse both return true for the newer SADDLE slot in
-        // 1.21.11. AbstractHorse then gates dispenser use by tame OR pickup-loot.
+        // Horse, ZombieHorse and SkeletonHorse return true for the newer SADDLE
+        // slot in 1.21.11. AbstractHorse then gates dispenser use by tame OR pickup-loot.
         if (entity instanceof Horse horse) {
             return horse.isTamed() || horse.canPickUpLoot();
         }
