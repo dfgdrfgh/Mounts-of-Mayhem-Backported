@@ -113,6 +113,7 @@ public final class Barched {
         public static final SoundEvent NAUTILUS_RIDING = ZReflectionTool.getStaticFieldValue(net.minecraft.sounds.SoundEvents.class, "NAUTILUS_RIDING");
         public static final SoundEvent NAUTILUS_ARMOR_EQUIP = ZReflectionTool.getStaticFieldValue(net.minecraft.sounds.SoundEvents.class, "NAUTILUS_ARMOR_EQUIP");
         public static final SoundEvent NAUTILUS_ARMOR_UNEQUIP = ZReflectionTool.getStaticFieldValue(net.minecraft.sounds.SoundEvents.class, "NAUTILUS_ARMOR_UNEQUIP");
+        public static final SoundEvent SADDLE_UNEQUIP = ZReflectionTool.getStaticFieldValue(net.minecraft.sounds.SoundEvents.class, "SADDLE_UNEQUIP");
         public static final SoundEvent NAUTILUS_SADDLE_EQUIP = ZReflectionTool.getStaticFieldValue(net.minecraft.sounds.SoundEvents.class, "NAUTILUS_SADDLE_EQUIP");
         public static final SoundEvent NAUTILUS_SADDLE_UNDERWATER_EQUIP = ZReflectionTool.getStaticFieldValue(net.minecraft.sounds.SoundEvents.class, "NAUTILUS_SADDLE_UNDERWATER_EQUIP");
         public static final SoundEvent PARROT_IMITATE_ZOMBIE_NAUTILUS = ZReflectionTool.getStaticFieldValue(net.minecraft.sounds.SoundEvents.class, "PARROT_IMITATE_ZOMBIE_NAUTILUS");
