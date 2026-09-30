@@ -36,9 +36,10 @@ public abstract class DrownedMixin extends Zombie {
     private boolean barched$keepRiderUpright(boolean original) { return original && !this.isPassenger(); }
 
 
-    @org.spongepowered.asm.mixin.injection.Inject(method = "rideTick", at = @org.spongepowered.asm.mixin.injection.At("TAIL"))
-    private void barched$matchMountedBodyRotation(org.spongepowered.asm.mixin.injection.callback.CallbackInfo ci) {
-        Entity vehicle = this.getVehicle();
+    @Override
+    public void rideTick() {
+        super.rideTick();
+        Entity vehicle = this.getControlledVehicle();
         if (vehicle instanceof PathfinderMob mount) {
             this.yBodyRot = mount.yBodyRot;
         }
