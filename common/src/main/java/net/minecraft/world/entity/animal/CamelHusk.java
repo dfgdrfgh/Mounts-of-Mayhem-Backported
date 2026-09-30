@@ -52,6 +52,22 @@ public class CamelHusk extends Camel implements CamelBridge {
 
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
+        ItemStack heldItem = player.getItemInHand(hand);
+        if (heldItem.is(Items.SHEARS) && !player.isSecondaryUseActive() && !this.isVehicle()) {
+            ItemStack saddle = this.getSlot(400).get();
+            if (!saddle.isEmpty() && (player.isCreative()
+                    || !EnchantmentHelper.has(saddle, EnchantmentEffectComponents.PREVENT_ARMOR_CHANGE))) {
+                if (!this.level().isClientSide()) {
+                    ItemStack removed = saddle.copy();
+                    this.getSlot(400).set(ItemStack.EMPTY);
+                    this.spawnAtLocation(removed, (float)this.getAttachments().get(EntityAttachment.PASSENGER, 0, 0.0F).y);
+                    this.gameEvent(GameEvent.SHEAR, player);
+                    this.playSound(Barched.SoundEvents.SADDLE_UNEQUIP);
+                    heldItem.hurtAndBreak(1, player, LivingEntity.getSlotForHand(hand));
+                }
+                return InteractionResult.sidedSuccess(this.level().isClientSide());
+            }
+        }
         return super.mobInteract(player, hand);
     }
 
