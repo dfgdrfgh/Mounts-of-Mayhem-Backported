@@ -93,6 +93,7 @@ public abstract class EntityMixin implements EntityBridge {
         if (!self.level().isClientSide()) {
             ItemStack removed = saddle.copy();
             saddleBridge.barched$setSaddleItem(ItemStack.EMPTY);
+            self.gameEvent(GameEvent.UNEQUIP);
             self.spawnAtLocation(
                     removed,
                     (float) self.getAttachments().get(EntityAttachment.PASSENGER, 0, 0.0F).y
