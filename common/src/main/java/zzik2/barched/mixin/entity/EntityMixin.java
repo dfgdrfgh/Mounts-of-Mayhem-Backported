@@ -30,6 +30,7 @@ import zzik2.barched.Barched;
 import zzik2.barched.bridge.entity.EntityBridge;
 import zzik2.barched.bridge.entity.PlayerBridge;
 import zzik2.barched.bridge.entity.SaddleItemBridge;
+import zzik2.barched.util.EntityAttachmentUtil;
 
 @Mixin(Entity.class)
 public abstract class EntityMixin implements EntityBridge {
@@ -93,7 +94,7 @@ public abstract class EntityMixin implements EntityBridge {
                     horse.setItemSlot(EquipmentSlot.BODY, ItemStack.EMPTY);
                     self.spawnAtLocation(
                             removed,
-                            (float) self.getAttachments().get(EntityAttachment.PASSENGER, 0, 0.0F).y
+                            EntityAttachmentUtil.averageY(self, EntityAttachment.PASSENGER)
                     );
                     self.gameEvent(GameEvent.SHEAR, player);
                     self.playSound(Barched.SoundEvents.HORSE_ARMOR_UNEQUIP);
@@ -122,7 +123,7 @@ public abstract class EntityMixin implements EntityBridge {
             self.gameEvent(GameEvent.UNEQUIP);
             self.spawnAtLocation(
                     removed,
-                    (float) self.getAttachments().get(EntityAttachment.PASSENGER, 0, 0.0F).y
+                    EntityAttachmentUtil.averageY(self, EntityAttachment.PASSENGER)
             );
             self.gameEvent(GameEvent.SHEAR, player);
             self.playSound(Barched.SoundEvents.SADDLE_UNEQUIP);
