@@ -400,13 +400,19 @@ observable 1.21.1 compatibility differences and both are now corrected:
   registration was removed. All five horse-armor tiers now use the single
   shared final-rule compatibility registration, eliminating load-order
   dependence between the legacy and backported behaviors.
-- Saddle item interaction now reproduces the 1.21.11 Equippable path for Horse
-  and Zombie Horse rather than always inheriting 1.21.1 SaddleItem's
-  isSaddleable gate. This closes the regular Horse difference introduced by
-  the equipment-component migration while preserving the full Saddle stack,
-  equip event and old-engine saddle inventory/drop behavior. Zombie Horse's
-  own mobInteract still rejects non-food items while untamed, exactly as the
-  final 1.21.11 class does.
+- Saddle item interaction now reproduces the 1.21.11 Equippable path for Horse,
+  Zombie Horse and Skeleton Horse rather than always inheriting 1.21.1
+  SaddleItem's isSaddleable gate. This closes the regular Horse difference
+  introduced by the equipment-component migration and preserves direct-call
+  semantics for all three equines whose final canUseSlot implementation is
+  unconditional. The full Saddle stack, equip event and old-engine saddle
+  inventory/drop behavior are retained. Zombie Horse still rejects non-food
+  items while untamed and Skeleton Horse still returns PASS while untamed in
+  their own mobInteract methods, exactly as the final 1.21.11 classes do.
+- Skeleton Horse dispenser eligibility now also matches the final combination
+  of unconditional SADDLE canUseSlot plus AbstractHorse's tame-or-pickup-loot
+  dispenser gate. This covers the rare command/datapack-visible case where an
+  untamed Skeleton Horse is allowed to pick up loot.
 
 The same final-source pass rechecked Nautilus adult/baby geometry, Nautilus
 Armor and Saddle geometry, Zombie Nautilus coral geometry/visibility, Nautilus
@@ -415,7 +421,7 @@ Horse/Nautilus armor material values, and shared mount-equipment shearing. No
 additional non-structural mismatch was found in those areas.
 
 Current code head for this cross-check is
-`e2106c3e92bdb86175ba34444a972e3707697958`. No pull-request-triggered GitHub
+`6c197a92cb5c20432c13ae799c277cd463c4a66a`. No pull-request-triggered GitHub
 Actions run was attached to this head at the time of the audit update, so the
 new dispenser commits are source-verified but not yet independently
 CI-validated. The preceding validated mount-equipment head remains
