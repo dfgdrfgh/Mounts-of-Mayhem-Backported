@@ -167,7 +167,7 @@ public abstract class ZombieHorseMixin extends AbstractHorse implements EntityBr
                 if (!this.level().isClientSide()) {
                     ItemStack removed = armor.copy();
                     this.setItemSlot(EquipmentSlot.BODY, ItemStack.EMPTY);
-                    this.spawnAtLocation(removed);
+                    this.spawnAtLocation(removed, (float) this.getAttachments().get(EntityAttachment.PASSENGER, 0, 0.0F).y);
                     this.gameEvent(GameEvent.SHEAR, player);
                     this.playSound(Barched.SoundEvents.HORSE_ARMOR_UNEQUIP);
                     held.hurtAndBreak(1, player, LivingEntity.getSlotForHand(interactionHand));
@@ -178,7 +178,7 @@ public abstract class ZombieHorseMixin extends AbstractHorse implements EntityBr
                 if (!this.level().isClientSide()) {
                     ItemStack removed = this.inventory.getItem(0).copy();
                     this.inventory.setItem(0, ItemStack.EMPTY);
-                    this.spawnAtLocation(removed);
+                    this.spawnAtLocation(removed, (float) this.getAttachments().get(EntityAttachment.PASSENGER, 0, 0.0F).y);
                     this.gameEvent(GameEvent.SHEAR, player);
                     this.playSound(Barched.SoundEvents.SADDLE_UNEQUIP);
                     held.hurtAndBreak(1, player, LivingEntity.getSlotForHand(interactionHand));
