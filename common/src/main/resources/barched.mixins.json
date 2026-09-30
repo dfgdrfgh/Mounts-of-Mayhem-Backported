@@ -99,6 +99,7 @@
     "item.ItemStackMixin",
     "item.ItemsMixin",
     "item.MaceItemMixin",
+    "item.SaddleItemMixin",
     "item.SmithingTemplateItemMixin",
     "item.SpawnEggItemMixin",
     "item.UseAnimMixin",
