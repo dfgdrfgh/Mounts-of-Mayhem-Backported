@@ -15,6 +15,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.effect.MobEffectUtil;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -94,11 +95,18 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityBr
     @Inject(method = "baseTick", at = @At("TAIL"))
     private void barched$match12111BreathingRefill(CallbackInfo ci) {
         LivingEntity self = (LivingEntity) (Object) this;
+        boolean wouldDrown = !self.canBreatheUnderwater()
+                && !MobEffectUtil.hasWaterBreathing(self)
+                && (!(self instanceof Player player) || !player.getAbilities().invulnerable);
+        boolean shouldRefill = !self.hasEffect(Barched.MobEffects.BREATH_OF_THE_NAUTILUS)
+                || self.hasEffect(MobEffects.WATER_BREATHING)
+                || self.hasEffect(MobEffects.CONDUIT_POWER);
         if (!this.level().isClientSide
                 && self.isEyeInFluid(FluidTags.WATER)
                 && !this.level().getBlockState(BlockPos.containing(self.getX(), self.getEyeY(), self.getZ())).is(Blocks.BUBBLE_COLUMN)
                 && self.getAirSupply() < self.getMaxAirSupply()
-                && (self.hasEffect(MobEffects.WATER_BREATHING) || self.hasEffect(MobEffects.CONDUIT_POWER))) {
+                && !wouldDrown
+                && shouldRefill) {
             self.setAirSupply(this.increaseAirSupply(self.getAirSupply()));
         }
     }
