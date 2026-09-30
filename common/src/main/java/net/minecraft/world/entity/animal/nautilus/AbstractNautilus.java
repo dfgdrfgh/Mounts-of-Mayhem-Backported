@@ -415,7 +415,7 @@ PlayerRideableJumping, Saddleable, ContainerListener {
         ItemStack stack = player.getItemInHand(hand);
         if (stack.is(Items.SHEARS) && !player.isSecondaryUseActive() && !this.isVehicle()) {
             ItemStack armor = this.getBodyArmorItem();
-            if (!armor.isEmpty()) {
+            if (!armor.isEmpty() && (player.isCreative() || !net.minecraft.world.item.enchantment.EnchantmentHelper.has(armor, net.minecraft.world.item.enchantment.EnchantmentEffectComponents.PREVENT_ARMOR_CHANGE))) {
                 if (!this.level().isClientSide()) {
                     ItemStack removed = armor.copy();
                     this.setItemSlot(EquipmentSlot.BODY, ItemStack.EMPTY);
@@ -425,7 +425,7 @@ PlayerRideableJumping, Saddleable, ContainerListener {
                 }
                 return InteractionResult.sidedSuccess(this.level().isClientSide());
             }
-            if (this.isSaddled()) {
+            if (this.isSaddled() && (player.isCreative() || !net.minecraft.world.item.enchantment.EnchantmentHelper.has(this.inventory.getItem(0), net.minecraft.world.item.enchantment.EnchantmentEffectComponents.PREVENT_ARMOR_CHANGE))) {
                 if (!this.level().isClientSide()) {
                     ItemStack removed = this.inventory.getItem(0).copy();
                     this.inventory.setItem(0, ItemStack.EMPTY);
