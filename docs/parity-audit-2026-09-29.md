@@ -320,6 +320,17 @@ mounts where those changes are observable:
   Zombie Horse. This reproduces the final CAN_WEAR_NAUTILUS_ARMOR and
   CAN_WEAR_HORSE_ARMOR allowed-entity sets and prevents 1.21.1's BODY-to-
   MAINHAND fallback on unrelated mobs.
+- 1.21.1 has no EquipmentSlot.SADDLE or EquipmentSlotGroup.SADDLE, so its
+  generic EnchantmentHelper equipment iteration cannot treat the preserved
+  Saddle stack as a native equipment slot. Vanilla 1.21.11 does not place
+  Saddles in the normal enchantable tags; the observable vanilla cases used by
+  this backport are handled explicitly (Binding/shearing protection,
+  PREVENT_EQUIPMENT_DROP, item components, save/load and foil). A
+  command/datapack-added active enchantment whose slot rule is ANY could still
+  execute from a native 1.21.11 Saddle slot but not from the 1.21.1 legacy
+  saddle bridge. Fully emulating that would require inventing the newer Saddle
+  equipment-slot enum/codec across the older engine and is retained as a
+  structural compatibility limit rather than using an inaccurate BODY proxy.
 - Final 1.21.11 also introduced the generic player_sheared_equipment criterion
   as part of the broader equipment migration and changed the pre-existing
   Remove Wolf Armor advancement to use it. The 1.21.1 base advancement still
