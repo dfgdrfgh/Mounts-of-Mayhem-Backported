@@ -160,32 +160,6 @@ public abstract class ZombieHorseMixin extends AbstractHorse implements EntityBr
 
     @Override
     public @NotNull InteractionResult mobInteract(Player player, InteractionHand interactionHand) {
-        ItemStack held = player.getItemInHand(interactionHand);
-        if (held.is(Items.SHEARS) && !player.isSecondaryUseActive() && !this.isVehicle()) {
-            ItemStack armor = this.getBodyArmorItem();
-            if (!armor.isEmpty() && (player.isCreative() || !net.minecraft.world.item.enchantment.EnchantmentHelper.has(armor, net.minecraft.world.item.enchantment.EnchantmentEffectComponents.PREVENT_ARMOR_CHANGE))) {
-                if (!this.level().isClientSide()) {
-                    ItemStack removed = armor.copy();
-                    this.setItemSlot(EquipmentSlot.BODY, ItemStack.EMPTY);
-                    this.spawnAtLocation(removed, (float) this.getAttachments().get(EntityAttachment.PASSENGER, 0, 0.0F).y);
-                    this.gameEvent(GameEvent.SHEAR, player);
-                    this.playSound(Barched.SoundEvents.HORSE_ARMOR_UNEQUIP);
-                    held.hurtAndBreak(1, player, LivingEntity.getSlotForHand(interactionHand));
-                }
-                return InteractionResult.sidedSuccess(this.level().isClientSide());
-            }
-            if (this.isSaddled() && (player.isCreative() || !net.minecraft.world.item.enchantment.EnchantmentHelper.has(this.inventory.getItem(0), net.minecraft.world.item.enchantment.EnchantmentEffectComponents.PREVENT_ARMOR_CHANGE))) {
-                if (!this.level().isClientSide()) {
-                    ItemStack removed = this.inventory.getItem(0).copy();
-                    this.inventory.setItem(0, ItemStack.EMPTY);
-                    this.spawnAtLocation(removed, (float) this.getAttachments().get(EntityAttachment.PASSENGER, 0, 0.0F).y);
-                    this.gameEvent(GameEvent.SHEAR, player);
-                    this.playSound(Barched.SoundEvents.SADDLE_UNEQUIP);
-                    held.hurtAndBreak(1, player, LivingEntity.getSlotForHand(interactionHand));
-                }
-                return InteractionResult.sidedSuccess(this.level().isClientSide());
-            }
-        }
         boolean bl = !this.isBaby() && this.isTamed() && player.isSecondaryUseActive();
         if (!this.isVehicle() && !bl) {
             ItemStack itemStack = player.getItemInHand(interactionHand);
