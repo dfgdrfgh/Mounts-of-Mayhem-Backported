@@ -2,8 +2,6 @@ package zzik2.barched.mixin.entity;
 
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityAttachment;
@@ -12,12 +10,9 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.Saddleable;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.entity.animal.nautilus.AbstractNautilus;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.Pose;
-import net.minecraft.world.entity.vehicle.DismountHelper;
 import net.minecraft.world.item.AnimalArmorItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -25,7 +20,6 @@ import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -159,40 +153,6 @@ public abstract class EntityMixin implements EntityBridge {
         }
 
         cir.setReturnValue(InteractionResult.SUCCESS);
-    }
-
-    @Inject(method = "getDismountLocationForPassenger", at = @At("HEAD"), cancellable = true)
-    private void barched$animalDismountLocation(LivingEntity passenger, CallbackInfoReturnable<Vec3> cir) {
-        Entity self = (Entity) (Object) this;
-        if (!(self instanceof Animal animal)) {
-            return;
-        }
-
-        Direction direction = animal.getMotionDirection();
-        if (direction.getAxis() == Direction.Axis.Y) {
-            return;
-        }
-
-        int[][] offsets = DismountHelper.offsetsForDirection(direction);
-        BlockPos origin = animal.blockPosition();
-        BlockPos.MutableBlockPos candidate = new BlockPos.MutableBlockPos();
-        for (Pose pose : passenger.getDismountPoses()) {
-            AABB bounds = passenger.getLocalBoundsForPose(pose);
-            for (int[] offset : offsets) {
-                candidate.set(origin.getX() + offset[0], origin.getY(), origin.getZ() + offset[1]);
-                double floorHeight = animal.level().getBlockFloorHeight(candidate);
-                if (!DismountHelper.isBlockFloorValid(floorHeight)) {
-                    continue;
-                }
-
-                Vec3 location = Vec3.upFromBottomCenterOf(candidate, floorHeight);
-                if (DismountHelper.canDismountTo(animal.level(), passenger, bounds.move(location))) {
-                    passenger.setPose(pose);
-                    cir.setReturnValue(location);
-                    return;
-                }
-            }
-        }
     }
 
     @Inject(method = "baseTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/profiling/ProfilerFiller;push(Ljava/lang/String;)V", shift = At.Shift.AFTER, ordinal = 0))
