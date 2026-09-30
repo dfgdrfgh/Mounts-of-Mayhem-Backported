@@ -5,6 +5,7 @@ import net.minecraft.client.model.animal.nautilus.*;
 import net.minecraft.client.model.monster.nautilus.ZombieNautilusCoralModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.entity.*;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -12,6 +13,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.animal.nautilus.AbstractNautilus;
 import net.minecraft.world.entity.animal.nautilus.ZombieNautilus;
 import zzik2.barched.item.NautilusArmorItem;
+import net.minecraft.world.item.ItemStack;
 
 public class NautilusRenderer extends MobRenderer<AbstractNautilus, NautilusModel> {
     private final NautilusModel adult = this.model;
@@ -35,13 +37,13 @@ public class NautilusRenderer extends MobRenderer<AbstractNautilus, NautilusMode
         EquipmentLayer(RenderLayerParent<AbstractNautilus, NautilusModel> parent) { super(parent); }
         @Override public void render(PoseStack pose, MultiBufferSource buffers, int light, AbstractNautilus entity, float limbSwing, float limbAmount, float partialTick, float age, float yaw, float pitch) {
             if (entity.isBaby()) return;
-            if (entity.getBodyArmorItem().getItem() instanceof NautilusArmorItem item) draw(armor, item.getTexture(), pose, buffers, light, entity, limbSwing, limbAmount, age, yaw, pitch);
-            if (entity.isSaddled()) draw(saddle, ResourceLocation.withDefaultNamespace("textures/entity/equipment/nautilus_saddle/saddle.png"), pose, buffers, light, entity, limbSwing, limbAmount, age, yaw, pitch);
+            if (entity.getBodyArmorItem().getItem() instanceof NautilusArmorItem item) draw(armor, item.getTexture(), entity.getBodyArmorItem(), pose, buffers, light, entity, limbSwing, limbAmount, age, yaw, pitch);
+            if (entity.isSaddled()) draw(saddle, ResourceLocation.withDefaultNamespace("textures/entity/equipment/nautilus_saddle/saddle.png"), entity.getSaddleItem(), pose, buffers, light, entity, limbSwing, limbAmount, age, yaw, pitch);
         }
-        private void draw(NautilusModel model, ResourceLocation texture, PoseStack pose, MultiBufferSource buffers, int light, AbstractNautilus entity, float limbSwing, float limbAmount, float age, float yaw, float pitch) {
+        private void draw(NautilusModel model, ResourceLocation texture, ItemStack stack, PoseStack pose, MultiBufferSource buffers, int light, AbstractNautilus entity, float limbSwing, float limbAmount, float age, float yaw, float pitch) {
             this.getParentModel().copyPropertiesTo(model);
             model.setupAnim(entity, limbSwing, limbAmount, age, yaw, pitch);
-            model.renderToBuffer(pose, buffers.getBuffer(RenderType.entityCutoutNoCull(texture)), light, OverlayTexture.NO_OVERLAY, -1);
+            model.renderToBuffer(pose, ItemRenderer.getArmorFoilBuffer(buffers, RenderType.armorCutoutNoCull(texture), stack.hasFoil()), light, OverlayTexture.NO_OVERLAY, -1);
         }
     }
 }

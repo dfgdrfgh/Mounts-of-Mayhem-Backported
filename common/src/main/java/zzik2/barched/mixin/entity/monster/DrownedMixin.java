@@ -26,6 +26,11 @@ public abstract class DrownedMixin extends Zombie {
 
     @org.spongepowered.asm.mixin.Shadow abstract boolean wantsToSwim();
 
+    @com.llamalad7.mixinextras.injector.ModifyExpressionValue(method = "travel", at = @org.spongepowered.asm.mixin.injection.At(value = "INVOKE", target = "Lnet/minecraft/world/entity/monster/Drowned;isInWater()Z"))
+    private boolean barched$swimOnlyWhenSubmerged(boolean original) {
+        return this.isUnderWater();
+    }
+
     @org.spongepowered.asm.mixin.injection.Inject(method = "updateSwimming", at = @org.spongepowered.asm.mixin.injection.At("HEAD"), cancellable = true)
     private void barched$updateSwimming(org.spongepowered.asm.mixin.injection.callback.CallbackInfo ci) {
         if (!this.level().isClientSide()) this.setSwimming(this.isEffectiveAi() && this.isUnderWater() && this.wantsToSwim());

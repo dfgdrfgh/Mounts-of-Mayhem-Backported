@@ -88,7 +88,7 @@ PlayerRideableJumping, Saddleable, ContainerListener {
     private static final float IN_WATER_SPEED_MODIFIER = 0.011f;
     private static final float RIDDEN_SPEED_MODIFIER_IN_WATER = 0.0325f;
     private static final float RIDDEN_SPEED_MODIFIER_ON_LAND = 0.02f;
-    private static final EntityDataAccessor<Boolean> SADDLED = SynchedEntityData.defineId(AbstractNautilus.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<ItemStack> SADDLE_ITEM = SynchedEntityData.defineId(AbstractNautilus.class, EntityDataSerializers.ITEM_STACK);
     private static final EntityDataAccessor<Boolean> DASH = SynchedEntityData.defineId(AbstractNautilus.class, EntityDataSerializers.BOOLEAN);
     private static final int DASH_COOLDOWN_TICKS = 40;
     private static final int DASH_MINIMUM_DURATION_TICKS = 5;
@@ -351,7 +351,7 @@ PlayerRideableJumping, Saddleable, ContainerListener {
     protected void defineSynchedData(SynchedEntityData.Builder $$0) {
         super.defineSynchedData($$0);
         $$0.define(DASH, false);
-        $$0.define(SADDLED, false);
+        $$0.define(SADDLE_ITEM, ItemStack.EMPTY);
     }
 
     public boolean isDashing() {
@@ -557,7 +557,9 @@ PlayerRideableJumping, Saddleable, ContainerListener {
     public boolean isSaddleable() { return this.isAlive() && !this.isBaby() && this.isTame(); }
 
     @Override
-    public boolean isSaddled() { return this.entityData.get(SADDLED); }
+    public boolean isSaddled() { return this.getSaddleItem().is(Items.SADDLE); }
+
+    public ItemStack getSaddleItem() { return this.entityData.get(SADDLE_ITEM); }
 
     @Override
     public void equipSaddle(ItemStack saddle, @Nullable SoundSource source) {
@@ -602,7 +604,12 @@ PlayerRideableJumping, Saddleable, ContainerListener {
     public void containerChanged(Container container) {
         boolean saddled = this.inventory.getItem(0).is(Items.SADDLE);
         boolean wasSaddled = this.isSaddled();
-        this.entityData.set(SADDLED, saddled);
+        // 1.21.1 has no saddle equipment slot. Synchronize the stack as well
+        // as its presence so clients can render components such as glint.
+        ItemStack saddle = this.inventory.getItem(0);
+        if (!ItemStack.matches(this.getSaddleItem(), saddle)) {
+            this.entityData.set(SADDLE_ITEM, saddle.copy());
+        }
         if (saddled && !wasSaddled && this.tickCount > 20) {
             this.playSound(this.isUnderWater() ? Barched.SoundEvents.NAUTILUS_SADDLE_UNDERWATER_EQUIP : Barched.SoundEvents.NAUTILUS_SADDLE_EQUIP);
         }

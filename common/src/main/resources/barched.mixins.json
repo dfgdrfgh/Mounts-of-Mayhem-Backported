@@ -76,6 +76,7 @@
     "entity.attributes.DefaultAttributesMixin",
     "entity.monster.AbstractSkeletonMixin",
     "entity.monster.DrownedMixin",
+    "entity.monster.DrownedGoToBeachGoalMixin",
     "entity.monster.HuskMixin",
     "entity.monster.ZombieMixin",
     "entity.monster.ZombifiedPiglinMixin",

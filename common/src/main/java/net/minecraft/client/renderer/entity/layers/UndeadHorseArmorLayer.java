@@ -10,6 +10,7 @@ import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
+import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
@@ -64,10 +65,10 @@ public class UndeadHorseArmorLayer extends RenderLayer<AbstractHorse, HorseModel
                texture = DIAMOND;
             }
 
-            VertexConsumer vertexConsumer = multiBufferSource.getBuffer(RenderType.entityCutoutNoCull(texture));
+            VertexConsumer vertexConsumer = ItemRenderer.getArmorFoilBuffer(multiBufferSource, RenderType.armorCutoutNoCull(texture), itemStack.hasFoil());
             this.model.renderToBuffer(poseStack, vertexConsumer, i, OverlayTexture.NO_OVERLAY, m);
             if (itemStack.is(Items.LEATHER_HORSE_ARMOR)) {
-               VertexConsumer overlay = multiBufferSource.getBuffer(RenderType.entityCutoutNoCull(LEATHER_OVERLAY));
+               VertexConsumer overlay = multiBufferSource.getBuffer(RenderType.armorCutoutNoCull(LEATHER_OVERLAY));
                this.model.renderToBuffer(poseStack, overlay, i, OverlayTexture.NO_OVERLAY, -1);
             }
             return;
