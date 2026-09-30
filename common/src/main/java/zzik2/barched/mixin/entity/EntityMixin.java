@@ -2,12 +2,17 @@ package zzik2.barched.mixin.entity;
 
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityAttachment;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Saddleable;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.animal.horse.AbstractHorse;
+import net.minecraft.world.entity.animal.nautilus.AbstractNautilus;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.AnimalArmorItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
@@ -26,6 +31,7 @@ import zzik2.barched.Barched;
 import zzik2.barched.bridge.entity.EntityBridge;
 import zzik2.barched.bridge.entity.PlayerBridge;
 import zzik2.barched.bridge.entity.SaddleItemBridge;
+import zzik2.barched.item.NautilusArmorItem;
 import zzik2.barched.util.EntityAttachmentUtil;
 
 @Mixin(Entity.class)
@@ -75,9 +81,47 @@ public abstract class EntityMixin implements EntityBridge {
         }
 
         ItemStack shears = player.getItemInHand(hand);
-        if (!shears.is(Items.SHEARS)
-                || !(self instanceof Saddleable saddleable)
-                || !(self instanceof SaddleItemBridge saddleBridge)) {
+        if (!shears.is(Items.SHEARS)) {
+            return;
+        }
+
+        ItemStack bodyArmor = ItemStack.EMPTY;
+        SoundEvent bodyUnequipSound = null;
+        if (self instanceof AbstractHorse horse) {
+            ItemStack candidate = horse.getBodyArmorItem();
+            if (candidate.getItem() instanceof AnimalArmorItem armor
+                    && armor.getBodyType() == AnimalArmorItem.BodyType.EQUESTRIAN) {
+                bodyArmor = candidate;
+                bodyUnequipSound = Barched.SoundEvents.HORSE_ARMOR_UNEQUIP;
+            }
+        } else if (self instanceof AbstractNautilus nautilus) {
+            ItemStack candidate = nautilus.getBodyArmorItem();
+            if (candidate.getItem() instanceof NautilusArmorItem) {
+                bodyArmor = candidate;
+                bodyUnequipSound = Barched.SoundEvents.NAUTILUS_ARMOR_UNEQUIP;
+            }
+        }
+
+        if (!bodyArmor.isEmpty()
+                && (player.isCreative()
+                || !EnchantmentHelper.has(bodyArmor, EnchantmentEffectComponents.PREVENT_ARMOR_CHANGE))) {
+            if (!self.level().isClientSide()) {
+                ItemStack removed = bodyArmor.copy();
+                ((LivingEntity) self).setItemSlot(EquipmentSlot.BODY, ItemStack.EMPTY);
+                self.spawnAtLocation(
+                        removed,
+                        EntityAttachmentUtil.averageY(self, EntityAttachment.PASSENGER)
+                );
+                self.gameEvent(GameEvent.SHEAR, player);
+                self.playSound(bodyUnequipSound);
+                shears.hurtAndBreak(1, player, LivingEntity.getSlotForHand(hand));
+            }
+
+            cir.setReturnValue(InteractionResult.sidedSuccess(self.level().isClientSide()));
+            return;
+        }
+
+        if (!(self instanceof Saddleable saddleable) || !(self instanceof SaddleItemBridge saddleBridge)) {
             return;
         }
 
