@@ -8,7 +8,10 @@ import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.GoalSelector;
 import net.minecraft.world.entity.ai.goal.PanicGoal;
 import net.minecraft.world.entity.animal.horse.AbstractHorse;
+import net.minecraft.world.entity.animal.horse.ZombieHorse;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.gameevent.GameEvent;
@@ -18,8 +21,10 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import zzik2.barched.Barched;
 import zzik2.barched.bridge.entity.AbstractHorseBridge;
+import zzik2.barched.mixin.accessor.AbstractHorseAccessor;
 
 @Mixin(AbstractHorse.class)
 public abstract class AbstractHorseMixin implements AbstractHorseBridge {
@@ -55,6 +60,32 @@ public abstract class AbstractHorseMixin implements AbstractHorseBridge {
             this.barched$setSaddleItem(ItemStack.EMPTY);
             horse.gameEvent(GameEvent.UNEQUIP);
         }
+    }
+
+    @Inject(method = "handleEating", at = @At("HEAD"), cancellable = true)
+    private void barched$handleZombieHorseRedMushroom(Player player, ItemStack itemStack, CallbackInfoReturnable<Boolean> cir) {
+        AbstractHorse horse = (AbstractHorse) (Object) this;
+        if (!(horse instanceof ZombieHorse) || !itemStack.is(Items.RED_MUSHROOM)) {
+            return;
+        }
+
+        boolean changed = false;
+        if (horse.getHealth() < horse.getMaxHealth()) {
+            horse.heal(3.0F);
+            changed = true;
+        }
+
+        if ((changed || !horse.isTamed()) && horse.getTemper() < horse.getMaxTemper() && !horse.level().isClientSide()) {
+            horse.modifyTemper(3);
+            changed = true;
+        }
+
+        if (changed) {
+            ((AbstractHorseAccessor) horse).barched$invokeEating();
+            horse.gameEvent(GameEvent.EAT);
+        }
+
+        cir.setReturnValue(changed);
     }
 
     @Redirect(method = "registerGoals", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/ai/goal/GoalSelector;addGoal(ILnet/minecraft/world/entity/ai/goal/Goal;)V"))
