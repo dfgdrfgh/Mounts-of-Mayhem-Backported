@@ -27,6 +27,7 @@ public abstract class VanillaItemTagsProviderMixin extends ItemTagsProvider {
         this.tag(Barched.ItemTags.SKELETON_PREFERRED_WEAPONS).add(Items.BOW);
         this.tag(Barched.ItemTags.DROWNED_PREFERRED_WEAPONS).add(Items.TRIDENT);
         this.tag(Barched.ItemTags.PIGLIN_PREFERRED_WEAPONS).add(Items.CROSSBOW, Barched.Items.GOLDEN_SPEAR);
+        this.tag(ItemTags.PIGLIN_LOVED).add(Barched.Items.GOLDEN_SPEAR, Barched.Items.GOLDEN_NAUTILUS_ARMOR);
         this.tag(Barched.ItemTags.PILLAGER_PREFERRED_WEAPONS).add(Items.CROSSBOW);
         this.tag(Barched.ItemTags.WITHER_SKELETON_DISLIKED_WEAPONS).add(Items.BOW, Items.CROSSBOW);
         this.tag(Barched.ItemTags.CAMEL_HUSK_FOOD).add(Items.RABBIT_FOOT);
