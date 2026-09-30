@@ -12,6 +12,7 @@ import net.minecraft.world.entity.Saddleable;
 import net.minecraft.world.entity.animal.nautilus.AbstractNautilus;
 import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.entity.animal.horse.Horse;
+import net.minecraft.world.entity.animal.horse.SkeletonHorse;
 import net.minecraft.world.entity.animal.horse.ZombieHorse;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.item.ItemStack;
@@ -123,6 +124,9 @@ public interface DispenseItemBehaviorMixin {
             return horse.isTamed() || horse.canPickUpLoot();
         }
         if (entity instanceof ZombieHorse horse) {
+            return horse.isTamed() || horse.canPickUpLoot();
+        }
+        if (entity instanceof SkeletonHorse horse) {
             return horse.isTamed() || horse.canPickUpLoot();
         }
 
