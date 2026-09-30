@@ -62,7 +62,6 @@ public class NautilusInventoryMenu extends AbstractContainerMenu {
         } else if (!this.moveItemStackTo(stack, 2, 29, false)) return ItemStack.EMPTY;
         if (stack.isEmpty()) slot.setByPlayer(ItemStack.EMPTY); else slot.setChanged();
         if (stack.getCount() == original.getCount()) return ItemStack.EMPTY;
-        slot.onTake(player, stack);
         return original;
     }
 }
