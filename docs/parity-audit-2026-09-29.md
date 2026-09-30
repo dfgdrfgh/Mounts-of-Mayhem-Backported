@@ -396,6 +396,10 @@ observable 1.21.1 compatibility differences and both are now corrected:
   setItemSlotAndDropWhenKilled, so dispenser-equipped Horse Armor remains
   guaranteed-drop equipment and marks the mount persistent without an extra
   compatibility write.
+- The old Netherite Horse Armor constructor-level tame-only dispenser
+  registration was removed. All five horse-armor tiers now use the single
+  shared final-rule compatibility registration, eliminating load-order
+  dependence between the legacy and backported behaviors.
 
 The same final-source pass rechecked Nautilus adult/baby geometry, Nautilus
 Armor and Saddle geometry, Zombie Nautilus coral geometry/visibility, Nautilus
@@ -404,7 +408,7 @@ Horse/Nautilus armor material values, and shared mount-equipment shearing. No
 additional non-structural mismatch was found in those areas.
 
 Current code head for this cross-check is
-`cf3a9fe97cabe1766f65cc607cf44bcf50b56da4`. No pull-request-triggered GitHub
+`e1ef9a3cc7a628487b84d4b19c1b9e7ea0e61575`. No pull-request-triggered GitHub
 Actions run was attached to this head at the time of the audit update, so the
 new dispenser commits are source-verified but not yet independently
 CI-validated. The preceding validated mount-equipment head remains
