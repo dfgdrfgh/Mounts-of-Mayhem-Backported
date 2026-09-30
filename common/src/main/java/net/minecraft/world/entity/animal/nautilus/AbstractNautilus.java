@@ -598,7 +598,7 @@ PlayerRideableJumping, Saddleable, ContainerListener, SaddleItemBridge {
         if (!ItemStack.matches(this.getSaddleItem(), saddle)) {
             this.entityData.set(SADDLE_ITEM, saddle.copy());
         }
-        if (saddled && !wasSaddled && this.tickCount > 20) {
+        if (saddled && !wasSaddled && !this.firstTick) {
             this.playSound(this.isUnderWater() ? Barched.SoundEvents.NAUTILUS_SADDLE_UNDERWATER_EQUIP : Barched.SoundEvents.NAUTILUS_SADDLE_EQUIP);
         }
         ItemStack armor = this.inventory.getItem(1);
