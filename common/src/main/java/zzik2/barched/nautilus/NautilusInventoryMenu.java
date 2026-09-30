@@ -1,6 +1,7 @@
 package zzik2.barched.nautilus;
 
 import net.minecraft.world.Container;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.animal.nautilus.AbstractNautilus;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -8,8 +9,6 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.gameevent.GameEvent;
-import zzik2.barched.Barched;
 import zzik2.barched.item.NautilusArmorItem;
 
 public class NautilusInventoryMenu extends AbstractContainerMenu {
@@ -26,13 +25,8 @@ public class NautilusInventoryMenu extends AbstractContainerMenu {
             @Override public boolean mayPickup(Player player) { return player.isCreative() || !net.minecraft.world.item.enchantment.EnchantmentHelper.has(this.getItem(), net.minecraft.world.item.enchantment.EnchantmentEffectComponents.PREVENT_ARMOR_CHANGE); }
             @Override public int getMaxStackSize() { return 1; }
             @Override public void setByPlayer(ItemStack stack, ItemStack previous) {
+                nautilus.barched$onSaddleEquipItem(previous, stack);
                 super.setByPlayer(stack, previous);
-                if (!nautilus.level().isClientSide() && !ItemStack.isSameItemSameComponents(previous, stack)) {
-                    if (!previous.isEmpty() && !stack.isEmpty()) {
-                        nautilus.playSound(nautilus.isUnderWater() ? Barched.SoundEvents.NAUTILUS_SADDLE_UNDERWATER_EQUIP : Barched.SoundEvents.NAUTILUS_SADDLE_EQUIP);
-                    }
-                    nautilus.gameEvent(stack.isEmpty() ? GameEvent.UNEQUIP : GameEvent.EQUIP);
-                }
             }
         });
         this.addSlot(new Slot(inventory, 1, 8, 36) {
@@ -40,6 +34,10 @@ public class NautilusInventoryMenu extends AbstractContainerMenu {
             @Override public boolean isActive() { return nautilus.isSaddleable(); }
             @Override public boolean mayPickup(Player player) { return player.isCreative() || !net.minecraft.world.item.enchantment.EnchantmentHelper.has(this.getItem(), net.minecraft.world.item.enchantment.EnchantmentEffectComponents.PREVENT_ARMOR_CHANGE); }
             @Override public int getMaxStackSize() { return 1; }
+            @Override public void setByPlayer(ItemStack stack, ItemStack previous) {
+                nautilus.onEquipItem(EquipmentSlot.BODY, previous, stack);
+                super.setByPlayer(stack, previous);
+            }
         });
         for (int row = 0; row < 3; row++) for (int col = 0; col < 9; col++) this.addSlot(new Slot(playerInventory, col + row * 9 + 9, 8 + col * 18, 84 + row * 18));
         for (int col = 0; col < 9; col++) this.addSlot(new Slot(playerInventory, col, 8 + col * 18, 142));
