@@ -422,6 +422,7 @@ PlayerRideableJumping, Saddleable, ContainerListener {
                     this.setItemSlot(EquipmentSlot.BODY, ItemStack.EMPTY);
                     this.spawnAtLocation(removed, (float) this.getAttachments().get(EntityAttachment.PASSENGER, 0, 0.0F).y);
                     this.gameEvent(GameEvent.SHEAR, player);
+                    this.playSound(Barched.SoundEvents.NAUTILUS_ARMOR_UNEQUIP);
                     stack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(hand));
                 }
                 return InteractionResult.sidedSuccess(this.level().isClientSide());
@@ -625,9 +626,6 @@ PlayerRideableJumping, Saddleable, ContainerListener {
         if (slot == EquipmentSlot.BODY && this.inventory != null) {
             if (!stack.isEmpty()) this.setDropChance(EquipmentSlot.BODY, 2.0F);
             if (this.inventory.getItem(1) != stack) this.inventory.setItem(1, stack);
-            if (this.tickCount > 20 && !ItemStack.isSameItemSameComponents(previous, stack)) {
-                this.playSound(stack.isEmpty() ? Barched.SoundEvents.NAUTILUS_ARMOR_UNEQUIP : Barched.SoundEvents.NAUTILUS_ARMOR_EQUIP);
-            }
         }
     }
 
