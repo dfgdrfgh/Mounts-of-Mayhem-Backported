@@ -88,5 +88,6 @@
   "subtitles.item.armor.equip_nautilus": "Nautilus Armor equips",
   "subtitles.item.armor.unequip_nautilus": "Nautilus Armor unequips",
   "subtitles.item.nautilus_saddle_equip": "Saddle equips",
-  "subtitles.item.nautilus_saddle_underwater_equip": "Saddle equips"
+  "subtitles.item.nautilus_saddle_underwater_equip": "Saddle equips",
+  "subtitles.item.saddle.unequip": "Saddle snips away"
 }
