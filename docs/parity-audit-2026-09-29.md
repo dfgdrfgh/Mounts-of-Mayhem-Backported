@@ -106,6 +106,53 @@ Further source/resource checks:
 - Packaged Nautilus, Camel Husk, Parched and spear sound definitions match the
   official 1.21.11 sound definitions.
 
+
+## Late September 30 parity pass
+
+Additional non-weapon parity corrections completed after the earlier checkpoint:
+
+- Zombie Horse default natural-spawn biomes now match 1.21.11 exactly:
+  Snowy Plains, Savanna, Savanna Plateau and Windswept Savanna. Plains and
+  Sunflower Plains were removed from the backport defaults.
+- Zombie Horse spawning now reduces the biome's existing Zombie spawn entries
+  by the configured Zombie Horse weight while preserving each entry's existing
+  group sizes. The vanilla defaults therefore reproduce the 1.21.11 95 -> 90
+  Zombie weight shift and add Zombie Horse at weight 5 without overwriting
+  datapack/modded spawn-group values.
+- Parched's Desert replacement applies the same preservation logic to existing
+  Skeleton entries. Vanilla remains Skeleton 50 plus Parched 50, while modified
+  Skeleton group sizes are no longer reset to hard-coded values.
+- Camel Husk's natural rider chance now uses the existing config value instead
+  of an unconditional 10 percent literal. The default remains the vanilla
+  1.21.11 10 percent chance.
+- The advancement data-generation path now includes Zombie Nautilus in
+  Monsters Hunted. The packaged advancement JSON already contained it; both
+  generated and shipped paths now agree.
+- Added the missing `minecraft:nautilus_one_cm` custom statistic with the
+  distance formatter and award it from the 1.21.1 ServerPlayer riding-stat path
+  whenever the player moves while riding an AbstractNautilus.
+- Added the 1.21.11 Nautilus riding loop on the client. It starts on a successful
+  local mount, follows the mount's sound source, is audible underwater, scales
+  with Nautilus movement speed, and stops on dismount/removal.
+- Added the Nautilus Armor empty-slot icon to the Netherite Upgrade smithing
+  template in the same position as 1.21.11. Both Nautilus inventory/smithing
+  slot sprites are byte-for-byte identical to the 1.21.11 resources.
+- Verified the new iron/golden Nautilus armor recycling inputs, piglin-loved
+  membership for Golden Nautilus Armor, all-effects advancement data, entity
+  loot, armor values, smithing inputs, chest-loot weights, creative-tab
+  placement and new mount entity/item/biome tags against 1.21.11.
+
+The dedicated four-point Zombie Horse leash offsets in 1.21.11 are part of the
+newer quad-leash system. Quad connections are only used when the leash holder
+supports quad leashing (for example newer Ghast/Happy Ghast holder behavior),
+which is outside this 1.21.1 Mounts of Mayhem backport scope. The existing
+single-leash behavior remains the observable behavior for the scoped entities.
+
+Latest validation commit: `bdf6b886faae2c0a639539d45a087434bb5e82a6`.
+GitHub Actions run 36661636609 completed successfully: combined Fabric and
+NeoForge Gradle build passed, and both release-JAR artifact uploads succeeded.
+https://github.com/dfgdrfgh/Yarched/actions/runs/36661636609
+
 ## Remaining limits
 
 This is a source-audit and build checkpoint, not certification of complete 1:1
@@ -117,7 +164,7 @@ shearing with passengers, sneaking and Binding Curse.
 
 The Zombie Nautilus backport represents the two built-in variants with a
 synchronized flag and vanilla variant IDs in saved data; it does not implement
-1.21.11's extensible variant registry/data-component system. The newer general
-leash physics and quad-leash renderer are not supplied by the 1.21.1 renderer.
+1.21.11's extensible variant registry/data-component system. The newer general quad-leash physics/renderer are not supplied by 1.21.1; the
+Zombie Horse quad offsets are not exercised by the scoped 1.21.1 leash holders.
 Copper Horse Armor remains excluded as previously requested; Netherite Horse
 Armor is part of the 1.21.11 scope.
