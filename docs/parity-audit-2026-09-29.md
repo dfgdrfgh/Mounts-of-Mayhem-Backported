@@ -300,9 +300,10 @@ mounts where those changes are observable:
   mounts: shears, no secondary-use, no passengers, Binding Curse protection
   unless creative, one durability point, SHEAR game event, real ItemStack drop
   and the Saddle unequip sound.
-- Horse Armor is also shearable as in final 1.21.11. Equestrian BODY armor is
-  removed before the saddle, uses the Horse Armor unequip sound and honors the
-  same passenger/secondary-use/Binding-Curse restrictions.
+- Horse Armor is not shearable in final 1.21.11: its Equippable component
+  keeps can_be_sheared at the default false value. The temporary compatibility
+  hook that removed EQUESTRIAN BODY armor with shears was therefore removed.
+  Saddles remain shearable, and Nautilus Armor remains explicitly shearable.
 - Nautilus Armor remains armor-first then saddle. Clearing its BODY slot already
   invokes the backported Nautilus Armor unequip sound through setItemSlot, so
   no duplicate explicit sound call is needed.
@@ -327,7 +328,7 @@ mounts where those changes are observable:
   so it remains outside this Mounts of Mayhem compatibility scope.
 
 Latest code validation for this pass is commit
-`9db1b8ef6385ff3c077cb2d76075c5d1add9802b`.
-GitHub Actions run 36668433780 completed successfully: Fabric and NeoForge
+`83ab8a2fe17b6a7371b3238919611ea7c481e71f`.
+GitHub Actions run 36669483539 completed successfully: Fabric and NeoForge
 compiled and both release-JAR artifact uploads succeeded.
-https://github.com/dfgdrfgh/Yarched/actions/runs/36668433780
+https://github.com/dfgdrfgh/Yarched/actions/runs/36669483539
