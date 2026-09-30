@@ -281,3 +281,53 @@ Latest code validation is commit
 GitHub Actions run 36666735571 completed successfully: Fabric and NeoForge
 compiled and both release-JAR artifact uploads succeeded.
 https://github.com/dfgdrfgh/Yarched/actions/runs/36666735571
+
+
+## Mount equipment-system parity pass
+
+The 1.21.11 equipment rewrite changes more than the newly added Nautilus
+inventory, so the 1.21.1 compatibility layer was extended across the existing
+mounts where those changes are observable:
+
+- AbstractHorse now synchronizes the actual Saddle ItemStack instead of only
+  the legacy saddled boolean. This preserves item components for remote-client
+  rendering while continuing to use the normal 1.21.1 SaddleItem save field.
+- Pig and Strider now preserve the real Saddle ItemStack as synchronized data
+  and in save data. Existing 1.21.1 worlds containing only the legacy saddle
+  boolean migrate to a normal Saddle stack. Death drops preserve saddle
+  components and respect PREVENT_EQUIPMENT_DROP.
+- Successful saddle shearing now follows the final shared rules for the scoped
+  mounts: shears, no secondary-use, no passengers, Binding Curse protection
+  unless creative, one durability point, SHEAR game event, real ItemStack drop
+  and the Saddle unequip sound.
+- Horse Armor is also shearable as in final 1.21.11. Equestrian BODY armor is
+  removed before the saddle, uses the Horse Armor unequip sound and honors the
+  same passenger/secondary-use/Binding-Curse restrictions.
+- Nautilus Armor remains armor-first then saddle. Clearing its BODY slot already
+  invokes the backported Nautilus Armor unequip sound through setItemSlot, so
+  no duplicate explicit sound call is needed.
+- Saddle foil/glint now uses the synchronized saddle stack on Camel Husk,
+  Zombie/Skeleton Horse, Pig, Strider, Horse, Donkey, Mule and Camel. The
+  compatibility render layers render only the older model's saddle geometry,
+  preserving the 1.21.1 body model while reproducing 1.21.11's stack-based
+  equipment foil.
+- The shared Saddle dispenser now marks every equipped Mob persistent, matching
+  1.21.11's EquipmentDispenseItemBehavior rather than doing so only for
+  Nautilus.
+- Mob auto-equipping now rejects Nautilus Armor on non-Nautilus entities and
+  rejects every EQUESTRIAN AnimalArmorItem on entities other than Horse and
+  Zombie Horse. This reproduces the final CAN_WEAR_NAUTILUS_ARMOR and
+  CAN_WEAR_HORSE_ARMOR allowed-entity sets and prevents 1.21.1's BODY-to-
+  MAINHAND fallback on unrelated mobs.
+- Final 1.21.11 also introduced the generic player_sheared_equipment criterion
+  as part of the broader equipment migration and changed the pre-existing
+  Remove Wolf Armor advancement to use it. The 1.21.1 base advancement still
+  uses player_interacted_with_entity; importing the new criterion completely
+  would also require unrelated Wolf/Llama/Happy-Ghast equipment-system changes,
+  so it remains outside this Mounts of Mayhem compatibility scope.
+
+Latest code validation for this pass is commit
+`9db1b8ef6385ff3c077cb2d76075c5d1add9802b`.
+GitHub Actions run 36668433780 completed successfully: Fabric and NeoForge
+compiled and both release-JAR artifact uploads succeeded.
+https://github.com/dfgdrfgh/Yarched/actions/runs/36668433780
