@@ -261,6 +261,14 @@ generators. This corrected one earlier inference and verified several
 - Nautilus swimming animation keyframes and Zombie Nautilus coral geometry
   match final 1.21.11. The coral visibility rule also matches: coral is hidden
   while BODY armor is equipped.
+- The old 1.21.1 horse/camel saddle system only synchronized a boolean
+  saddled flag. The backport now also synchronizes the actual saddle ItemStack
+  through AbstractHorse so equipment components such as foil are available on
+  remote clients and after save/reload.
+- Camel Husk's compatibility saddle layer now renders foil from that synced
+  saddle stack. Undead horses use a saddle-only glint overlay over the older
+  baked saddle geometry, reproducing 1.21.11 equipment-renderer foil without
+  replacing their 1.21.1 base model.
 - Nautilus and Zombie Nautilus loot tables and the all-effects advancement are
   exact JSON matches. The smithing recipe advancements are also exact; the
   smithing recipes themselves use 1.21.1's older ingredient-object syntax with
@@ -269,7 +277,7 @@ generators. This corrected one earlier inference and verified several
   10, Gold 5 and Diamond 2, each with count 1.
 
 Latest code validation is commit
-`7e7eaa877245ea9e258a0920f3c1f25d11482584`.
-GitHub Actions run 36666275810 completed successfully: Fabric and NeoForge
+`36708e9cc58f620c086929f2803d1dd03c539141`.
+GitHub Actions run 36666735571 completed successfully: Fabric and NeoForge
 compiled and both release-JAR artifact uploads succeeded.
-https://github.com/dfgdrfgh/Yarched/actions/runs/36666275810
+https://github.com/dfgdrfgh/Yarched/actions/runs/36666735571
