@@ -45,6 +45,12 @@ import java.util.function.DoubleSupplier;
 @Mixin(ZombieHorse.class)
 public abstract class ZombieHorseMixin extends AbstractHorse implements EntityBridge, AbstractHorseBridge {
 
+    @Unique
+    private static final EntityDimensions BARCHED_BABY_DIMENSIONS = EntityType.ZOMBIE_HORSE
+            .getDimensions()
+            .withAttachments(EntityAttachments.builder().attach(EntityAttachment.PASSENGER, 0.0F, EntityType.ZOMBIE_HORSE.getHeight() - 0.03125F, 0.0F))
+            .scale(0.5F);
+
     protected ZombieHorseMixin(EntityType<? extends AbstractHorse> entityType, Level level) {
         super(entityType, level);
     }
@@ -211,6 +217,11 @@ public abstract class ZombieHorseMixin extends AbstractHorse implements EntityBr
         this.burnUndead();
     }
 
+
+    @Override
+    public EntityDimensions getDefaultDimensions(Pose pose) {
+        return this.isBaby() ? BARCHED_BABY_DIMENSIONS : super.getDefaultDimensions(pose);
+    }
 
     @Override
     public float chargeSpeedModifier() {
