@@ -587,18 +587,27 @@ PlayerRideableJumping, Saddleable, ContainerListener, SaddleItemBridge {
         return this.inventory != oldInventory;
     }
 
+    public void barched$onSaddleEquipItem(ItemStack previous, ItemStack current) {
+        if (!this.level().isClientSide()
+                && !this.firstTick
+                && !ItemStack.isSameItemSameComponents(previous, current)) {
+            if (!current.isEmpty()) {
+                this.playSound(this.isUnderWater() ? Barched.SoundEvents.NAUTILUS_SADDLE_UNDERWATER_EQUIP : Barched.SoundEvents.NAUTILUS_SADDLE_EQUIP);
+            }
+            this.gameEvent(current.isEmpty() ? GameEvent.UNEQUIP : GameEvent.EQUIP);
+        }
+    }
+
     @Override
     public void containerChanged(Container container) {
-        boolean saddled = this.inventory.getItem(0).is(Items.SADDLE);
-        boolean wasSaddled = this.isSaddled();
         // 1.21.1 has no saddle equipment slot. Synchronize the stack as well
-        // as its presence so clients can render components such as glint.
+        // as its presence so clients can render components such as glint, and
+        // reproduce the native SADDLE slot's LivingEntity.onEquipItem callback.
         ItemStack saddle = this.inventory.getItem(0);
-        if (!ItemStack.matches(this.getSaddleItem(), saddle)) {
+        ItemStack previousSaddle = this.getSaddleItem();
+        if (!ItemStack.matches(previousSaddle, saddle)) {
+            this.barched$onSaddleEquipItem(previousSaddle, saddle);
             this.entityData.set(SADDLE_ITEM, saddle.copy());
-        }
-        if (saddled && !wasSaddled && !this.firstTick) {
-            this.playSound(this.isUnderWater() ? Barched.SoundEvents.NAUTILUS_SADDLE_UNDERWATER_EQUIP : Barched.SoundEvents.NAUTILUS_SADDLE_EQUIP);
         }
         ItemStack armor = this.inventory.getItem(1);
         if (armor != this.getBodyArmorItem()) this.setItemSlot(EquipmentSlot.BODY, armor);
