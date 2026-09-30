@@ -199,6 +199,9 @@ public abstract class SoundEventsMixin {
     private static final SoundEvent NAUTILUS_ARMOR_UNEQUIP = register("item.armor.unequip_nautilus");
 
     @ModifyAccess(access = Opcodes.ACC_PUBLIC)
+    private static final SoundEvent HORSE_ARMOR_UNEQUIP = register("item.horse_armor.unequip");
+
+    @ModifyAccess(access = Opcodes.ACC_PUBLIC)
     private static final SoundEvent SADDLE_UNEQUIP = register("item.saddle.unequip");
 
     @ModifyAccess(access = Opcodes.ACC_PUBLIC)
