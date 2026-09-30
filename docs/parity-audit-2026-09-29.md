@@ -111,9 +111,9 @@ Further source/resource checks:
 
 Additional non-weapon parity corrections completed after the earlier checkpoint:
 
-- Zombie Horse default natural-spawn biomes now match 1.21.11 exactly:
-  Snowy Plains, Savanna, Savanna Plateau and Windswept Savanna. Plains and
-  Sunflower Plains were removed from the backport defaults.
+- Zombie Horse default natural-spawn biomes now match the final generated
+  1.21.11 biome data exactly: Plains, Sunflower Plains, Snowy Plains, Savanna,
+  Savanna Plateau and Windswept Savanna. Ice Spikes remains excluded.
 - Zombie Horse spawning now reduces the biome's existing Zombie spawn entries
   by the configured Zombie Horse weight while preserving each entry's existing
   group sizes. The vanilla defaults therefore reproduce the 1.21.11 95 -> 90
@@ -212,9 +212,11 @@ Additional final-release checks:
 - Zombie Horse natural placement, Parched/Camel Husk surface placement and
   Nautilus water placement match the final SpawnPlacements table. Zombie
   Nautilus intentionally has no standalone natural SpawnPlacement entry.
-- The final Zombie Horse biome set was rechecked from OverworldBiomes:
-  Snowy Plains (but not Ice Spikes) and all three Savanna variants. Normal
-  Plains and Sunflower Plains use their existing plains spawn table.
+- The final Zombie Horse biome set was rechecked against both the Java
+  generators and the generated biome JSON: Plains, Sunflower Plains, Snowy
+  Plains and all three Savanna variants use Zombie 90 / Zombie Villager 5 /
+  Zombie Horse 5. Ice Spikes keeps Zombie 95 / Zombie Villager 5 with no
+  Zombie Horse entry.
 
 Latest code validation for this sweep is commit
 `1b8b1c8041a9e39de4a73b10dbbb8cd23d43ae68`.
