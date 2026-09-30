@@ -50,6 +50,26 @@ public class BackportedHorseArmorItem extends AnimalArmorItem {
         }
 
         this.modifiers = builder.build();
+
+        net.minecraft.world.level.block.DispenserBlock.registerBehavior(this, new net.minecraft.core.dispenser.OptionalDispenseItemBehavior() {
+            @Override
+            protected ItemStack execute(net.minecraft.core.dispenser.BlockSource source, ItemStack stack) {
+                net.minecraft.core.BlockPos pos = source.pos().relative(source.state().getValue(net.minecraft.world.level.block.DispenserBlock.FACING));
+                java.util.List<net.minecraft.world.entity.animal.horse.AbstractHorse> horses = source.level().getEntitiesOfClass(
+                        net.minecraft.world.entity.animal.horse.AbstractHorse.class,
+                        new net.minecraft.world.phys.AABB(pos),
+                        horse -> horse.isAlive() && horse.canUseSlot(EquipmentSlot.BODY)
+                );
+                for (net.minecraft.world.entity.animal.horse.AbstractHorse horse : horses) {
+                    if (horse.isBodyArmorItem(stack) && !horse.isWearingBodyArmor() && horse.isTamed()) {
+                        horse.setBodyArmorItem(stack.split(1));
+                        this.setSuccess(true);
+                        return stack;
+                    }
+                }
+                return super.execute(source, stack);
+            }
+        });
     }
 
     @Override
