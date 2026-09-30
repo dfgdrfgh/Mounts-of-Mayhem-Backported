@@ -14,14 +14,14 @@ import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.item.ItemStack;
-import zzik2.barched.bridge.entity.AbstractHorseBridge;
+import zzik2.barched.bridge.entity.SaddleItemBridge;
 
 @Environment(EnvType.CLIENT)
-public class UndeadHorseSaddleGlintLayer extends RenderLayer<AbstractHorse, HorseModel<AbstractHorse>> {
-    private final HorseModel<AbstractHorse> model;
+public class UndeadHorseSaddleGlintLayer<T extends AbstractHorse, M extends HorseModel<T>> extends RenderLayer<T, M> {
+    private final HorseModel<T> model;
 
     public UndeadHorseSaddleGlintLayer(
-            RenderLayerParent<AbstractHorse, HorseModel<AbstractHorse>> parent,
+            RenderLayerParent<T, M> parent,
             EntityModelSet modelSet,
             ModelLayerLocation modelLayerLocation
     ) {
@@ -47,7 +47,7 @@ public class UndeadHorseSaddleGlintLayer extends RenderLayer<AbstractHorse, Hors
             PoseStack poseStack,
             MultiBufferSource bufferSource,
             int packedLight,
-            AbstractHorse horse,
+            T horse,
             float limbSwing,
             float limbSwingAmount,
             float partialTick,
@@ -55,7 +55,7 @@ public class UndeadHorseSaddleGlintLayer extends RenderLayer<AbstractHorse, Hors
             float netHeadYaw,
             float headPitch
     ) {
-        ItemStack saddle = ((AbstractHorseBridge) (Object) horse).barched$getSaddleItem();
+        ItemStack saddle = ((SaddleItemBridge) (Object) horse).barched$getSaddleItem();
         if (!horse.isSaddled() || !saddle.hasFoil()) {
             return;
         }
