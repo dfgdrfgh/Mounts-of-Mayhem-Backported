@@ -14,19 +14,14 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.function.BiFunction;
 
 @Mixin(DataFixers.class)
 public class DataFixersMixin {
 
-    @Shadow @Final private static BiFunction<Integer, Schema, Schema> SAME_NAMESPACED;
-
     @Inject(method = "addFixers", at = @At("TAIL"))
     private static void barched$addFixers(DataFixerBuilder dataFixerBuilder, CallbackInfo ci) {
-        Schema schema281 = dataFixerBuilder.addSchema(3955, SAME_NAMESPACED); //4649 -> 3955
-        dataFixerBuilder.addFixer(new TridentAnimationFix(schema281));
-
-        Schema schema284 = dataFixerBuilder.addSchema(3955, V4656::new); //4656 -> 3955
-        dataFixerBuilder.addFixer(new AddNewChoices(schema284, "Added Parched and Camel Husk", References.ENTITY));
+        Schema schema = dataFixerBuilder.addSchema(3955, V4656::new);
+        dataFixerBuilder.addFixer(new TridentAnimationFix(schema));
+        dataFixerBuilder.addFixer(new AddNewChoices(schema, "Added Mounts of Mayhem entities", References.ENTITY));
     }
 }
