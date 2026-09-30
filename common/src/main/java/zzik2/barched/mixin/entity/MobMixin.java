@@ -5,6 +5,8 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.animal.nautilus.AbstractNautilus;
+import net.minecraft.world.entity.animal.horse.Horse;
+import net.minecraft.world.entity.animal.horse.ZombieHorse;
 import net.minecraft.world.entity.monster.AbstractSkeleton;
 import net.minecraft.world.entity.monster.Drowned;
 import net.minecraft.world.entity.monster.Pillager;
@@ -48,6 +50,12 @@ public abstract class MobMixin extends LivingEntity implements MobBridge {
     @Inject(method = "equipItemIfPossible", at = @At("HEAD"), cancellable = true)
     private void barched$restrictNautilusArmorAutoEquip(ItemStack stack, CallbackInfoReturnable<ItemStack> cir) {
         if (stack.getItem() instanceof NautilusArmorItem && !((Object) this instanceof AbstractNautilus)) {
+            cir.setReturnValue(ItemStack.EMPTY);
+            return;
+        }
+        if (stack.is(Barched.Items.NETHERITE_HORSE_ARMOR)
+                && !((Object) this instanceof Horse)
+                && !((Object) this instanceof ZombieHorse)) {
             cir.setReturnValue(ItemStack.EMPTY);
         }
     }
