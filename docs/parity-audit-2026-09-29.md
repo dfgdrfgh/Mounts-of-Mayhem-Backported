@@ -300,10 +300,12 @@ mounts where those changes are observable:
   mounts: shears, no secondary-use, no passengers, Binding Curse protection
   unless creative, one durability point, SHEAR game event, real ItemStack drop
   and the Saddle unequip sound.
-- Horse Armor is not shearable in final 1.21.11: its Equippable component
-  keeps can_be_sheared at the default false value. The temporary compatibility
-  hook that removed EQUESTRIAN BODY armor with shears was therefore removed.
-  Saddles remain shearable, and Nautilus Armor remains explicitly shearable.
+- Horse Armor is explicitly shearable in final 1.21.11. The horseArmor
+  Equippable definition sets can_be_sheared=true and uses HORSE_ARMOR_UNEQUIP.
+  The compatibility hook therefore removes EQUESTRIAN BODY armor before the
+  Saddle, honors passenger/secondary-use/Binding-Curse restrictions, emits the
+  normal BODY-slot UNEQUIP event plus SHEAR, drops the real stack, plays
+  HORSE_ARMOR_UNEQUIP and costs one shears durability.
 - Nautilus Armor remains armor-first then saddle. Clearing its BODY slot already
   invokes the backported Nautilus Armor unequip sound through setItemSlot, so
   no duplicate explicit sound call is needed.
