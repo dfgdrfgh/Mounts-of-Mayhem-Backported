@@ -120,16 +120,16 @@ public interface DispenseItemBehaviorMixin {
             return false;
         }
 
-        // The newer SADDLE slot still requires an alive, adult, tamed horse.
-        // canPickUpLoot only widens dispenser access for BODY armor, not saddles.
+        // Horse, Zombie Horse and Skeleton Horse override the newer SADDLE slot gate.
+        // Their final dispenser rule is tame OR the generic Mob canPickUpLoot fallback.
         if (entity instanceof Horse horse) {
-            return horse.isTamed();
+            return horse.isTamed() || horse.canPickUpLoot();
         }
         if (entity instanceof ZombieHorse horse) {
-            return horse.isTamed();
+            return horse.isTamed() || horse.canPickUpLoot();
         }
         if (entity instanceof SkeletonHorse horse) {
-            return horse.isTamed();
+            return horse.isTamed() || horse.canPickUpLoot();
         }
 
         return saddleable.isSaddleable();
