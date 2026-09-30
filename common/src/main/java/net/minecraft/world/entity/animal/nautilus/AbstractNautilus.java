@@ -54,6 +54,7 @@ import net.minecraft.world.entity.vehicle.DismountHelper;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.ContainerListener;
 import zzik2.barched.Barched;
+import zzik2.barched.bridge.entity.SaddleItemBridge;
 import zzik2.barched.nautilus.NautilusInventoryBridge;
 import zzik2.barched.item.NautilusArmorItem;
 import zzik2.barched.util.EntityAttachmentUtil;
@@ -77,7 +78,7 @@ import org.jetbrains.annotations.Nullable;
 public abstract class AbstractNautilus
 extends TamableAnimal
 implements HasCustomInventoryScreen,
-PlayerRideableJumping, Saddleable, ContainerListener {
+PlayerRideableJumping, Saddleable, ContainerListener, SaddleItemBridge {
     public static final int INVENTORY_SLOT_OFFSET = 500;
     public static final int INVENTORY_ROWS = 3;
     public static final int SMALL_RESTRICTION_RADIUS = 16;
@@ -563,6 +564,16 @@ PlayerRideableJumping, Saddleable, ContainerListener {
     public boolean isSaddled() { return this.getSaddleItem().is(Items.SADDLE); }
 
     public ItemStack getSaddleItem() { return this.entityData.get(SADDLE_ITEM); }
+
+    @Override
+    public ItemStack barched$getSaddleItem() {
+        return this.getSaddleItem();
+    }
+
+    @Override
+    public void barched$setSaddleItem(ItemStack stack) {
+        this.inventory.setItem(0, stack.isEmpty() ? ItemStack.EMPTY : stack.copyWithCount(1));
+    }
 
     @Override
     public void equipSaddle(ItemStack saddle, @Nullable SoundSource source) {
