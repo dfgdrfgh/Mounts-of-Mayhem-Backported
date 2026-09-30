@@ -52,4 +52,7 @@ public abstract class ItemTagsMixin {
 
     @ModifyAccess(access = Opcodes.ACC_PUBLIC)
     private static final TagKey<Item> PILLAGER_PREFERRED_WEAPONS = bind("pillager_preferred_weapons");
+
+    @ModifyAccess(access = Opcodes.ACC_PUBLIC)
+    private static final TagKey<Item> WITHER_SKELETON_DISLIKED_WEAPONS = bind("wither_skeleton_disliked_weapons");
 }
