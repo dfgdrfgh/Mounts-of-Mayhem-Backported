@@ -115,6 +115,7 @@
     "level.ServerPlayerMixin",
     "level.WorldBorderMixin",
     "network.ServerGamePacketListenerImplMixin",
+    "resources.RegistryDataLoaderMixin",
     "phys.Vec3Mixin",
     "server.commands.SummonCommandMixin",
     "sounds.SoundEventsMixin",

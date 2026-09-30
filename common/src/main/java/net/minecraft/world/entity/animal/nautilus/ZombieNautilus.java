@@ -2,6 +2,9 @@ package net.minecraft.world.entity.animal.nautilus;
 
 import com.mojang.serialization.Dynamic;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.Holder;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.syncher.*;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
@@ -11,13 +14,13 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.*;
 import net.minecraft.world.level.*;
-import net.minecraft.world.level.biome.Biomes;
 import org.jetbrains.annotations.Nullable;
 import zzik2.barched.Barched;
 import zzik2.barched.bridge.entity.MobBridge;
+import zzik2.barched.nautilus.ZombieNautilusVariant;
 
 public class ZombieNautilus extends AbstractNautilus implements MobBridge {
-    private static final EntityDataAccessor<Boolean> CORAL = SynchedEntityData.defineId(ZombieNautilus.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<String> VARIANT = SynchedEntityData.defineId(ZombieNautilus.class, EntityDataSerializers.STRING);
 
     public ZombieNautilus(EntityType<? extends ZombieNautilus> type, Level level) { super(type, level); }
     public static AttributeSupplier.Builder createAttributes() { return AbstractNautilus.createAttributes().add(Attributes.MOVEMENT_SPEED, 1.1F); }
@@ -40,13 +43,36 @@ public class ZombieNautilus extends AbstractNautilus implements MobBridge {
     @Override protected SoundEvent getDashReadySound() { return this.isUnderWater() ? Barched.SoundEvents.ZOMBIE_NAUTILUS_DASH_READY : Barched.SoundEvents.ZOMBIE_NAUTILUS_DASH_READY_LAND; }
     @Override protected void playEatingSound() { this.makeSound(Barched.SoundEvents.ZOMBIE_NAUTILUS_EAT); }
     @Override protected SoundEvent getSwimSound() { return Barched.SoundEvents.ZOMBIE_NAUTILUS_SWIM; }
-    @Override protected void defineSynchedData(SynchedEntityData.Builder builder) { super.defineSynchedData(builder); builder.define(CORAL, false); }
-    public boolean isCoral() { return this.entityData.get(CORAL); }
-    public void setCoral(boolean value) { this.entityData.set(CORAL, value); }
-    @Override public void readAdditionalSaveData(CompoundTag tag) { super.readAdditionalSaveData(tag); this.setCoral("minecraft:warm".equals(tag.getString("variant"))); }
-    @Override public void addAdditionalSaveData(CompoundTag tag) { super.addAdditionalSaveData(tag); tag.putString("variant", this.isCoral() ? "minecraft:warm" : "minecraft:temperate"); }
+    @Override protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(VARIANT, ZombieNautilusVariant.defaultVariant(this.registryAccess()).unwrapKey().orElseThrow().location().toString());
+    }
+    public Holder<ZombieNautilusVariant> getVariant() {
+        ResourceKey<ZombieNautilusVariant> key = ResourceKey.create(ZombieNautilusVariant.REGISTRY, ResourceLocation.parse(this.entityData.get(VARIANT)));
+        return this.registryAccess().registryOrThrow(ZombieNautilusVariant.REGISTRY).getHolder(key)
+                .<Holder<ZombieNautilusVariant>>map(holder -> holder)
+                .orElseGet(() -> ZombieNautilusVariant.defaultVariant(this.registryAccess()));
+    }
+    public void setVariant(Holder<ZombieNautilusVariant> variant) {
+        this.entityData.set(VARIANT, variant.unwrapKey().orElseThrow().location().toString());
+    }
+    public boolean isCoral() { return this.getVariant().value().model() == ZombieNautilusVariant.ModelType.WARM; }
+    public void setCoral(boolean value) {
+        this.registryAccess().registryOrThrow(ZombieNautilusVariant.REGISTRY)
+                .getHolder(value ? ZombieNautilusVariant.WARM : ZombieNautilusVariant.TEMPERATE).ifPresent(this::setVariant);
+    }
+    @Override public void readAdditionalSaveData(CompoundTag tag) {
+        super.readAdditionalSaveData(tag);
+        ResourceLocation id = ResourceLocation.tryParse(tag.getString("variant"));
+        if (id != null) this.registryAccess().registryOrThrow(ZombieNautilusVariant.REGISTRY)
+                .getHolder(ResourceKey.create(ZombieNautilusVariant.REGISTRY, id)).ifPresent(this::setVariant);
+    }
+    @Override public void addAdditionalSaveData(CompoundTag tag) {
+        super.addAdditionalSaveData(tag);
+        tag.putString("variant", this.getVariant().unwrapKey().orElseThrow().location().toString());
+    }
     @Override public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData group) {
-        this.setCoral(level.getBiome(this.blockPosition()).is(net.minecraft.tags.TagKey.create(net.minecraft.core.registries.Registries.BIOME, net.minecraft.resources.ResourceLocation.withDefaultNamespace("spawns_coral_variant_zombie_nautilus"))));
+        ZombieNautilusVariant.select(level, this.blockPosition()).ifPresent(this::setVariant);
         return super.finalizeSpawn(level, difficulty, reason, group);
     }
     @Override public boolean canBeLeashed() { return !this.isAggravated() && !this.isMobControlled(); }

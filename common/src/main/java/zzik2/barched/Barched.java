@@ -296,6 +296,8 @@ public final class Barched {
     }
 
     public static class DataComponents {
+        public static final net.minecraft.core.component.DataComponentType<EitherHolder<zzik2.barched.nautilus.ZombieNautilusVariant>> ZOMBIE_NAUTILUS_VARIANT = ZReflectionTool.getStaticFieldValue(net.minecraft.core.component.DataComponents.class, "ZOMBIE_NAUTILUS_VARIANT");
+
         public static final net.minecraft.core.component.DataComponentType<UseEffects> USE_EFFECTS = ZReflectionTool.getStaticFieldValue(net.minecraft.core.component.DataComponents.class, "USE_EFFECTS");
 
         public static final net.minecraft.core.component.DataComponentType<EitherHolder<DamageType>> DAMAGE_TYPE = ZReflectionTool.getStaticFieldValue(net.minecraft.core.component.DataComponents.class, "DAMAGE_TYPE");

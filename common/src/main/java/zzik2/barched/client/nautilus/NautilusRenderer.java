@@ -24,7 +24,7 @@ public class NautilusRenderer extends MobRenderer<AbstractNautilus, NautilusMode
         this.addLayer(new EquipmentLayer(this));
     }
     @Override public ResourceLocation getTextureLocation(AbstractNautilus entity) {
-        if (entity instanceof ZombieNautilus zombie) return ResourceLocation.withDefaultNamespace(zombie.isCoral() ? "textures/entity/nautilus/zombie_nautilus_coral.png" : "textures/entity/nautilus/zombie_nautilus.png");
+        if (entity instanceof ZombieNautilus zombie) return zombie.getVariant().value().texture();
         return ResourceLocation.withDefaultNamespace(entity.isBaby() ? "textures/entity/nautilus/nautilus_baby.png" : "textures/entity/nautilus/nautilus.png");
     }
     @Override public void render(AbstractNautilus entity, float yaw, float partialTick, PoseStack pose, MultiBufferSource buffers, int light) {

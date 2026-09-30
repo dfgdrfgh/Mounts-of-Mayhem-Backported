@@ -17,12 +17,19 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import zzik2.barched.Barched;
 import zzik2.barched.bridge.component.DataComponentTypeBridge;
+import zzik2.barched.nautilus.ZombieNautilusVariant;
 import zzik2.zreflex.mixin.ModifyAccess;
 
 import java.util.function.UnaryOperator;
 
 @Mixin(DataComponents.class)
 public abstract class DataComponentsMixin {
+
+    @Unique
+    @ModifyAccess(access = Opcodes.ACC_PUBLIC)
+    private static final DataComponentType<EitherHolder<ZombieNautilusVariant>> ZOMBIE_NAUTILUS_VARIANT = register("zombie_nautilus/variant", builder ->
+            builder.persistent(EitherHolder.codec(ZombieNautilusVariant.REGISTRY, ZombieNautilusVariant.CODEC))
+                    .networkSynchronized(EitherHolder.streamCodec(ZombieNautilusVariant.REGISTRY, ZombieNautilusVariant.STREAM_CODEC)));
 
     @Shadow
     private static <T> DataComponentType<T> register(String string, UnaryOperator<DataComponentType.Builder<T>> unaryOperator) {
