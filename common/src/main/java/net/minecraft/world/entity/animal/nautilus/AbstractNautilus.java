@@ -426,10 +426,9 @@ PlayerRideableJumping, Saddleable, ContainerListener, SaddleItemBridge {
         if (!stack.isEmpty()) {
             if (this.isTame() && stack.getItem() instanceof NautilusArmorItem && this.getBodyArmorItem().isEmpty()) {
                 if (!this.level().isClientSide()) {
-                    this.setItemSlot(EquipmentSlot.BODY, stack.copyWithCount(1));
-                    stack.consume(1, player);
+                    this.setItemSlot(EquipmentSlot.BODY, stack.split(1));
                 }
-                return InteractionResult.sidedSuccess(this.level().isClientSide());
+                return InteractionResult.SUCCESS;
             }
             if (!this.level().isClientSide() && !this.isTame() && this.isFood(stack)) {
                 this.usePlayerItem(player, hand, stack);
