@@ -23319,5 +23319,11 @@
       }
     ],
     "subtitle": "subtitles.item.saddle.unequip"
+  },
+  "item.horse_armor.unequip": {
+    "sounds": [
+      "mob/horse/armor"
+    ],
+    "subtitle": "subtitles.item.horse_armor.unequip"
   }
 }
