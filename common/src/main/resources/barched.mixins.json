@@ -21,6 +21,7 @@
     "client.model.geom.LayerDefinitionsMixin",
     "client.model.geom.ModelLayersMixin",
     "client.multiplayer.ClientLevelMixin",
+    "client.multiplayer.ClientPacketListenerMixin",
     "client.multiplayer.MultiPlayerGameModeMixin",
     "client.player.LocalPlayerMixin",
     "client.renderer.GameRendererMixin",
@@ -31,7 +32,7 @@
     "client.renderer.entity.PlayerRendererMixin",
     "client.renderer.entity.UndeadHorseRendererMixin",
     "client.renderer.entity.layers.ItemInHandLayerMixin",
-    "client.multiplayer.ClientPacketListenerMixin"
+    "client.renderer.entity.layers.SaddleLayerMixin"
   ],
   "mixins": [
     "InteractionHandMixin",
