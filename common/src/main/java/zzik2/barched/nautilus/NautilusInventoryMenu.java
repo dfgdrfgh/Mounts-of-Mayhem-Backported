@@ -8,6 +8,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.gameevent.GameEvent;
 import zzik2.barched.item.NautilusArmorItem;
 
 public class NautilusInventoryMenu extends AbstractContainerMenu {
@@ -23,6 +24,12 @@ public class NautilusInventoryMenu extends AbstractContainerMenu {
             @Override public boolean isActive() { return nautilus.isSaddleable(); }
             @Override public boolean mayPickup(Player player) { return player.isCreative() || !net.minecraft.world.item.enchantment.EnchantmentHelper.has(this.getItem(), net.minecraft.world.item.enchantment.EnchantmentEffectComponents.PREVENT_ARMOR_CHANGE); }
             @Override public int getMaxStackSize() { return 1; }
+            @Override public void setByPlayer(ItemStack stack, ItemStack previous) {
+                super.setByPlayer(stack, previous);
+                if (!nautilus.level().isClientSide() && !ItemStack.isSameItemSameComponents(previous, stack)) {
+                    nautilus.gameEvent(stack.isEmpty() ? GameEvent.UNEQUIP : GameEvent.EQUIP);
+                }
+            }
         });
         this.addSlot(new Slot(inventory, 1, 8, 36) {
             @Override public boolean mayPlace(ItemStack stack) { return stack.getItem() instanceof NautilusArmorItem && nautilus.isSaddleable(); }
