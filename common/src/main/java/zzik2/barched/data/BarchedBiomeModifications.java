@@ -22,8 +22,6 @@ public final class BarchedBiomeModifications {
 
     private static final Logger LOGGER = LogUtils.getLogger();
     private static final Set<ResourceLocation> VANILLA_ZOMBIE_HORSE_BIOMES = Set.of(
-            ResourceLocation.withDefaultNamespace("plains"),
-            ResourceLocation.withDefaultNamespace("sunflower_plains"),
             ResourceLocation.withDefaultNamespace("snowy_plains"),
             ResourceLocation.withDefaultNamespace("savanna"),
             ResourceLocation.withDefaultNamespace("savanna_plateau"),
@@ -95,19 +93,39 @@ public final class BarchedBiomeModifications {
         // In 1.21.11, the vanilla Zombie Horse biomes reserve part of the normal
         // Zombie spawn weight for Zombie Horses: Zombie 95 -> 90 and Zombie Horse 5.
         // Preserve that relationship when backporting to 1.21.1.
-        int zombieWeight = Math.max(0, 95 - Math.min(weight, 95));
         BiomeModifications.replaceProperties(
                 context -> selection.matches(context)
                         && context.getKey().map(VANILLA_ZOMBIE_HORSE_BIOMES::contains).orElse(false),
                 (context, properties) -> {
-                    properties.getSpawnProperties().removeSpawns(
+                    var spawnProperties = properties.getSpawnProperties();
+                    var monsterSpawns = spawnProperties.getSpawners().get(MobCategory.MONSTER);
+                    if (monsterSpawns == null) {
+                        return;
+                    }
+
+                    var zombieSpawns = monsterSpawns.stream()
+                            .filter(data -> data.type == EntityType.ZOMBIE)
+                            .toList();
+                    if (zombieSpawns.isEmpty()) {
+                        return;
+                    }
+
+                    spawnProperties.removeSpawns(
                             (category, data) -> category == MobCategory.MONSTER && data.type == EntityType.ZOMBIE
                     );
-                    if (zombieWeight > 0) {
-                        properties.getSpawnProperties().addSpawn(
-                                MobCategory.MONSTER,
-                                new MobSpawnSettings.SpawnerData(EntityType.ZOMBIE, zombieWeight, 4, 4)
-                        );
+                    for (MobSpawnSettings.SpawnerData zombieSpawn : zombieSpawns) {
+                        int adjustedWeight = Math.max(0, zombieSpawn.getWeight().asInt() - weight);
+                        if (adjustedWeight > 0) {
+                            spawnProperties.addSpawn(
+                                    MobCategory.MONSTER,
+                                    new MobSpawnSettings.SpawnerData(
+                                            EntityType.ZOMBIE,
+                                            adjustedWeight,
+                                            zombieSpawn.minCount,
+                                            zombieSpawn.maxCount
+                                    )
+                            );
+                        }
                     }
                 }
         );
