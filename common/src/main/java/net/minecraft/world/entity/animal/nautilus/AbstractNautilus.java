@@ -416,32 +416,6 @@ PlayerRideableJumping, Saddleable, ContainerListener, SaddleItemBridge {
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
-        if (stack.is(Items.SHEARS) && !player.isSecondaryUseActive() && !this.isVehicle()) {
-            ItemStack armor = this.getBodyArmorItem();
-            if (!armor.isEmpty() && (player.isCreative() || !net.minecraft.world.item.enchantment.EnchantmentHelper.has(armor, net.minecraft.world.item.enchantment.EnchantmentEffectComponents.PREVENT_ARMOR_CHANGE))) {
-                if (!this.level().isClientSide()) {
-                    ItemStack removed = armor.copy();
-                    this.setItemSlot(EquipmentSlot.BODY, ItemStack.EMPTY);
-                    this.spawnAtLocation(removed, EntityAttachmentUtil.averageY(this, EntityAttachment.PASSENGER));
-                    this.gameEvent(GameEvent.SHEAR, player);
-                    this.playSound(Barched.SoundEvents.NAUTILUS_ARMOR_UNEQUIP);
-                    stack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(hand));
-                }
-                return InteractionResult.sidedSuccess(this.level().isClientSide());
-            }
-            if (this.isSaddled() && (player.isCreative() || !net.minecraft.world.item.enchantment.EnchantmentHelper.has(this.inventory.getItem(0), net.minecraft.world.item.enchantment.EnchantmentEffectComponents.PREVENT_ARMOR_CHANGE))) {
-                if (!this.level().isClientSide()) {
-                    ItemStack removed = this.inventory.getItem(0).copy();
-                    this.inventory.setItem(0, ItemStack.EMPTY);
-                    this.gameEvent(GameEvent.UNEQUIP);
-                    this.spawnAtLocation(removed, EntityAttachmentUtil.averageY(this, EntityAttachment.PASSENGER));
-                    this.gameEvent(GameEvent.SHEAR, player);
-                    this.playSound(Barched.SoundEvents.SADDLE_UNEQUIP);
-                    stack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(hand));
-                }
-                return InteractionResult.sidedSuccess(this.level().isClientSide());
-            }
-        }
         if (this.isBaby()) {
             return this.interactAsAnimal(player, hand);
         }
