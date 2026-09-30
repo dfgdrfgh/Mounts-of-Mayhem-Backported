@@ -640,7 +640,12 @@ PlayerRideableJumping, Saddleable, ContainerListener, SaddleItemBridge {
     @Override
     protected void dropEquipment() {
         super.dropEquipment();
-        if (this.isSaddled() && !net.minecraft.world.item.enchantment.EnchantmentHelper.has(this.inventory.getItem(0), net.minecraft.world.item.enchantment.EnchantmentEffectComponents.PREVENT_EQUIPMENT_DROP)) this.spawnAtLocation(this.inventory.getItem(0));
-        this.inventory.setItem(0, ItemStack.EMPTY);
+        ItemStack saddle = this.inventory.getItem(0);
+        if (this.isSaddled()
+                && !net.minecraft.world.item.enchantment.EnchantmentHelper.has(saddle, net.minecraft.world.item.enchantment.EnchantmentEffectComponents.PREVENT_EQUIPMENT_DROP)) {
+            this.spawnAtLocation(saddle);
+            this.inventory.setItem(0, ItemStack.EMPTY);
+            this.gameEvent(GameEvent.UNEQUIP);
+        }
     }
 }
