@@ -29,6 +29,7 @@ public interface DispenseItemBehaviorMixin {
                 for (AbstractNautilus nautilus : source.level().getEntitiesOfClass(AbstractNautilus.class, new AABB(targetPos))) {
                     if (nautilus.canUseSlot(EquipmentSlot.BODY) && nautilus.getBodyArmorItem().isEmpty()) {
                         nautilus.setItemSlot(EquipmentSlot.BODY, stack.split(1));
+                        nautilus.setPersistenceRequired();
                         this.setSuccess(true);
                         return stack;
                     }
