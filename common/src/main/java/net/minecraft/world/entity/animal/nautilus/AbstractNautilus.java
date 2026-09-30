@@ -56,6 +56,7 @@ import net.minecraft.world.ContainerListener;
 import zzik2.barched.Barched;
 import zzik2.barched.nautilus.NautilusInventoryBridge;
 import zzik2.barched.item.NautilusArmorItem;
+import zzik2.barched.util.EntityAttachmentUtil;
 import zzik2.zreflex.mixin.ModifyName;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUtils;
@@ -420,7 +421,7 @@ PlayerRideableJumping, Saddleable, ContainerListener {
                 if (!this.level().isClientSide()) {
                     ItemStack removed = armor.copy();
                     this.setItemSlot(EquipmentSlot.BODY, ItemStack.EMPTY);
-                    this.spawnAtLocation(removed, (float) this.getAttachments().get(EntityAttachment.PASSENGER, 0, 0.0F).y);
+                    this.spawnAtLocation(removed, EntityAttachmentUtil.averageY(this, EntityAttachment.PASSENGER));
                     this.gameEvent(GameEvent.SHEAR, player);
                     this.playSound(Barched.SoundEvents.NAUTILUS_ARMOR_UNEQUIP);
                     stack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(hand));
@@ -432,7 +433,7 @@ PlayerRideableJumping, Saddleable, ContainerListener {
                     ItemStack removed = this.inventory.getItem(0).copy();
                     this.inventory.setItem(0, ItemStack.EMPTY);
                     this.gameEvent(GameEvent.UNEQUIP);
-                    this.spawnAtLocation(removed, (float) this.getAttachments().get(EntityAttachment.PASSENGER, 0, 0.0F).y);
+                    this.spawnAtLocation(removed, EntityAttachmentUtil.averageY(this, EntityAttachment.PASSENGER));
                     this.gameEvent(GameEvent.SHEAR, player);
                     this.playSound(Barched.SoundEvents.SADDLE_UNEQUIP);
                     stack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(hand));
