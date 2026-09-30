@@ -19,6 +19,7 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.effect.MobEffectUtil;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.animal.horse.SkeletonHorse;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.AttackRange;
 import net.minecraft.world.item.component.KineticWeapon;
@@ -89,6 +90,13 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityBr
 
     public LivingEntityMixin(EntityType<?> entityType, Level level) {
         super(entityType, level);
+    }
+
+    @Inject(method = "canUseSlot", at = @At("HEAD"), cancellable = true)
+    private void barched$skeletonHorseCanUseSlots(EquipmentSlot slot, CallbackInfoReturnable<Boolean> cir) {
+        if ((Object) this instanceof SkeletonHorse) {
+            cir.setReturnValue(true);
+        }
     }
 
     @Inject(method = "<init>", at = @At("TAIL"))
