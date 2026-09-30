@@ -117,7 +117,7 @@ public abstract class EntityMixin implements EntityBridge {
                 shears.hurtAndBreak(1, player, LivingEntity.getSlotForHand(hand));
             }
 
-            cir.setReturnValue(InteractionResult.sidedSuccess(self.level().isClientSide()));
+            cir.setReturnValue(InteractionResult.SUCCESS);
             return;
         }
 
@@ -145,7 +145,7 @@ public abstract class EntityMixin implements EntityBridge {
             shears.hurtAndBreak(1, player, LivingEntity.getSlotForHand(hand));
         }
 
-        cir.setReturnValue(InteractionResult.sidedSuccess(self.level().isClientSide()));
+        cir.setReturnValue(InteractionResult.SUCCESS);
     }
 
     @Inject(method = "baseTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/profiling/ProfilerFiller;push(Ljava/lang/String;)V", shift = At.Shift.AFTER, ordinal = 0))
