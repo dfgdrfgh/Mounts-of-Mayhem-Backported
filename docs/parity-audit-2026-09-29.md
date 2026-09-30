@@ -433,8 +433,10 @@ The two-value coral flag is replaced with the `minecraft:zombie_nautilus_variant
 dynamic registry. Definitions use the final 1.21.11 format: `model` (default
 `normal`, or `warm`), `asset_id`, and prioritized `spawn_conditions`. The built-in
 Temperate and Warm JSON files are copied byte-for-byte from the official client
-JAR. Both loaders load the registry through the shared vanilla registry loader
-and synchronize appearance definitions before entities are sent to clients.
+JAR. Fabric's `DynamicRegistries.registerSynced` and NeoForge's
+`DataPackRegistryEvent.NewRegistry` register the shared codecs and synchronize
+appearance definitions before entities are sent to clients. Using the loader
+APIs preserves their registry bookkeeping and other mods' later registrations.
 
 - Supports the three vanilla condition types: biome, structure and moon
   brightness. The moon test uses 1.21.1's dimension-time moon brightness; newer

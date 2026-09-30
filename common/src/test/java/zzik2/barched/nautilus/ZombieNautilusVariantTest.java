@@ -3,13 +3,21 @@ package zzik2.barched.nautilus;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.mojang.serialization.JsonOps;
+import com.mojang.serialization.Lifecycle;
 import net.minecraft.SharedConstants;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.MappedRegistry;
+import net.minecraft.core.Registry;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.RegistrationInfo;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.registries.VanillaRegistries;
 import net.minecraft.resources.RegistryOps;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.Bootstrap;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -21,7 +29,11 @@ public class ZombieNautilusVariantTest {
         SharedConstants.tryDetectVersion();
         Bootstrap.bootStrap();
         HolderLookup.Provider lookup = VanillaRegistries.createLookup();
-        registries = RegistryOps.create(JsonOps.INSTANCE, lookup);
+        // RegistrySetBuilder uses generator-only holder owners. Rebind entries to real
+        // registries, as the world loader does, so encoding validates holder ownership.
+        RegistryAccess access = new RegistryAccess.ImmutableRegistryAccess(List.of(
+                copyRegistry(lookup, Registries.BIOME), copyRegistry(lookup, Registries.STRUCTURE)));
+        registries = RegistryOps.create(JsonOps.INSTANCE, access);
     }
 
     @Test
@@ -92,5 +104,11 @@ public class ZombieNautilusVariantTest {
 
     private static ZombieNautilusVariant decode(String json) {
         return ZombieNautilusVariant.DIRECT_CODEC.parse(registries, JsonParser.parseString(json)).getOrThrow();
+    }
+
+    private static <T> Registry<T> copyRegistry(HolderLookup.Provider lookup, ResourceKey<Registry<T>> key) {
+        MappedRegistry<T> registry = new MappedRegistry<>(key, Lifecycle.stable());
+        lookup.lookupOrThrow(key).listElements().forEach(holder -> registry.register(holder.key(), holder.value(), RegistrationInfo.BUILT_IN));
+        return registry.freeze();
     }
 }
