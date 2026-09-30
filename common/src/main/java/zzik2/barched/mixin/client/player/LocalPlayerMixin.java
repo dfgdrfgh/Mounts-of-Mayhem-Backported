@@ -8,6 +8,7 @@ import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.player.Input;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.animal.nautilus.AbstractNautilus;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.AttackRange;
@@ -18,10 +19,13 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import zzik2.barched.Barched;
 import zzik2.barched.bridge.client.LocalPlayerBridge;
 import zzik2.barched.bridge.entity.LivingEntityBridge;
 import zzik2.barched.mixin.accessor.client.GameRendererAccessor;
+import zzik2.barched.client.sound.NautilusRidingSoundInstance;
 
 @Mixin(LocalPlayer.class)
 public abstract class LocalPlayerMixin extends AbstractClientPlayer implements LivingEntityBridge, LocalPlayerBridge {
@@ -47,6 +51,13 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer implements L
     @Shadow public float xBobO;
 
     @Shadow protected int sprintTriggerTime;
+
+    @Inject(method = "startRiding", at = @At("RETURN"))
+    private void barched$startNautilusRidingSound(Entity entity, boolean force, CallbackInfoReturnable<Boolean> cir) {
+        if (cir.getReturnValue() && entity instanceof AbstractNautilus nautilus) {
+            Minecraft.getInstance().getSoundManager().play(new NautilusRidingSoundInstance((LocalPlayer)(Object)this, nautilus));
+        }
+    }
 
     @ModifyExpressionValue(method = "aiStep", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;canStartSprinting()Z"))
     private boolean barched$aiStep(boolean original) {
