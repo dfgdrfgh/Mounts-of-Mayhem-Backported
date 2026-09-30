@@ -2,7 +2,6 @@ package zzik2.barched.client.sound;
 
 import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.animal.nautilus.AbstractNautilus;
 import net.minecraft.world.entity.player.Player;
@@ -13,7 +12,7 @@ public class NautilusRidingSoundInstance extends AbstractTickableSoundInstance {
     private final AbstractNautilus nautilus;
 
     public NautilusRidingSoundInstance(Player player, AbstractNautilus nautilus) {
-        super(Barched.SoundEvents.NAUTILUS_RIDING, SoundSource.NEUTRAL, SoundInstance.createUnseededRandom());
+        super(Barched.SoundEvents.NAUTILUS_RIDING, nautilus.getSoundSource(), SoundInstance.createUnseededRandom());
         this.player = player;
         this.nautilus = nautilus;
         this.attenuation = SoundInstance.Attenuation.NONE;
