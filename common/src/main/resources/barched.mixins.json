@@ -109,6 +109,8 @@
     "server.commands.SummonCommandMixin",
     "phys.Vec3Mixin",
     "sounds.SoundEventsMixin",
+    "stats.StatsMixin",
+    "stats.ServerPlayerStatsMixin",
     "tags.BlockTagsMixin",
     "tags.ItemTagsMixin",
     "util.datafix.DataFixersMixin",
