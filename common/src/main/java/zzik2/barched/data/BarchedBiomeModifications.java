@@ -22,6 +22,8 @@ public final class BarchedBiomeModifications {
 
     private static final Logger LOGGER = LogUtils.getLogger();
     private static final Set<ResourceLocation> VANILLA_ZOMBIE_HORSE_BIOMES = Set.of(
+            ResourceLocation.withDefaultNamespace("plains"),
+            ResourceLocation.withDefaultNamespace("sunflower_plains"),
             ResourceLocation.withDefaultNamespace("snowy_plains"),
             ResourceLocation.withDefaultNamespace("savanna"),
             ResourceLocation.withDefaultNamespace("savanna_plateau"),
