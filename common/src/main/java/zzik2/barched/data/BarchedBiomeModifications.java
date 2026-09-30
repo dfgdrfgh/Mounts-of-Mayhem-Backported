@@ -40,34 +40,34 @@ public final class BarchedBiomeModifications {
     }
 
     private static void registerNautilusSpawns() {
-        Set<ResourceLocation> lowWeightOceans = Set.of(
+        addNautilusSpawns(Set.of(
+                ResourceLocation.withDefaultNamespace("ocean"),
+                ResourceLocation.withDefaultNamespace("deep_ocean")
+        ), 1);
+
+        addNautilusSpawns(Set.of(
+                ResourceLocation.withDefaultNamespace("lukewarm_ocean"),
+                ResourceLocation.withDefaultNamespace("deep_lukewarm_ocean")
+        ), 2);
+
+        addNautilusSpawns(Set.of(
                 ResourceLocation.withDefaultNamespace("cold_ocean"),
                 ResourceLocation.withDefaultNamespace("deep_cold_ocean"),
                 ResourceLocation.withDefaultNamespace("frozen_ocean"),
                 ResourceLocation.withDefaultNamespace("deep_frozen_ocean")
-        );
+        ), 3);
 
-        Set<ResourceLocation> normalWeightOceans = Set.of(
-                ResourceLocation.withDefaultNamespace("ocean"),
-                ResourceLocation.withDefaultNamespace("deep_ocean"),
-                ResourceLocation.withDefaultNamespace("lukewarm_ocean"),
-                ResourceLocation.withDefaultNamespace("deep_lukewarm_ocean"),
+        addNautilusSpawns(Set.of(
                 ResourceLocation.withDefaultNamespace("warm_ocean")
-        );
+        ), 10);
+    }
 
+    private static void addNautilusSpawns(Set<ResourceLocation> biomes, int weight) {
         BiomeModifications.addProperties(
-                context -> context.getKey().map(lowWeightOceans::contains).orElse(false),
+                context -> context.getKey().map(biomes::contains).orElse(false),
                 (context, properties) -> properties.getSpawnProperties().addSpawn(
                         MobCategory.WATER_CREATURE,
-                        new MobSpawnSettings.SpawnerData(Barched.EntityType.NAUTILUS, 2, 1, 1)
-                )
-        );
-
-        BiomeModifications.addProperties(
-                context -> context.getKey().map(normalWeightOceans::contains).orElse(false),
-                (context, properties) -> properties.getSpawnProperties().addSpawn(
-                        MobCategory.WATER_CREATURE,
-                        new MobSpawnSettings.SpawnerData(Barched.EntityType.NAUTILUS, 5, 1, 1)
+                        new MobSpawnSettings.SpawnerData(Barched.EntityType.NAUTILUS, weight, 1, 3)
                 )
         );
     }
