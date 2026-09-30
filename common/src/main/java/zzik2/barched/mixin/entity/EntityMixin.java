@@ -141,7 +141,9 @@ public abstract class EntityMixin implements EntityBridge {
             if (self instanceof Mob mob) {
                 mob.setPersistenceRequired();
             }
-            self.gameEvent(GameEvent.UNEQUIP);
+            if (!(self instanceof AbstractNautilus)) {
+                self.gameEvent(GameEvent.UNEQUIP);
+            }
             self.gameEvent(GameEvent.SHEAR, player);
             self.playSound(Barched.SoundEvents.SADDLE_UNEQUIP);
             self.spawnAtLocation(
