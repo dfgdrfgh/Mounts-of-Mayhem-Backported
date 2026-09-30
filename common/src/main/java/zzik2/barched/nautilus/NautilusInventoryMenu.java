@@ -1,7 +1,6 @@
 package zzik2.barched.nautilus;
 
 import net.minecraft.world.Container;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.animal.nautilus.AbstractNautilus;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -41,10 +40,6 @@ public class NautilusInventoryMenu extends AbstractContainerMenu {
             @Override public boolean isActive() { return nautilus.isSaddleable(); }
             @Override public boolean mayPickup(Player player) { return player.isCreative() || !net.minecraft.world.item.enchantment.EnchantmentHelper.has(this.getItem(), net.minecraft.world.item.enchantment.EnchantmentEffectComponents.PREVENT_ARMOR_CHANGE); }
             @Override public int getMaxStackSize() { return 1; }
-            @Override public void setByPlayer(ItemStack stack, ItemStack previous) {
-                nautilus.onEquipItem(EquipmentSlot.BODY, previous, stack);
-                super.setByPlayer(stack, previous);
-            }
         });
         for (int row = 0; row < 3; row++) for (int col = 0; col < 9; col++) this.addSlot(new Slot(playerInventory, col + row * 9 + 9, 8 + col * 18, 84 + row * 18));
         for (int col = 0; col < 9; col++) this.addSlot(new Slot(playerInventory, col, 8 + col * 18, 142));
