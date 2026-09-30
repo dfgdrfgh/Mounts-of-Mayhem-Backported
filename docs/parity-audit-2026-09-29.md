@@ -400,6 +400,13 @@ observable 1.21.1 compatibility differences and both are now corrected:
   registration was removed. All five horse-armor tiers now use the single
   shared final-rule compatibility registration, eliminating load-order
   dependence between the legacy and backported behaviors.
+- Saddle item interaction now reproduces the 1.21.11 Equippable path for Horse
+  and Zombie Horse rather than always inheriting 1.21.1 SaddleItem's
+  isSaddleable gate. This closes the regular Horse difference introduced by
+  the equipment-component migration while preserving the full Saddle stack,
+  equip event and old-engine saddle inventory/drop behavior. Zombie Horse's
+  own mobInteract still rejects non-food items while untamed, exactly as the
+  final 1.21.11 class does.
 
 The same final-source pass rechecked Nautilus adult/baby geometry, Nautilus
 Armor and Saddle geometry, Zombie Nautilus coral geometry/visibility, Nautilus
@@ -408,7 +415,7 @@ Horse/Nautilus armor material values, and shared mount-equipment shearing. No
 additional non-structural mismatch was found in those areas.
 
 Current code head for this cross-check is
-`e1ef9a3cc7a628487b84d4b19c1b9e7ea0e61575`. No pull-request-triggered GitHub
+`e2106c3e92bdb86175ba34444a972e3707697958`. No pull-request-triggered GitHub
 Actions run was attached to this head at the time of the audit update, so the
 new dispenser commits are source-verified but not yet independently
 CI-validated. The preceding validated mount-equipment head remains
