@@ -6,6 +6,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Saddleable;
 import net.minecraft.world.entity.animal.horse.Horse;
+import net.minecraft.world.entity.animal.horse.SkeletonHorse;
 import net.minecraft.world.entity.animal.horse.ZombieHorse;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -27,7 +28,9 @@ public abstract class SaddleItemMixin {
             InteractionHand hand,
             CallbackInfoReturnable<InteractionResult> cir
     ) {
-        if (!(target instanceof Horse) && !(target instanceof ZombieHorse)) {
+        if (!(target instanceof Horse)
+                && !(target instanceof ZombieHorse)
+                && !(target instanceof SkeletonHorse)) {
             return;
         }
         if (!(target instanceof Saddleable saddleable)
