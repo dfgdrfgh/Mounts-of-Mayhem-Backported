@@ -18,6 +18,10 @@ public class BoatMixin {
             )
     )
     private boolean barched$preventNautilusAutoBoarding(Entity passenger, Entity vehicle) {
-        return !(passenger instanceof AbstractNautilus) && passenger.startRiding(vehicle);
+        if (passenger instanceof AbstractNautilus) {
+            vehicle.push(passenger);
+            return false;
+        }
+        return passenger.startRiding(vehicle);
     }
 }
