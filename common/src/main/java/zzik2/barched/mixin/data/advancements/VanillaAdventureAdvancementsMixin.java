@@ -18,5 +18,6 @@ public class VanillaAdventureAdvancementsMixin {
         MOBS_TO_KILL.add(Barched.EntityType.PARCHED);
         MOBS_TO_KILL.add(Barched.EntityType.CAMEL_HUSK);
         MOBS_TO_KILL.add(EntityType.ZOMBIE_HORSE);
+        MOBS_TO_KILL.add(Barched.EntityType.ZOMBIE_NAUTILUS);
     }
 }
