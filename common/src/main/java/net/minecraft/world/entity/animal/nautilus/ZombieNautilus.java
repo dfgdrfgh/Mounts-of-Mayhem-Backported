@@ -31,8 +31,13 @@ public class ZombieNautilus extends AbstractNautilus implements MobBridge {
     @Override protected Brain<?> makeBrain(Dynamic<?> data) { return ZombieNautilusAi.makeBrain(this.brainProvider().makeBrain(data)); }
     @Override public Brain<ZombieNautilus> getBrain() { return (Brain<ZombieNautilus>)super.getBrain(); }
     @Override protected void customServerAiStep() {
+        net.minecraft.util.profiling.ProfilerFiller profiler = this.level().getProfiler();
+        profiler.push("zombieNautilusBrain");
         this.getBrain().tick((ServerLevel)this.level(), this);
+        profiler.pop();
+        profiler.push("zombieNautilusActivityUpdate");
         ZombieNautilusAi.updateActivity(this);
+        profiler.pop();
         super.customServerAiStep();
     }
     @Override public void aiStep() { super.aiStep(); this.burnUndead(); }
