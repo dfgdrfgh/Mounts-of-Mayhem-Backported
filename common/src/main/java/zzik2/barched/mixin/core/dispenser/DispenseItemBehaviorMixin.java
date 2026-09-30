@@ -14,6 +14,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.DispenserBlock;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.AABB;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -63,6 +64,7 @@ public interface DispenseItemBehaviorMixin {
                                 && !saddleable.isSaddled()
                                 && saddleable.isSaddleable())) {
                     ((Saddleable) target).equipSaddle(stack.split(1), SoundSource.BLOCKS);
+                    target.gameEvent(GameEvent.EQUIP);
                     if (target instanceof Mob mob) {
                         mob.setPersistenceRequired();
                     }
