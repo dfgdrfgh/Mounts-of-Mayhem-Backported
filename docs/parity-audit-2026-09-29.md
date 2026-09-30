@@ -306,9 +306,10 @@ mounts where those changes are observable:
   Saddle, honors passenger/secondary-use/Binding-Curse restrictions, emits the
   normal BODY-slot UNEQUIP event plus SHEAR, drops the real stack, plays
   HORSE_ARMOR_UNEQUIP and costs one shears durability.
-- Nautilus Armor remains armor-first then saddle. Clearing its BODY slot already
-  invokes the backported Nautilus Armor unequip sound through setItemSlot, so
-  no duplicate explicit sound call is needed.
+- Nautilus Armor remains armor-first then saddle. Clearing its BODY slot emits
+  the normal BODY-slot UNEQUIP game event through LivingEntity, while the
+  shared shearing hook explicitly plays ARMOR_UNEQUIP_NAUTILUS, matching the
+  final Equippable shearing sound.
 - Saddle foil/glint now uses the synchronized saddle stack on Camel Husk,
   Zombie/Skeleton Horse, Pig, Strider, Horse, Donkey, Mule and Camel. The
   compatibility render layers render only the older model's saddle geometry,
@@ -345,3 +346,31 @@ Latest code validation for this pass is commit
 GitHub Actions run 36669483539 completed successfully: Fabric and NeoForge
 compiled and both release-JAR artifact uploads succeeded.
 https://github.com/dfgdrfgh/Yarched/actions/runs/36669483539
+
+
+## Unified mount equipment shearing verification
+
+- The shared mount-equipment shearing hook now handles Horse Armor, Nautilus
+  Armor and Saddles in the same interaction stage as final 1.21.11.
+- BODY equipment is checked before the Saddle, matching the final equipment
+  slot order. Binding Curse blocks removal unless the player is in creative,
+  ridden mounts cannot be sheared, secondary-use skips shearing, one shears
+  durability is consumed, the real ItemStack is dropped at the average
+  passenger attachment height, and the SHEAR game event is emitted.
+- Horse Armor uses HORSE_ARMOR_UNEQUIP and Nautilus Armor uses
+  ARMOR_UNEQUIP_NAUTILUS. BODY-slot clearing also emits the inherited UNEQUIP
+  game event through the 1.21.1 LivingEntity equipment callback.
+- Saddles use SADDLE_UNEQUIP. The shared SaddleItemBridge now covers
+  AbstractHorse descendants, Pig, Strider and Nautilus, so the same removal
+  rules apply across the scoped saddleable mounts.
+- Pig and Strider preserve the full Saddle ItemStack in synced/save data rather
+  than only the legacy boolean, preserving components, foil and Binding/drop
+  behavior. Existing boolean-only saves migrate to a normal Saddle stack.
+- Successful shearing returns InteractionResult.SUCCESS on both sides, matching
+  final 1.21.11 rather than the older sided-success convention.
+
+Latest code validation is commit
+`e54ed6365723048c8e43490ea051a6d3fe9578de`.
+GitHub Actions run 36675164787 completed successfully: Fabric and NeoForge
+compiled and both release-JAR artifact uploads succeeded.
+https://github.com/dfgdrfgh/Yarched/actions/runs/36675164787
