@@ -7,6 +7,7 @@ import net.minecraft.core.dispenser.DispenseItemBehavior;
 import net.minecraft.core.dispenser.OptionalDispenseItemBehavior;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.Saddleable;
 import net.minecraft.world.entity.animal.nautilus.AbstractNautilus;
 import net.minecraft.sounds.SoundSource;
@@ -62,8 +63,8 @@ public interface DispenseItemBehaviorMixin {
                                 && !saddleable.isSaddled()
                                 && saddleable.isSaddleable())) {
                     ((Saddleable) target).equipSaddle(stack.split(1), SoundSource.BLOCKS);
-                    if (target instanceof AbstractNautilus nautilus) {
-                        nautilus.setPersistenceRequired();
+                    if (target instanceof Mob mob) {
+                        mob.setPersistenceRequired();
                     }
                     this.setSuccess(true);
                     return stack;
