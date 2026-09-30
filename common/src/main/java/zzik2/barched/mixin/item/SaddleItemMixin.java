@@ -8,6 +8,7 @@ import net.minecraft.world.entity.Saddleable;
 import net.minecraft.world.entity.animal.horse.Horse;
 import net.minecraft.world.entity.animal.horse.SkeletonHorse;
 import net.minecraft.world.entity.animal.horse.ZombieHorse;
+import net.minecraft.world.entity.animal.nautilus.AbstractNautilus;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SaddleItem;
@@ -28,6 +29,17 @@ public abstract class SaddleItemMixin {
             InteractionHand hand,
             CallbackInfoReturnable<InteractionResult> cir
     ) {
+        if (target instanceof AbstractNautilus nautilus) {
+            if (!target.isAlive() || nautilus.isSaddled() || !nautilus.isSaddleable()) {
+                return;
+            }
+            if (!player.level().isClientSide) {
+                nautilus.equipSaddle(stack.split(1), SoundSource.NEUTRAL);
+            }
+            cir.setReturnValue(InteractionResult.SUCCESS);
+            return;
+        }
+
         if (!(target instanceof Horse)
                 && !(target instanceof ZombieHorse)
                 && !(target instanceof SkeletonHorse)) {
