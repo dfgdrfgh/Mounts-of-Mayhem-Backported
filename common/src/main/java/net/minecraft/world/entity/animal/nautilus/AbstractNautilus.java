@@ -621,7 +621,6 @@ PlayerRideableJumping, Saddleable, ContainerListener {
 
     @Override
     public void setItemSlot(EquipmentSlot slot, ItemStack stack) {
-        ItemStack previous = this.getItemBySlot(slot);
         super.setItemSlot(slot, stack);
         if (slot == EquipmentSlot.BODY && this.inventory != null) {
             if (!stack.isEmpty()) this.setDropChance(EquipmentSlot.BODY, 2.0F);
