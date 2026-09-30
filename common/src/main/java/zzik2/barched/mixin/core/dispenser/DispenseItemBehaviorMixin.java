@@ -120,16 +120,16 @@ public interface DispenseItemBehaviorMixin {
             return false;
         }
 
-        // Horse, ZombieHorse and SkeletonHorse return true for the newer SADDLE
-        // slot in 1.21.11. AbstractHorse then gates dispenser use by tame OR pickup-loot.
+        // The newer SADDLE slot still requires an alive, adult, tamed horse.
+        // canPickUpLoot only widens dispenser access for BODY armor, not saddles.
         if (entity instanceof Horse horse) {
             return horse.isTamed();
         }
         if (entity instanceof ZombieHorse horse) {
-            return horse.isTamed() || horse.canPickUpLoot();
+            return horse.isTamed();
         }
         if (entity instanceof SkeletonHorse horse) {
-            return horse.isTamed() || horse.canPickUpLoot();
+            return horse.isTamed();
         }
 
         return saddleable.isSaddleable();
