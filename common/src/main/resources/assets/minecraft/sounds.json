@@ -2115,32 +2115,32 @@
       {
         "name": "block/bell/bell_use01",
         "pitch": 0.93,
-        "volume": 12.0
+        "volume": 12
       },
       {
         "name": "block/bell/bell_use01",
         "pitch": 0.95,
-        "volume": 12.0
+        "volume": 12
       },
       {
         "name": "block/bell/bell_use01",
         "pitch": 0.97,
-        "volume": 12.0
+        "volume": 12
       },
       {
         "name": "block/bell/bell_use02",
         "pitch": 0.93,
-        "volume": 12.0
+        "volume": 12
       },
       {
         "name": "block/bell/bell_use02",
         "pitch": 0.95,
-        "volume": 12.0
+        "volume": 12
       },
       {
         "name": "block/bell/bell_use02",
         "pitch": 0.97,
-        "volume": 12.0
+        "volume": 12
       }
     ],
     "subtitle": "subtitles.block.bell.use"
@@ -15948,7 +15948,7 @@
     "sounds": [
       {
         "name": "entity.camel_husk.ambient",
-        "pitch": 2.0,
+        "pitch": 2,
         "type": "event",
         "volume": 0.7
       }
@@ -16244,7 +16244,7 @@
     "sounds": [
       {
         "name": "entity.warden.tendril_clicks",
-        "pitch": 2.0,
+        "pitch": 2,
         "type": "event",
         "volume": 0.8
       }
@@ -18757,15 +18757,15 @@
     "sounds": [
       {
         "name": "item/book/open_flip1",
-        "volume": 2.0
+        "volume": 2
       },
       {
         "name": "item/book/open_flip2",
-        "volume": 2.0
+        "volume": 2
       },
       {
         "name": "item/book/open_flip3",
-        "volume": 2.0
+        "volume": 2
       }
     ],
     "subtitle": "subtitles.entity.villager.work_librarian"
@@ -20052,15 +20052,15 @@
     "sounds": [
       {
         "name": "item/book/open_flip1",
-        "volume": 2.0
+        "volume": 2
       },
       {
         "name": "item/book/open_flip2",
-        "volume": 2.0
+        "volume": 2
       },
       {
         "name": "item/book/open_flip3",
-        "volume": 2.0
+        "volume": 2
       }
     ],
     "subtitle": "subtitles.item.book.page_turn"
@@ -23310,5 +23310,14 @@
       }
     ],
     "subtitle": "subtitles.entity.parrot.imitate.zombie_nautilus"
+  },
+  "item.saddle.unequip": {
+    "sounds": [
+      {
+        "name": "mob/horse/leather",
+        "volume": 0.5
+      }
+    ],
+    "subtitle": "subtitles.item.saddle.unequip"
   }
 }
