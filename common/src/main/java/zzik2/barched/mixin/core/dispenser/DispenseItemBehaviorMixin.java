@@ -96,9 +96,7 @@ public interface DispenseItemBehaviorMixin {
                 for (LivingEntity target : source.level().getEntitiesOfClass(
                         LivingEntity.class,
                         new AABB(targetPos),
-                        entity -> entity instanceof Saddleable saddleable
-                                && !saddleable.isSaddled()
-                                && saddleable.isSaddleable())) {
+                        entity -> barched$canDispenseSaddle(entity))) {
                     ((Saddleable) target).equipSaddle(stack.split(1), SoundSource.BLOCKS);
                     target.gameEvent(GameEvent.EQUIP);
                     if (target instanceof Mob mob) {
@@ -114,4 +112,21 @@ public interface DispenseItemBehaviorMixin {
 
         DispenserBlock.registerBehavior(Items.SADDLE, saddleBehavior);
     }
+    private static boolean barched$canDispenseSaddle(LivingEntity entity) {
+        if (!(entity instanceof Saddleable saddleable) || saddleable.isSaddled() || !entity.isAlive()) {
+            return false;
+        }
+
+        // Horse and ZombieHorse both return true for the newer SADDLE slot in
+        // 1.21.11. AbstractHorse then gates dispenser use by tame OR pickup-loot.
+        if (entity instanceof Horse horse) {
+            return horse.isTamed() || horse.canPickUpLoot();
+        }
+        if (entity instanceof ZombieHorse horse) {
+            return horse.isTamed() || horse.canPickUpLoot();
+        }
+
+        return saddleable.isSaddleable();
+    }
+
 }
