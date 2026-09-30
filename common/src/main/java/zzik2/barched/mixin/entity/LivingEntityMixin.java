@@ -5,6 +5,7 @@ import dev.architectury.platform.Platform;
 import it.unimi.dsi.fastutil.objects.Object2LongMap;
 import it.unimi.dsi.fastutil.objects.Object2LongOpenHashMap;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.resources.ResourceLocation;
@@ -21,9 +22,11 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.AttackRange;
 import net.minecraft.world.item.component.KineticWeapon;
+import net.minecraft.world.item.component.UseEffects;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
@@ -32,6 +35,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import zzik2.barched.Barched;
 import zzik2.barched.bridge.entity.LivingEntityBridge;
@@ -118,6 +122,20 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityBr
                 && this.isVehicle()
                 && this.getFluidHeight(FluidTags.WATER) > this.getFluidJumpThreshold()) {
             this.setDeltaMovement(this.getDeltaMovement().add(0.0D, 0.04D, 0.0D));
+        }
+    }
+
+    @Redirect(
+            method = {"startUsingItem", "stopUsingItem"},
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/world/entity/LivingEntity;gameEvent(Lnet/minecraft/core/Holder;)V"
+            )
+    )
+    private void barched$respectUseVibrations(LivingEntity entity, Holder<GameEvent> event) {
+        UseEffects effects = (UseEffects) this.useItem.getOrDefault(Barched.DataComponents.USE_EFFECTS, UseEffects.DEFAULT);
+        if (effects.interactVibrations()) {
+            entity.gameEvent(event);
         }
     }
 
