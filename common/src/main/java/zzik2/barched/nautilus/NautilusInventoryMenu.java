@@ -24,10 +24,6 @@ public class NautilusInventoryMenu extends AbstractContainerMenu {
             @Override public boolean isActive() { return nautilus.isSaddleable(); }
             @Override public boolean mayPickup(Player player) { return player.isCreative() || !net.minecraft.world.item.enchantment.EnchantmentHelper.has(this.getItem(), net.minecraft.world.item.enchantment.EnchantmentEffectComponents.PREVENT_ARMOR_CHANGE); }
             @Override public int getMaxStackSize() { return 1; }
-            @Override public void setByPlayer(ItemStack stack, ItemStack previous) {
-                nautilus.barched$onSaddleEquipItem(previous, stack);
-                super.setByPlayer(stack, previous);
-            }
         });
         this.addSlot(new Slot(inventory, 1, 8, 36) {
             @Override public boolean mayPlace(ItemStack stack) { return stack.getItem() instanceof NautilusArmorItem && nautilus.isSaddleable(); }
