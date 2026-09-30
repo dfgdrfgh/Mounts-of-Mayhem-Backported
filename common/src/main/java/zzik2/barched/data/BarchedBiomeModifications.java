@@ -155,18 +155,38 @@ public final class BarchedBiomeModifications {
         // Skeleton weight 100 -> 50, with Parched added at weight 50.
         ResourceLocation desert = ResourceLocation.withDefaultNamespace("desert");
         if (selection.biomeIds().contains(desert)) {
-            int skeletonWeight = Math.max(0, 100 - Math.min(weight, 100));
             BiomeModifications.replaceProperties(
                     context -> context.getKey().map(desert::equals).orElse(false),
                     (context, properties) -> {
-                        properties.getSpawnProperties().removeSpawns(
+                        var spawnProperties = properties.getSpawnProperties();
+                        var monsterSpawns = spawnProperties.getSpawners().get(MobCategory.MONSTER);
+                        if (monsterSpawns == null) {
+                            return;
+                        }
+
+                        var skeletonSpawns = monsterSpawns.stream()
+                                .filter(data -> data.type == EntityType.SKELETON)
+                                .toList();
+                        if (skeletonSpawns.isEmpty()) {
+                            return;
+                        }
+
+                        spawnProperties.removeSpawns(
                                 (category, data) -> category == MobCategory.MONSTER && data.type == EntityType.SKELETON
                         );
-                        if (skeletonWeight > 0) {
-                            properties.getSpawnProperties().addSpawn(
-                                    MobCategory.MONSTER,
-                                    new MobSpawnSettings.SpawnerData(EntityType.SKELETON, skeletonWeight, 4, 4)
-                            );
+                        for (MobSpawnSettings.SpawnerData skeletonSpawn : skeletonSpawns) {
+                            int adjustedWeight = Math.max(0, skeletonSpawn.getWeight().asInt() - weight);
+                            if (adjustedWeight > 0) {
+                                spawnProperties.addSpawn(
+                                        MobCategory.MONSTER,
+                                        new MobSpawnSettings.SpawnerData(
+                                                EntityType.SKELETON,
+                                                adjustedWeight,
+                                                skeletonSpawn.minCount,
+                                                skeletonSpawn.maxCount
+                                        )
+                                );
+                            }
                         }
                     }
             );
