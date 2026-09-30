@@ -4,6 +4,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.animal.nautilus.AbstractNautilus;
 import net.minecraft.world.entity.monster.AbstractSkeleton;
 import net.minecraft.world.entity.monster.Drowned;
 import net.minecraft.world.entity.monster.Pillager;
@@ -25,6 +26,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import zzik2.barched.Barched;
+import zzik2.barched.item.NautilusArmorItem;
 import zzik2.barched.bridge.entity.MobBridge;
 import zzik2.zreflex.mixin.ModifyAccess;
 
@@ -42,6 +44,13 @@ public abstract class MobMixin extends LivingEntity implements MobBridge {
     }
 
     @Shadow protected abstract boolean isSunBurnTick();
+
+    @Inject(method = "equipItemIfPossible", at = @At("HEAD"), cancellable = true)
+    private void barched$restrictNautilusArmorAutoEquip(ItemStack stack, CallbackInfoReturnable<ItemStack> cir) {
+        if (stack.getItem() instanceof NautilusArmorItem && !((Object) this instanceof AbstractNautilus)) {
+            cir.setReturnValue(ItemStack.EMPTY);
+        }
+    }
 
     @Inject(method = "doHurtTarget", at = @At("TAIL"))
     private void barched$doHurtTarget(Entity entity, CallbackInfoReturnable<Boolean> cir) {
