@@ -5,13 +5,9 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityAttachment;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Saddleable;
-import net.minecraft.world.entity.animal.horse.AbstractHorse;
-import net.minecraft.world.entity.animal.nautilus.AbstractNautilus;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.AnimalArmorItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
@@ -74,53 +70,28 @@ public abstract class EntityMixin implements EntityBridge {
     @Inject(method = "interact", at = @At("HEAD"), cancellable = true)
     private void barched$shearMountEquipment(Player player, InteractionHand hand, CallbackInfoReturnable<InteractionResult> cir) {
         Entity self = (Entity) (Object) this;
-        if (self instanceof AbstractNautilus || self.isVehicle() || player.isSecondaryUseActive()) {
+        if (self.isVehicle() || player.isSecondaryUseActive()) {
             return;
         }
 
         ItemStack shears = player.getItemInHand(hand);
-        if (!shears.is(Items.SHEARS)) {
-            return;
-        }
-
-        if (self instanceof AbstractHorse horse) {
-            ItemStack armor = horse.getBodyArmorItem();
-            if (armor.getItem() instanceof AnimalArmorItem animalArmor
-                    && animalArmor.getBodyType() == AnimalArmorItem.BodyType.EQUESTRIAN
-                    && (player.isCreative()
-                    || !EnchantmentHelper.has(armor, EnchantmentEffectComponents.PREVENT_ARMOR_CHANGE))) {
-                if (!self.level().isClientSide()) {
-                    ItemStack removed = armor.copy();
-                    horse.setItemSlot(EquipmentSlot.BODY, ItemStack.EMPTY);
-                    self.spawnAtLocation(
-                            removed,
-                            EntityAttachmentUtil.averageY(self, EntityAttachment.PASSENGER)
-                    );
-                    self.gameEvent(GameEvent.SHEAR, player);
-                    self.playSound(Barched.SoundEvents.HORSE_ARMOR_UNEQUIP);
-                    shears.hurtAndBreak(1, player, LivingEntity.getSlotForHand(hand));
-                }
-
-                cir.setReturnValue(InteractionResult.sidedSuccess(self.level().isClientSide()));
-                return;
-            }
-        }
-
-        if (!(self instanceof Saddleable saddleable) || !(self instanceof SaddleItemBridge saddleBridge)) {
+        if (!shears.is(Items.SHEARS)
+                || !(self instanceof Saddleable saddleable)
+                || !(self instanceof SaddleItemBridge saddleBridge)) {
             return;
         }
 
         ItemStack saddle = saddleBridge.barched$getSaddleItem();
         if (!saddleable.isSaddled()
                 || saddle.isEmpty()
-                || (!player.isCreative() && EnchantmentHelper.has(saddle, EnchantmentEffectComponents.PREVENT_ARMOR_CHANGE))) {
+                || (!player.isCreative()
+                && EnchantmentHelper.has(saddle, EnchantmentEffectComponents.PREVENT_ARMOR_CHANGE))) {
             return;
         }
 
         if (!self.level().isClientSide()) {
             ItemStack removed = saddle.copy();
             saddleBridge.barched$setSaddleItem(ItemStack.EMPTY);
-            self.gameEvent(GameEvent.UNEQUIP);
             self.spawnAtLocation(
                     removed,
                     EntityAttachmentUtil.averageY(self, EntityAttachment.PASSENGER)
