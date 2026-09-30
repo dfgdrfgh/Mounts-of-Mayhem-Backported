@@ -41,6 +41,7 @@
     "advancements.critereon.EntityFlagsPredicateMixin",
     "block.entity.AbstractFurnaceBlockEntityMixin",
     "compat.bettercombat.ServerNetworkMixin",
+    "core.dispenser.DispenseItemBehaviorMixin",
     "component.DataComponentsMixin",
     "component.DataComponentType$$BuilderMixin",
     "component.DataComponentType$Builder$SimpleTypeMixin",
