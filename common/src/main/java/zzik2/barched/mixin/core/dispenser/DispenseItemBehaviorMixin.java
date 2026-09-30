@@ -99,7 +99,9 @@ public interface DispenseItemBehaviorMixin {
                         new AABB(targetPos),
                         entity -> barched$canDispenseSaddle(entity))) {
                     ((Saddleable) target).equipSaddle(stack.split(1), SoundSource.BLOCKS);
-                    target.gameEvent(GameEvent.EQUIP);
+                    if (!(target instanceof AbstractNautilus)) {
+                        target.gameEvent(GameEvent.EQUIP);
+                    }
                     if (target instanceof Mob mob) {
                         mob.setPersistenceRequired();
                     }
