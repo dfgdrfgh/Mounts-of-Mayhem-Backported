@@ -43,6 +43,7 @@ import zzik2.barched.Barched;
 import zzik2.barched.bridge.entity.LivingEntityBridge;
 import zzik2.barched.bridge.item.ItemStackBridge;
 
+import java.util.Objects;
 import java.util.function.Predicate;
 
 @Mixin(LivingEntity.class)
@@ -239,7 +240,18 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityBr
 
     @Override
     public int stabbedEntities(Predicate<Entity> predicate) {
-        return this.recentKineticEnemies == null ? 0 : (int)this.recentKineticEnemies.keySet().stream().filter(predicate).count();
+        if (this.recentKineticEnemies == null) {
+            return 0;
+        }
+
+        Objects.requireNonNull(predicate);
+        int count = 0;
+        for (Entity entity : this.recentKineticEnemies.keySet()) {
+            if (predicate.test(entity)) {
+                count++;
+            }
+        }
+        return count;
     }
 
     @Override
