@@ -86,6 +86,7 @@
     "entity.monster.DrownedMixin",
     "entity.monster.HuskMixin",
     "entity.monster.StriderMixin",
+    "entity.monster.WitherSkeletonMixin",
     "entity.monster.ZombieMixin",
     "entity.monster.ZombifiedPiglinMixin",
     "entity.monster.piglin.PiglinAiMixin",
