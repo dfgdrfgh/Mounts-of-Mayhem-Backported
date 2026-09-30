@@ -7,6 +7,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityAttachment;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.Saddleable;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.animal.horse.AbstractHorse;
@@ -107,14 +108,14 @@ public abstract class EntityMixin implements EntityBridge {
                 || !EnchantmentHelper.has(bodyArmor, EnchantmentEffectComponents.PREVENT_ARMOR_CHANGE))) {
             if (!self.level().isClientSide()) {
                 ItemStack removed = bodyArmor.copy();
-                ((LivingEntity) self).setItemSlot(EquipmentSlot.BODY, ItemStack.EMPTY);
+                shears.hurtAndBreak(1, player, LivingEntity.getSlotForHand(hand));
+                ((Mob) self).setBodyArmorItem(ItemStack.EMPTY);
+                self.gameEvent(GameEvent.SHEAR, player);
+                self.playSound(bodyUnequipSound);
                 self.spawnAtLocation(
                         removed,
                         EntityAttachmentUtil.averageY(self, EntityAttachment.PASSENGER)
                 );
-                self.gameEvent(GameEvent.SHEAR, player);
-                self.playSound(bodyUnequipSound);
-                shears.hurtAndBreak(1, player, LivingEntity.getSlotForHand(hand));
             }
 
             cir.setReturnValue(InteractionResult.SUCCESS);
@@ -135,14 +136,18 @@ public abstract class EntityMixin implements EntityBridge {
 
         if (!self.level().isClientSide()) {
             ItemStack removed = saddle.copy();
+            shears.hurtAndBreak(1, player, LivingEntity.getSlotForHand(hand));
             saddleBridge.barched$setSaddleItem(ItemStack.EMPTY);
+            if (self instanceof Mob mob) {
+                mob.setPersistenceRequired();
+            }
+            self.gameEvent(GameEvent.UNEQUIP);
+            self.gameEvent(GameEvent.SHEAR, player);
+            self.playSound(Barched.SoundEvents.SADDLE_UNEQUIP);
             self.spawnAtLocation(
                     removed,
                     EntityAttachmentUtil.averageY(self, EntityAttachment.PASSENGER)
             );
-            self.gameEvent(GameEvent.SHEAR, player);
-            self.playSound(Barched.SoundEvents.SADDLE_UNEQUIP);
-            shears.hurtAndBreak(1, player, LivingEntity.getSlotForHand(hand));
         }
 
         cir.setReturnValue(InteractionResult.SUCCESS);
