@@ -61,4 +61,14 @@ public abstract class AbstractHorseMixin implements AbstractHorseBridge {
     public ItemStack barched$getSaddleItem() {
         return ((AbstractHorse) (Object) this).getEntityData().get(BARCHED_SADDLE_ITEM);
     }
+
+    @Override
+    public void barched$setSaddleItem(ItemStack stack) {
+        AbstractHorse horse = (AbstractHorse) (Object) this;
+        ItemStack stored = stack.isEmpty() ? ItemStack.EMPTY : stack.copyWithCount(1);
+        horse.getSlot(400).set(stored);
+        if (!horse.level().isClientSide()) {
+            horse.getEntityData().set(BARCHED_SADDLE_ITEM, stored.copy());
+        }
+    }
 }
