@@ -9,12 +9,18 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityAttachment;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.animal.camel.Camel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.gameevent.GameEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import zzik2.barched.Barched;
@@ -42,6 +48,26 @@ public class CamelHusk extends Camel implements CamelBridge {
     public InteractionResult interact0(Player player, InteractionHand interactionHand) {
         this.setPersistenceRequired();
         return super.interact(player, interactionHand);
+    }
+
+    @Override
+    public InteractionResult mobInteract(Player player, InteractionHand hand) {
+        ItemStack shears = player.getItemInHand(hand);
+        ItemStack saddle = this.inventory.getItem(0);
+        if (shears.is(Items.SHEARS) && !player.isSecondaryUseActive() && !this.isVehicle()
+                && this.isSaddled() && (player.isCreative()
+                || !EnchantmentHelper.has(saddle, EnchantmentEffectComponents.PREVENT_ARMOR_CHANGE))) {
+            if (!this.level().isClientSide()) {
+                ItemStack removed = saddle.copy();
+                this.inventory.setItem(0, ItemStack.EMPTY);
+                this.spawnAtLocation(removed, (float)this.getAttachments().get(EntityAttachment.PASSENGER, 0, 0.0F).y);
+                this.gameEvent(GameEvent.SHEAR, player);
+                this.playSound(Barched.SoundEvents.SADDLE_UNEQUIP);
+                shears.hurtAndBreak(1, player, LivingEntity.getSlotForHand(hand));
+            }
+            return InteractionResult.sidedSuccess(this.level().isClientSide());
+        }
+        return super.mobInteract(player, hand);
     }
 
     @Override
@@ -123,7 +149,6 @@ public class CamelHusk extends Camel implements CamelBridge {
         return Barched.SoundEvents.CAMEL_HUSK_SADDLE;
     }
 
-    // TODO
     @Override
     public float chargeSpeedModifier() {
         return 4.0F;

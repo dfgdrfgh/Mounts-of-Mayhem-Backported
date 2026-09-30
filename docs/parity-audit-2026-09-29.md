@@ -58,10 +58,66 @@ Compilation does not establish in-game parity; these runtime checks remain:
 6. Compare Lunge at food levels 6 and 7, all three enchantment levels, mounted,
    underwater, and elytra flight, including multiplayer synchronization.
 
-This is a bounded audit checkpoint, not a claim of complete 1:1 parity.
-The branch contains Nautilus item tags and Breath of the Nautilus groundwork,
-but no Nautilus or Zombie Nautilus entity implementation. Their entities,
-AI, equipment, rendering, spawning, and associated content remain substantial
-work. Quad-leash rendering from newer Minecraft versions is also not supplied
-by the existing 1.21.1 leash renderer. Copper Horse Armor remains excluded as
-previously requested; Netherite Horse Armor is part of the 1.21.11 scope.
+## September 30 continuation
+
+The branch now implements Nautilus and Zombie Nautilus entities, their AI,
+riding/dashing, taming/feeding, armor and saddle inventory, models, textures,
+sounds, spawning, drowned riders, loot, recipes, and advancement integration.
+The earlier statement that these entities were absent is superseded.
+
+Code commit `0229d2992632c1ec8d91d4f94f2c5e34dc9b0894` passed the Fabric and
+NeoForge build, including both artifact uploads:
+https://github.com/dfgdrfgh/Yarched/actions/runs/36657597034
+
+Corrections in this continuation:
+
+- Drowned beach-seeking no longer reinstalls 1.21.1's ground-only navigator.
+  The goal preserves the amphibious navigator, matching 1.21.11's goal start.
+- Drowned special swimming travel now requires submersion, rather than merely
+  touching water, matching 1.21.11's `travelInWater` condition.
+- Nautilus body armor and saddles render their enchantment glint. The saddle
+  stack is synchronized to tracking clients, replacing the boolean-only state
+  that could not communicate item components. Saddle persistence still uses
+  the existing `SaddleItem` save field.
+- Zombie Horse armor uses the armor render type and glint buffer. Leather's
+  separate overlay remains untinted and does not apply glint twice.
+- Camel Husk saddle shearing is implemented with the vanilla no-passengers,
+  non-sneaking and Binding Curse checks, a one-point shears durability cost,
+  the saddle unequip sound, and a saddle item drop. This closes the missing
+  interaction alongside the other new mounts.
+
+Further source/resource checks:
+
+- Compared Nautilus food, taming, movement, dash, restriction radius, effects,
+  charge AI, sound selection, and built-in Zombie Nautilus variant behavior
+  with the official mapped 1.21.11 classes.
+- Confirmed Camel Husk rider spawning and Parched health, Weakness arrows,
+  attack intervals, and Weakness immunity against the official classes.
+- All packaged JSON parses. The existing tag overrides contain their relevant
+  Mounts of Mayhem entries; the remaining referenced underwater-dismount tag
+  is inherited from 1.21.1.
+- Recipe ingredient syntax and the Lunge effect/sound codec intentionally use
+  1.21.1-compatible representations. Loot differences for Copper Horse Armor,
+  bundles and the Lava Chicken music disc remain outside this update's scope.
+- Matching-path packaged textures match the official files except Camel Husk
+  and Zombie Horse: all differing pixels occupy areas transparent in the
+  official body texture, supplying the saddle regions needed by 1.21.1's
+  combined body/saddle models. Do not replace them with bare body textures.
+- Packaged Nautilus, Camel Husk, Parched and spear sound definitions match the
+  official 1.21.11 sound definitions.
+
+## Remaining limits
+
+This is a source-audit and build checkpoint, not certification of complete 1:1
+runtime parity. In-game startup, movement, GUI interactions, multiplayer
+synchronization, rendering and the six earlier gameplay checks still require
+verification. Specifically exercise Drowned water/beach/water transitions,
+Nautilus saddle save/reload and remote glint visibility, and Camel Husk saddle
+shearing with passengers, sneaking and Binding Curse.
+
+The Zombie Nautilus backport represents the two built-in variants with a
+synchronized flag and vanilla variant IDs in saved data; it does not implement
+1.21.11's extensible variant registry/data-component system. The newer general
+leash physics and quad-leash renderer are not supplied by the 1.21.1 renderer.
+Copper Horse Armor remains excluded as previously requested; Netherite Horse
+Armor is part of the 1.21.11 scope.
