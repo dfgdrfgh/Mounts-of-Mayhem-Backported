@@ -1,4 +1,4 @@
-package zzik2.barched.mixin.entity.ai.util;
+package zzik2.mombackport.mixin.entity.ai.util;
 
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.util.GoalUtils;

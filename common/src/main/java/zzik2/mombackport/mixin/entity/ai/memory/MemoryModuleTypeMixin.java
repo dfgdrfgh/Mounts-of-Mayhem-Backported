@@ -1,4 +1,4 @@
-package zzik2.barched.mixin.entity.ai.memory;
+package zzik2.mombackport.mixin.entity.ai.memory;
 
 import net.minecraft.world.entity.ai.behavior.SpearAttack;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;

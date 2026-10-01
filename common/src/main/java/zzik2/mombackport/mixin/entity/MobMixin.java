@@ -1,4 +1,4 @@
-package zzik2.barched.mixin.entity;
+package zzik2.mombackport.mixin.entity;
 
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import zzik2.barched.bridge.entity.MobBridge;
+import zzik2.mombackport.bridge.entity.MobBridge;
 import zzik2.zreflex.mixin.ModifyAccess;
 
 @Mixin(Mob.class)
@@ -32,7 +32,7 @@ public abstract class MobMixin extends LivingEntity implements MobBridge {
     @Shadow protected abstract boolean isSunBurnTick();
 
     @Inject(method = "doHurtTarget", at = @At("TAIL"))
-    private void barched$doHurtTarget(Entity entity, CallbackInfoReturnable<Boolean> cir) {
+    private void mombackport$doHurtTarget(Entity entity, CallbackInfoReturnable<Boolean> cir) {
         this.lungeForwardMaybe();
     }
 

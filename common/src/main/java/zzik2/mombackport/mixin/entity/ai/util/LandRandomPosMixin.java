@@ -1,4 +1,4 @@
-package zzik2.barched.mixin.entity.ai.util;
+package zzik2.mombackport.mixin.entity.ai.util;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.PathfinderMob;
@@ -10,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import zzik2.barched.bridge.entity.ai.LandRandomPosBridge;
+import zzik2.mombackport.bridge.entity.ai.LandRandomPosBridge;
 import zzik2.zreflex.mixin.ModifyAccess;
 import zzik2.zreflex.reflection.ZReflectionTool;
 

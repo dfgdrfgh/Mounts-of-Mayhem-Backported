@@ -1,4 +1,4 @@
-package zzik2.barched.mixin.entity;
+package zzik2.mombackport.mixin.entity;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import dev.architectury.platform.Platform;
@@ -25,9 +25,9 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import zzik2.barched.Barched;
-import zzik2.barched.bridge.entity.LivingEntityBridge;
-import zzik2.barched.bridge.item.ItemStackBridge;
+import zzik2.mombackport.MomBackport;
+import zzik2.mombackport.bridge.entity.LivingEntityBridge;
+import zzik2.mombackport.bridge.item.ItemStackBridge;
 
 import java.util.function.Predicate;
 
@@ -72,24 +72,24 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityBr
     }
 
     @Inject(method = "<init>", at = @At("TAIL"))
-    private void barched$init(EntityType<?> entityType, Level level, CallbackInfo ci) {
+    private void mombackport$init(EntityType<?> entityType, Level level, CallbackInfo ci) {
         this.lastKineticHitFeedbackTime = -2147483648L;
     }
 
     @Inject(method = "startUsingItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;gameEvent(Lnet/minecraft/core/Holder;)V", shift = At.Shift.AFTER))
-    private void barched$startUsingItem(InteractionHand interactionHand, CallbackInfo ci) {
-        if (this.useItem.has(Barched.DataComponents.KINETIC_WEAPON)) {
+    private void mombackport$startUsingItem(InteractionHand interactionHand, CallbackInfo ci) {
+        if (this.useItem.has(MomBackport.DataComponents.KINETIC_WEAPON)) {
             this.recentKineticEnemies = new Object2LongOpenHashMap();
         }
     }
 
     @Inject(method = "stopUsingItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;isUsingItem()Z", shift = At.Shift.AFTER))
-    private void barched$stopUsingItem(CallbackInfo ci) {
+    private void mombackport$stopUsingItem(CallbackInfo ci) {
         this.recentKineticEnemies = null;
     }
 
     @Inject(method = "handleEntityEvent", at = @At("HEAD"), cancellable = true)
-    private void barched$handleEntityEvent(byte b, CallbackInfo ci) {
+    private void mombackport$handleEntityEvent(byte b, CallbackInfo ci) {
         if (b == 2) {
             this.onKineticHit();
             ci.cancel();
@@ -97,7 +97,7 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityBr
     }
 
     @ModifyExpressionValue(method = "getCurrentSwingDuration", at = @At(value = "CONSTANT", args = "intValue=6"))
-    private int barched$getCurrentSwingDuration(int constant) {
+    private int mombackport$getCurrentSwingDuration(int constant) {
         //HMI compat
         if (Platform.isModLoaded("hold-my-items") || Platform.isModLoaded("holdmyitemsnf")) {
             return constant;
@@ -109,20 +109,20 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityBr
     
     @Override
     public void lungeForwardMaybe() {
-        barched$lungeForwardMaybe();
+        mombackport$lungeForwardMaybe();
     }
 
     @Override
     public void super$lungeForwardMaybe() {
-        barched$lungeForwardMaybe();
+        mombackport$lungeForwardMaybe();
     }
 
     @Unique
-    public void barched$lungeForwardMaybe() {
+    public void mombackport$lungeForwardMaybe() {
         Level var2 = this.level();
         if (var2 instanceof ServerLevel) {
             ServerLevel serverLevel = (ServerLevel)var2;
-            Barched.EnchantmentHelper.doLungeEffects(serverLevel, this);
+            MomBackport.EnchantmentHelper.doLungeEffects(serverLevel, this);
         }
     }
 
@@ -137,7 +137,7 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityBr
 
     @Override
     public AttackRange entityAttackRange() {
-        AttackRange attackRange = (AttackRange)this.getActiveItem().get(Barched.DataComponents.ATTACK_RANGE);
+        AttackRange attackRange = (AttackRange)this.getActiveItem().get(MomBackport.DataComponents.ATTACK_RANGE);
         return attackRange != null ? attackRange : AttackRange.defaultFor((LivingEntity) (Object) this);
     }
 
@@ -252,27 +252,27 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityBr
     }
 
     @Override
-    public ItemStack barched$getMainHandItemStack() {
-        return this.getMainArm() == HumanoidArm.RIGHT ? this.barched$rightHanditemStack() : this.barched$leftHanditemStack();
+    public ItemStack mombackport$getMainHandItemStack() {
+        return this.getMainArm() == HumanoidArm.RIGHT ? this.mombackport$rightHanditemStack() : this.mombackport$leftHanditemStack();
     }
 
     @Unique
-    private ItemStack barched$rightHanditemStack() {
+    private ItemStack mombackport$rightHanditemStack() {
         return this.getItemHeldByArm(HumanoidArm.RIGHT).copy();
     }
 
     @Unique
-    private ItemStack barched$leftHanditemStack() {
+    private ItemStack mombackport$leftHanditemStack() {
         return this.getItemHeldByArm(HumanoidArm.LEFT).copy();
     }
 
     @Override
-    public ItemStack barched$getUseItemStackForArm(HumanoidArm humanoidArm) {
-        return humanoidArm == HumanoidArm.RIGHT ? barched$rightHanditemStack() : barched$leftHanditemStack();
+    public ItemStack mombackport$getUseItemStackForArm(HumanoidArm humanoidArm) {
+        return humanoidArm == HumanoidArm.RIGHT ? mombackport$rightHanditemStack() : mombackport$leftHanditemStack();
     }
 
     @Override
-    public float barched$ticksUsingItem(HumanoidArm humanoidArm, float partialTick) {
+    public float mombackport$ticksUsingItem(HumanoidArm humanoidArm, float partialTick) {
         return this.isUsingItem() && this.getUsedItemHand() == InteractionHand.MAIN_HAND == (humanoidArm == this.getMainArm()) ? this.getTicksUsingItem(partialTick) : 0.0F;
     }
 
@@ -280,7 +280,7 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityBr
     private void onKineticHit() {
         if (this.level().getGameTime() - this.lastKineticHitFeedbackTime > 10L) {
             this.lastKineticHitFeedbackTime = this.level().getGameTime();
-            KineticWeapon kineticWeapon = (KineticWeapon)this.useItem.get(Barched.DataComponents.KINETIC_WEAPON);
+            KineticWeapon kineticWeapon = (KineticWeapon)this.useItem.get(MomBackport.DataComponents.KINETIC_WEAPON);
             if (kineticWeapon != null) {
                 kineticWeapon.makeLocalHitSound(this);
             }
