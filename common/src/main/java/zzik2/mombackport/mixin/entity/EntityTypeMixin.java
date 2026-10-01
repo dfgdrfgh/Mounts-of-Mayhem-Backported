@@ -1,4 +1,4 @@
-package zzik2.barched.mixin.entity;
+package zzik2.mombackport.mixin.entity;
 
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -24,7 +24,7 @@ public abstract class EntityTypeMixin {
     }
 
     @ModifyArg(method = "<clinit>", slice = @Slice(from = @At(value = "CONSTANT", args = "stringValue=zombie_horse")), at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/EntityType$Builder;of(Lnet/minecraft/world/entity/EntityType$EntityFactory;Lnet/minecraft/world/entity/MobCategory;)Lnet/minecraft/world/entity/EntityType$Builder;"), index = 1)
-    private static MobCategory barched$modifyMobCategory(MobCategory arg2) {
+    private static MobCategory mombackport$modifyMobCategory(MobCategory arg2) {
         return MobCategory.MONSTER;
     }
 

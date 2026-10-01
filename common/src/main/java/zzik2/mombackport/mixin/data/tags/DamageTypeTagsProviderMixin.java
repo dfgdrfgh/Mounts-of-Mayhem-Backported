@@ -1,4 +1,4 @@
-package zzik2.barched.mixin.data.tags;
+package zzik2.mombackport.mixin.data.tags;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import zzik2.barched.Barched;
+import zzik2.mombackport.MomBackport;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -24,8 +24,8 @@ public abstract class DamageTypeTagsProviderMixin extends TagsProvider<DamageTyp
     }
 
     @Inject(method = "addTags", at = @At("TAIL"))
-    private void barched$addTags(HolderLookup.Provider provider, CallbackInfo ci) {
-        this.tag(DamageTypeTags.NO_KNOCKBACK).add(Barched.DamageTypes.SPEAR);
-        this.tag(DamageTypeTags.IS_PLAYER_ATTACK).add(Barched.DamageTypes.SPEAR, Barched.DamageTypes.MACE_SMASH);
+    private void mombackport$addTags(HolderLookup.Provider provider, CallbackInfo ci) {
+        this.tag(DamageTypeTags.NO_KNOCKBACK).add(MomBackport.DamageTypes.SPEAR);
+        this.tag(DamageTypeTags.IS_PLAYER_ATTACK).add(MomBackport.DamageTypes.SPEAR, MomBackport.DamageTypes.MACE_SMASH);
     }
 }

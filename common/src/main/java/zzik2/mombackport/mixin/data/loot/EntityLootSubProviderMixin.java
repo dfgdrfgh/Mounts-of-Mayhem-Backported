@@ -1,4 +1,4 @@
-package zzik2.barched.mixin.data.loot;
+package zzik2.mombackport.mixin.data.loot;
 
 import net.minecraft.data.loot.EntityLootSubProvider;
 import net.minecraft.resources.ResourceKey;
@@ -7,7 +7,7 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import zzik2.barched.bridge.EntityLootSubProviderBridge;
+import zzik2.mombackport.bridge.EntityLootSubProviderBridge;
 
 import java.util.Map;
 
@@ -17,7 +17,7 @@ public class EntityLootSubProviderMixin implements EntityLootSubProviderBridge {
     @Shadow @Final private Map<EntityType<?>, Map<ResourceKey<LootTable>, LootTable.Builder>> map;
 
     @Override
-    public void barched$remove(EntityType<?> entityType) {
+    public void mombackport$remove(EntityType<?> entityType) {
         this.map.remove(entityType);
     }
 }

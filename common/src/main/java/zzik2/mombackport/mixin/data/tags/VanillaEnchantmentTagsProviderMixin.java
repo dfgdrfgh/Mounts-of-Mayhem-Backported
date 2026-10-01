@@ -1,4 +1,4 @@
-package zzik2.barched.mixin.data.tags;
+package zzik2.mombackport.mixin.data.tags;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import zzik2.barched.Barched;
+import zzik2.mombackport.MomBackport;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -24,7 +24,7 @@ public abstract class VanillaEnchantmentTagsProviderMixin extends EnchantmentTag
     }
 
     @ModifyArg(method = "addTags", at = @At(value = "INVOKE", target = "Lnet/minecraft/data/tags/VanillaEnchantmentTagsProvider;tooltipOrder(Lnet/minecraft/core/HolderLookup$Provider;[Lnet/minecraft/resources/ResourceKey;)V"), index = 1)
-    private ResourceKey<?>[] barched$addTags(ResourceKey<?>[] original) {
+    private ResourceKey<?>[] mombackport$addTags(ResourceKey<?>[] original) {
         ResourceKey<?>[] newArray = new ResourceKey<?>[original.length + 1];
         int insertIndex = -1;
         for (int i = 0; i < original.length; i++) {
@@ -35,14 +35,14 @@ public abstract class VanillaEnchantmentTagsProviderMixin extends EnchantmentTag
         }
 
         System.arraycopy(original, 0, newArray, 0, insertIndex);
-        newArray[insertIndex] = Barched.Enchantments.LUNGE;
+        newArray[insertIndex] = MomBackport.Enchantments.LUNGE;
         System.arraycopy(original, insertIndex, newArray, insertIndex + 1, original.length - insertIndex);
 
         return newArray;
     }
 
     @Inject(method = "addTags", at = @At("TAIL"))
-    private void barched$addTags(HolderLookup.Provider provider, CallbackInfo ci) {
-        this.tag(EnchantmentTags.NON_TREASURE).add(Barched.Enchantments.LUNGE);
+    private void mombackport$addTags(HolderLookup.Provider provider, CallbackInfo ci) {
+        this.tag(EnchantmentTags.NON_TREASURE).add(MomBackport.Enchantments.LUNGE);
     }
 }

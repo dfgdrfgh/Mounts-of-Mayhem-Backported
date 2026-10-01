@@ -1,4 +1,4 @@
-package zzik2.barched.mixin.entity;
+package zzik2.mombackport.mixin.entity;
 
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -12,8 +12,8 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import zzik2.barched.bridge.entity.EntityBridge;
-import zzik2.barched.bridge.entity.PlayerBridge;
+import zzik2.mombackport.bridge.entity.EntityBridge;
+import zzik2.mombackport.bridge.entity.PlayerBridge;
 
 @Mixin(Entity.class)
 public abstract class EntityMixin implements EntityBridge {
@@ -45,17 +45,17 @@ public abstract class EntityMixin implements EntityBridge {
     @Nullable private Vec3 lastKnownPosition;
 
     @Inject(method = "<init>", at = @At("TAIL"))
-    private void barched$init(EntityType<?> entityType, Level level, CallbackInfo ci) {
+    private void mombackport$init(EntityType<?> entityType, Level level, CallbackInfo ci) {
         this.lastKnownSpeed = Vec3.ZERO;
     }
 
     @Inject(method = "reapplyPosition", at = @At("HEAD"))
-    private void barched$reapplyPosition(CallbackInfo ci) {
+    private void mombackport$reapplyPosition(CallbackInfo ci) {
         this.lastKnownPosition = null;
     }
 
     @Inject(method = "baseTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/profiling/ProfilerFiller;push(Ljava/lang/String;)V", shift = At.Shift.AFTER, ordinal = 0))
-    private void barched$baseTick(CallbackInfo ci) {
+    private void mombackport$baseTick(CallbackInfo ci) {
         this.computeSpeed();
     }
 

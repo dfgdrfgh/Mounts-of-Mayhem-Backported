@@ -1,4 +1,4 @@
-package zzik2.barched.mixin.data.tags;
+package zzik2.mombackport.mixin.data.tags;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import zzik2.barched.Barched;
+import zzik2.mombackport.MomBackport;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
@@ -25,8 +25,8 @@ public abstract class EntityTypeTagsProviderMixin extends IntrinsicHolderTagsPro
     }
 
     @Inject(method = "addTags", at = @At("TAIL"))
-    private void barched$addCustomTags(HolderLookup.Provider provider, CallbackInfo ci) {
-        this.tag(EntityTypeTags.SKELETONS).add(new EntityType[]{Barched.EntityType.PARCHED});
-        this.tag(EntityTypeTags.ZOMBIES).add(new EntityType[]{Barched.EntityType.CAMEL_HUSK});
+    private void mombackport$addCustomTags(HolderLookup.Provider provider, CallbackInfo ci) {
+        this.tag(EntityTypeTags.SKELETONS).add(new EntityType[]{MomBackport.EntityType.PARCHED});
+        this.tag(EntityTypeTags.ZOMBIES).add(new EntityType[]{MomBackport.EntityType.CAMEL_HUSK});
     }
 }
