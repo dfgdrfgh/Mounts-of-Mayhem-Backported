@@ -1,4 +1,4 @@
-package zzik2.barched.mixin.entity.monster.piglin;
+package zzik2.mombackport.mixin.entity.monster.piglin;
 
 import com.google.common.collect.ImmutableList;
 import net.minecraft.world.entity.EntityType;
@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import zzik2.barched.Barched;
+import zzik2.mombackport.MomBackport;
 import zzik2.zreflex.mixin.ModifyAccess;
 
 import java.util.ArrayList;
@@ -29,9 +29,9 @@ public abstract class PiglinMixin extends AbstractPiglin {
     @Shadow protected static ImmutableList<MemoryModuleType<?>> MEMORY_TYPES;
 
     @Inject(method = "<clinit>", at = @At("TAIL"))
-    private static void barched$clinit(CallbackInfo ci) {
+    private static void mombackport$clinit(CallbackInfo ci) {
         List<MemoryModuleType<?>> modifiedList = new ArrayList<>(MEMORY_TYPES);
-        modifiedList.addAll(List.of(Barched.MemoryModuleType.SPEAR_FLEEING_TIME, Barched.MemoryModuleType.SPEAR_FLEEING_POSITION, Barched.MemoryModuleType.SPEAR_CHARGE_POSITION, Barched.MemoryModuleType.SPEAR_ENGAGE_TIME, Barched.MemoryModuleType.SPEAR_STATUS));
+        modifiedList.addAll(List.of(MomBackport.MemoryModuleType.SPEAR_FLEEING_TIME, MomBackport.MemoryModuleType.SPEAR_FLEEING_POSITION, MomBackport.MemoryModuleType.SPEAR_CHARGE_POSITION, MomBackport.MemoryModuleType.SPEAR_ENGAGE_TIME, MomBackport.MemoryModuleType.SPEAR_STATUS));
         MEMORY_TYPES = ImmutableList.copyOf(modifiedList);
     }
 
@@ -40,15 +40,15 @@ public abstract class PiglinMixin extends AbstractPiglin {
     }
 
     @ModifyArg(method = "createSpawnWeapon", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;<init>(Lnet/minecraft/world/level/ItemLike;)V", ordinal = 1))
-    private ItemLike barched$Item(ItemLike arg) {
-        return this.random.nextInt(10) == 0 ? Barched.Items.GOLDEN_SPEAR : arg;
+    private ItemLike mombackport$Item(ItemLike arg) {
+        return this.random.nextInt(10) == 0 ? MomBackport.Items.GOLDEN_SPEAR : arg;
     }
 
     @Inject(method = "createSpawnWeapon", at = @At("RETURN"), cancellable = true)
-    private void barched$createSpawnWeapon(CallbackInfoReturnable<ItemStack> cir) {
-        float overrideChance = Barched.getConfig().getPiglinOverrideSpearSpawnChanceAsFloat();
+    private void mombackport$createSpawnWeapon(CallbackInfoReturnable<ItemStack> cir) {
+        float overrideChance = MomBackport.getConfig().getPiglinOverrideSpearSpawnChanceAsFloat();
         if (overrideChance > 0 && this.random.nextFloat() < overrideChance) {
-            cir.setReturnValue(new ItemStack(Barched.Items.GOLDEN_SPEAR));
+            cir.setReturnValue(new ItemStack(MomBackport.Items.GOLDEN_SPEAR));
         }
     }
 }

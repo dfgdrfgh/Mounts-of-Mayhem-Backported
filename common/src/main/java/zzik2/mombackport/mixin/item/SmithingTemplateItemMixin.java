@@ -1,4 +1,4 @@
-package zzik2.barched.mixin.item;
+package zzik2.mombackport.mixin.item;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.SmithingTemplateItem;
@@ -19,7 +19,7 @@ public class SmithingTemplateItemMixin {
     private static final ResourceLocation EMPTY_SLOT_SPEAR = ResourceLocation.withDefaultNamespace("item/empty_slot_spear");
 
     @Inject(method = "createNetheriteUpgradeIconList", at = @At("RETURN"), cancellable = true)
-    private static void barched$addIcons(CallbackInfoReturnable<List<ResourceLocation>> cir) {
+    private static void mombackport$addIcons(CallbackInfoReturnable<List<ResourceLocation>> cir) {
         List<ResourceLocation> originalList = cir.getReturnValue();
         List<ResourceLocation> newList = new ArrayList<>(originalList);
         newList.add(EMPTY_SLOT_SPEAR);

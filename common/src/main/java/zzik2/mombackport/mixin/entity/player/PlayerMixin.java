@@ -1,4 +1,4 @@
-package zzik2.barched.mixin.entity.player;
+package zzik2.mombackport.mixin.entity.player;
 
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceLocation;
@@ -30,11 +30,11 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import zzik2.barched.Barched;
-import zzik2.barched.bridge.InteractionHandBridge;
-import zzik2.barched.bridge.entity.PlayerBridge;
-import zzik2.barched.bridge.item.ItemStackBridge;
-import zzik2.barched.bridge.level.LevelBridge;
+import zzik2.mombackport.MomBackport;
+import zzik2.mombackport.bridge.InteractionHandBridge;
+import zzik2.mombackport.bridge.entity.PlayerBridge;
+import zzik2.mombackport.bridge.item.ItemStackBridge;
+import zzik2.mombackport.bridge.level.LevelBridge;
 
 @Mixin(Player.class)
 public abstract class PlayerMixin extends LivingEntity implements PlayerBridge {
@@ -76,7 +76,7 @@ public abstract class PlayerMixin extends LivingEntity implements PlayerBridge {
     private int itemSwapTicker;
 
     @Inject(method = "attack", at = @At("TAIL"))
-    private void barched$attack(Entity entity, CallbackInfo ci) {
+    private void mombackport$attack(Entity entity, CallbackInfo ci) {
         if (entity.isAttackable()) {
             this.onAttack();
             if (!entity.skipAttackInteraction((Player) (Object) this)) {
@@ -86,18 +86,18 @@ public abstract class PlayerMixin extends LivingEntity implements PlayerBridge {
     }
 
     @Inject(method = "resetAttackStrengthTicker", at = @At("TAIL"))
-    private void barched$resetAttackStrengthTicker(CallbackInfo ci) {
+    private void mombackport$resetAttackStrengthTicker(CallbackInfo ci) {
         this.itemSwapTicker = 0;
     }
 
     @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Player;getMainHandItem()Lnet/minecraft/world/item/ItemStack;", shift = At.Shift.BEFORE))
-    private void barched$tick(CallbackInfo ci) {
+    private void mombackport$tick(CallbackInfo ci) {
         ++this.itemSwapTicker;
     }
 
     @Override
     public boolean cannotAttackWithItem(ItemStack itemStack, int i) {
-        float f = (Float)itemStack.getOrDefault(Barched.DataComponents.MINIMUM_ATTACK_CHARGE, 0.0F);
+        float f = (Float)itemStack.getOrDefault(MomBackport.DataComponents.MINIMUM_ATTACK_CHARGE, 0.0F);
         float g = (float)(this.attackStrengthTicker + i) / this.getCurrentItemAttackStrengthDelay();
         return f > 0.0F && g < f;
     }
