@@ -1,4 +1,5 @@
 name: Build
+# The mod icon is packaged from common resources, so icon updates are validated by this build.
 
 on:
   workflow_dispatch:
