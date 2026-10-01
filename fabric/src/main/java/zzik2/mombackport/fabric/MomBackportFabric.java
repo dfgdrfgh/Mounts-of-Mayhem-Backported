@@ -1,9 +1,9 @@
-package zzik2.barched.fabric;
+package zzik2.mombackport.fabric;
 
 import net.fabricmc.api.ModInitializer;
-import zzik2.barched.Barched;
+import zzik2.mombackport.MomBackport;
 
-public final class BarchedFabric implements ModInitializer {
+public final class MomBackportFabric implements ModInitializer {
     @Override
     public void onInitialize() {
         // This code runs as soon as Minecraft is in a mod-load-ready state.
@@ -11,6 +11,6 @@ public final class BarchedFabric implements ModInitializer {
         // Proceed with mild caution.
 
         // Run our common setup.
-        Barched.init();
+        MomBackport.init();
     }
 }

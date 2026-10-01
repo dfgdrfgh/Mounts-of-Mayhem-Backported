@@ -1,7 +1,7 @@
 {
   "required": true,
-  "plugin": "zzik2.barched.mixin.BarchedMixinPlugin",
-  "package": "zzik2.barched.mixin",
+  "plugin": "zzik2.mombackport.mixin.MomBackportMixinPlugin",
+  "package": "zzik2.mombackport.mixin",
   "compatibilityLevel": "JAVA_21",
   "minVersion": "0.8",
   "client": [
