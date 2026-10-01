@@ -15,7 +15,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.mockito.MockMakers;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -86,8 +85,7 @@ public class NautilusEquipmentSyncTest {
     private static AbstractNautilus create(boolean client) throws Exception {
         // Mock world/sound side effects only; use actual entity equipment fields,
         // data storage, SimpleContainer listener, and all synchronization methods.
-        AbstractNautilus nautilus = mock(AbstractNautilus.class,
-                withSettings().defaultAnswer(CALLS_REAL_METHODS).mockMaker(MockMakers.SUBCLASS));
+        AbstractNautilus nautilus = mock(AbstractNautilus.class, CALLS_REAL_METHODS);
         Level level = mock(Level.class);
         when(level.isClientSide()).thenReturn(client);
         doReturn(level).when(nautilus).level();
