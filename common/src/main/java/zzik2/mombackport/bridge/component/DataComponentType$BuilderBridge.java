@@ -1,4 +1,4 @@
-package zzik2.barched.bridge.component;
+package zzik2.mombackport.bridge.component;
 
 import net.minecraft.core.component.DataComponentType;
 

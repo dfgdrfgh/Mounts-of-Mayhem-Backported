@@ -1,4 +1,4 @@
-package zzik2.barched.bridge.component;
+package zzik2.mombackport.bridge.component;
 
 public interface DataComponentTypeBridge {
 
@@ -6,6 +6,6 @@ public interface DataComponentTypeBridge {
         return false;
     }
 
-    default void barched$setIgnoreSwapAnimation(boolean value) {
+    default void mombackport$setIgnoreSwapAnimation(boolean value) {
     }
 }

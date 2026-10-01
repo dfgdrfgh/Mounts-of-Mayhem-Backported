@@ -1,4 +1,4 @@
-package zzik2.barched.bridge.entity;
+package zzik2.mombackport.bridge.entity;
 
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
@@ -65,15 +65,15 @@ public interface LivingEntityBridge extends EntityBridge {
     }
 
     //ArmedEntityRenderState-Like
-    default ItemStack barched$getMainHandItemStack() {
+    default ItemStack mombackport$getMainHandItemStack() {
         return null;
     }
 
-    default ItemStack barched$getUseItemStackForArm(HumanoidArm humanoidArm) {
+    default ItemStack mombackport$getUseItemStackForArm(HumanoidArm humanoidArm) {
         return null;
     }
 
-    default float barched$ticksUsingItem(HumanoidArm humanoidArm, float partialTick) {
+    default float mombackport$ticksUsingItem(HumanoidArm humanoidArm, float partialTick) {
         return 0.0F;
     }
 }
