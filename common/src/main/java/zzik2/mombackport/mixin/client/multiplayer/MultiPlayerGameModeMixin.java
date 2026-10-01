@@ -1,4 +1,4 @@
-package zzik2.barched.mixin.client.multiplayer;
+package zzik2.mombackport.mixin.client.multiplayer;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
@@ -10,9 +10,9 @@ import net.minecraft.world.item.component.PiercingWeapon;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import zzik2.barched.Barched;
-import zzik2.barched.bridge.client.MultiPlayerGameModeBridge;
-import zzik2.barched.bridge.entity.PlayerBridge;
+import zzik2.mombackport.MomBackport;
+import zzik2.mombackport.bridge.client.MultiPlayerGameModeBridge;
+import zzik2.mombackport.bridge.entity.PlayerBridge;
 
 @Mixin(MultiPlayerGameMode.class)
 public abstract class MultiPlayerGameModeMixin implements MultiPlayerGameModeBridge {
@@ -27,7 +27,7 @@ public abstract class MultiPlayerGameModeMixin implements MultiPlayerGameModeBri
     @Override
     public void piercingAttack(PiercingWeapon piercingWeapon) {
         this.ensureHasSentCarriedItem();
-        this.connection.send(new ServerboundPlayerActionPacket(Barched.ServerboundPlayerActionPacket$Action.STAB, BlockPos.ZERO, Direction.DOWN));
+        this.connection.send(new ServerboundPlayerActionPacket(MomBackport.ServerboundPlayerActionPacket$Action.STAB, BlockPos.ZERO, Direction.DOWN));
         ((PlayerBridge) this.minecraft.player).onAttack();
         ((PlayerBridge) this.minecraft.player).lungeForwardMaybe();
         piercingWeapon.makeSound(this.minecraft.player);

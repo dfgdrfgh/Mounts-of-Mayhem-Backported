@@ -1,4 +1,4 @@
-package zzik2.barched.mixin.client.model.geom;
+package zzik2.mombackport.mixin.client.model.geom;
 
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.client.model.HumanoidArmorModel;
@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import zzik2.barched.BarchedClient;
+import zzik2.mombackport.MomBackportClient;
 
 import java.util.Map;
 
@@ -26,22 +26,22 @@ public class LayerDefinitionsMixin {
     @Shadow @Final private static CubeDeformation INNER_ARMOR_DEFORMATION;
 
     @Unique
-    private static ImmutableMap.Builder<ModelLayerLocation, LayerDefinition> barched$builder;
+    private static ImmutableMap.Builder<ModelLayerLocation, LayerDefinition> mombackport$builder;
 
     @Redirect(method = "createRoots", at = @At(value = "INVOKE", target = "Lcom/google/common/collect/ImmutableMap;builder()Lcom/google/common/collect/ImmutableMap$Builder;"))
-    private static ImmutableMap.Builder<ModelLayerLocation, LayerDefinition> barched$captureBuilder() {
-        barched$builder = ImmutableMap.builder();
-        return barched$builder;
+    private static ImmutableMap.Builder<ModelLayerLocation, LayerDefinition> mombackport$captureBuilder() {
+        mombackport$builder = ImmutableMap.builder();
+        return mombackport$builder;
     }
 
     @Inject(method = "createRoots", at = @At(value = "INVOKE", target = "Lcom/google/common/collect/ImmutableMap$Builder;put(Ljava/lang/Object;Ljava/lang/Object;)Lcom/google/common/collect/ImmutableMap$Builder;", shift = At.Shift.AFTER, ordinal = 84))
-    private static void barched$createRoots(CallbackInfoReturnable<Map<ModelLayerLocation, LayerDefinition>> cir) {
+    private static void mombackport$createRoots(CallbackInfoReturnable<Map<ModelLayerLocation, LayerDefinition>> cir) {
         LayerDefinition layerDefinition2 = LayerDefinition.create(HumanoidArmorModel.createBodyLayer(OUTER_ARMOR_DEFORMATION), 64, 32);
         LayerDefinition layerDefinition4 = LayerDefinition.create(HumanoidArmorModel.createBodyLayer(INNER_ARMOR_DEFORMATION), 64, 32);
 
-        barched$builder.put(BarchedClient.ModelLayers.PARCHED, BarchedClient.SkeletonModel.createSingleModelDualBodyLayer());
-        barched$builder.put(BarchedClient.ModelLayers.PARCHED_INNER_ARMOR, layerDefinition4);
-        barched$builder.put(BarchedClient.ModelLayers.PARCHED_OUTER_ARMOR, layerDefinition2);
-        barched$builder.put(BarchedClient.ModelLayers.PARCHED_OUTER_LAYER, LayerDefinition.create(HumanoidModel.createMesh(new CubeDeformation(0.25F), 0.0F), 64, 32));
+        mombackport$builder.put(MomBackportClient.ModelLayers.PARCHED, MomBackportClient.SkeletonModel.createSingleModelDualBodyLayer());
+        mombackport$builder.put(MomBackportClient.ModelLayers.PARCHED_INNER_ARMOR, layerDefinition4);
+        mombackport$builder.put(MomBackportClient.ModelLayers.PARCHED_OUTER_ARMOR, layerDefinition2);
+        mombackport$builder.put(MomBackportClient.ModelLayers.PARCHED_OUTER_LAYER, LayerDefinition.create(HumanoidModel.createMesh(new CubeDeformation(0.25F), 0.0F), 64, 32));
     }
 }

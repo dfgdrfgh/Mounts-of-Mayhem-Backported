@@ -1,4 +1,4 @@
-package zzik2.barched.mixin.client.player;
+package zzik2.mombackport.mixin.client.player;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.mojang.authlib.GameProfile;
@@ -18,10 +18,10 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import zzik2.barched.Barched;
-import zzik2.barched.bridge.client.LocalPlayerBridge;
-import zzik2.barched.bridge.entity.LivingEntityBridge;
-import zzik2.barched.mixin.accessor.client.GameRendererAccessor;
+import zzik2.mombackport.MomBackport;
+import zzik2.mombackport.bridge.client.LocalPlayerBridge;
+import zzik2.mombackport.bridge.entity.LivingEntityBridge;
+import zzik2.mombackport.mixin.accessor.client.GameRendererAccessor;
 
 @Mixin(LocalPlayer.class)
 public abstract class LocalPlayerMixin extends AbstractClientPlayer implements LivingEntityBridge, LocalPlayerBridge {
@@ -49,34 +49,34 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer implements L
     @Shadow protected int sprintTriggerTime;
 
     @ModifyExpressionValue(method = "aiStep", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;canStartSprinting()Z"))
-    private boolean barched$aiStep(boolean original) {
+    private boolean mombackport$aiStep(boolean original) {
         return original && !this.isSlowDueToUsingItem();
     }
 
     @ModifyExpressionValue(method = "aiStep", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;isUsingItem()Z"))
-    private boolean barched$aiStep0(boolean original) {
+    private boolean mombackport$aiStep0(boolean original) {
         return original && this.isSlowDueToUsingItem();
     }
 
     @ModifyExpressionValue(method = "canStartSprinting", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;isUsingItem()Z"))
-    private boolean barched$canStartSprinting(boolean original) {
+    private boolean mombackport$canStartSprinting(boolean original) {
         return original && this.isSlowDueToUsingItem();
     }
 
     @Unique
     private boolean isSlowDueToUsingItem() {
-        return this.isUsingItem() && !((UseEffects)this.useItem.getOrDefault(Barched.DataComponents.USE_EFFECTS, UseEffects.DEFAULT)).canSprint();
+        return this.isUsingItem() && !((UseEffects)this.useItem.getOrDefault(MomBackport.DataComponents.USE_EFFECTS, UseEffects.DEFAULT)).canSprint();
     }
 
     @Unique
     private float itemUseSpeedMultiplier() {
-        return ((UseEffects)this.useItem.getOrDefault(Barched.DataComponents.USE_EFFECTS, UseEffects.DEFAULT)).speedMultiplier();
+        return ((UseEffects)this.useItem.getOrDefault(MomBackport.DataComponents.USE_EFFECTS, UseEffects.DEFAULT)).speedMultiplier();
     }
 
     @Override
     public HitResult raycastHitResult(float f, Entity entity) {
         ItemStack itemStack = this.getActiveItem();
-        AttackRange attackRange = (AttackRange)itemStack.get(Barched.DataComponents.ATTACK_RANGE);
+        AttackRange attackRange = (AttackRange)itemStack.get(MomBackport.DataComponents.ATTACK_RANGE);
         double d = this.blockInteractionRange();
         HitResult hitResult = null;
         if (attackRange != null) {

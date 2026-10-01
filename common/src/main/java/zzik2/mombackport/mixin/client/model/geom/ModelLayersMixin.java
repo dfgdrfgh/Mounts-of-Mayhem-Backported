@@ -1,4 +1,4 @@
-package zzik2.barched.mixin.client.model.geom;
+package zzik2.mombackport.mixin.client.model.geom;
 
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelLayers;

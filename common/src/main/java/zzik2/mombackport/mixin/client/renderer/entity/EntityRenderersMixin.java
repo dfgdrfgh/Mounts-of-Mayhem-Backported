@@ -1,4 +1,4 @@
-package zzik2.barched.mixin.client.renderer.entity;
+package zzik2.mombackport.mixin.client.renderer.entity;
 
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.entity.CamelHuskRenderer;
