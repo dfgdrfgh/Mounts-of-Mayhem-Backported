@@ -1,4 +1,4 @@
-package zzik2.barched.mixin.item;
+package zzik2.mombackport.mixin.item;
 
 import net.minecraft.world.item.UseAnim;
 import org.spongepowered.asm.mixin.Mixin;

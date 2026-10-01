@@ -1,4 +1,4 @@
-package zzik2.barched.mixin.item.enchantment;
+package zzik2.mombackport.mixin.item.enchantment;
 
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;
@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import zzik2.barched.Barched;
+import zzik2.mombackport.MomBackport;
 import zzik2.zreflex.mixin.ModifyAccess;
 
 import java.util.function.UnaryOperator;
@@ -27,8 +27,8 @@ public interface EnchantmentEffectComponentsMixin {
     }
 
     @Inject(method = "bootstrap", at = @At("HEAD"))
-    private static void barched$bootstrap(Registry<DataComponentType<?>> registry, CallbackInfoReturnable<DataComponentType<?>> cir) {
-        Barched.EnchantmentEffectComponents.POST_PIERCING_ATTACK = register("post_piercing_attack", (builder) -> {
+    private static void mombackport$bootstrap(Registry<DataComponentType<?>> registry, CallbackInfoReturnable<DataComponentType<?>> cir) {
+        MomBackport.EnchantmentEffectComponents.POST_PIERCING_ATTACK = register("post_piercing_attack", (builder) -> {
             return builder.persistent(ConditionalEffect.codec(EnchantmentEntityEffect.CODEC, LootContextParamSets.ENCHANTED_DAMAGE).listOf());
         });
     }

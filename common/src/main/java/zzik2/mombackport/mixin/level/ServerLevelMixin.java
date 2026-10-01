@@ -1,4 +1,4 @@
-package zzik2.barched.mixin.level;
+package zzik2.mombackport.mixin.level;
 
 import net.minecraft.core.Holder;
 import net.minecraft.core.RegistryAccess;
@@ -20,7 +20,7 @@ import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import zzik2.barched.bridge.level.LevelBridge;
+import zzik2.mombackport.bridge.level.LevelBridge;
 
 import java.util.function.Supplier;
 

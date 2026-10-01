@@ -1,4 +1,4 @@
-package zzik2.barched.mixin.item.enchantment;
+package zzik2.mombackport.mixin.item.enchantment;
 
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.server.level.ServerLevel;
@@ -10,8 +10,8 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import zzik2.barched.Barched;
-import zzik2.barched.bridge.EnchantmentBridge;
+import zzik2.mombackport.MomBackport;
+import zzik2.mombackport.bridge.EnchantmentBridge;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -33,7 +33,7 @@ public abstract class EnchantmentMixin implements EnchantmentBridge {
 
     @Override
     public void doLunge(ServerLevel serverLevel, int i, EnchantedItemInUse enchantedItemInUse, Entity entity) {
-        applyEffects(this.getEffects(Barched.EnchantmentEffectComponents.POST_PIERCING_ATTACK), entityContext(serverLevel, i, entity, entity.position()), (enchantmentEntityEffect) -> {
+        applyEffects(this.getEffects(MomBackport.EnchantmentEffectComponents.POST_PIERCING_ATTACK), entityContext(serverLevel, i, entity, entity.position()), (enchantmentEntityEffect) -> {
             enchantmentEntityEffect.apply(serverLevel, i, enchantedItemInUse, entity, entity.position());
         });
     }

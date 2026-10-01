@@ -1,4 +1,4 @@
-package zzik2.barched.mixin.item.enchantment.effects;
+package zzik2.mombackport.mixin.item.enchantment.effects;
 
 import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerLevel;
@@ -17,8 +17,8 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import zzik2.barched.Barched;
-import zzik2.barched.bridge.level.LevelBridge;
+import zzik2.mombackport.MomBackport;
+import zzik2.mombackport.bridge.level.LevelBridge;
 
 import java.util.List;
 
@@ -28,11 +28,11 @@ public abstract class PlaySoundEffectMixin implements EnchantmentEntityEffect {
     @Shadow @Final private Holder<SoundEvent> soundEvent;
     @Shadow @Final private FloatProvider volume;
     @Shadow @Final private FloatProvider pitch;
-    private static final List<Holder<SoundEvent>> SPEAR_SOUDNS = List.of(Barched.SoundEvents.LUNGE_1, Barched.SoundEvents.LUNGE_2, Barched.SoundEvents.LUNGE_3);
+    private static final List<Holder<SoundEvent>> SPEAR_SOUDNS = List.of(MomBackport.SoundEvents.LUNGE_1, MomBackport.SoundEvents.LUNGE_2, MomBackport.SoundEvents.LUNGE_3);
 
     @Inject(method = "apply", at =  @At("HEAD"), cancellable = true)
-    private void barched$apply(ServerLevel serverLevel, int i, EnchantedItemInUse enchantedItemInUse, Entity entity, Vec3 vec3, CallbackInfo ci) {
-        if (this.soundEvent == Barched.SoundEvents.LUNGE) {
+    private void mombackport$apply(ServerLevel serverLevel, int i, EnchantedItemInUse enchantedItemInUse, Entity entity, Vec3 vec3, CallbackInfo ci) {
+        if (this.soundEvent == MomBackport.SoundEvents.LUNGE) {
             RandomSource randomSource = entity.getRandom();
             if (!entity.isSilent()) {
                 int j = Mth.clamp(i - 1, 0, SPEAR_SOUDNS.size() - 1);
