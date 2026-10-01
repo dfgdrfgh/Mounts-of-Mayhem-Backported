@@ -1,12 +1,21 @@
 package zzik2.barched.client.nautilus;
 
+import net.minecraft.SharedConstants;
+import net.minecraft.server.Bootstrap;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 
 public class NautilusEquipmentLayeringTest {
+    @BeforeClass
+    public static void bootstrap() {
+        SharedConstants.tryDetectVersion();
+        Bootstrap.bootStrap();
+    }
+
     @Test
     public void inventoryArmorMovesForwardWithoutShrinkingOrSliding() {
         Matrix4f projection = new Matrix4f().setOrtho(0, 1920, 1080, 0, 1000, 21000);
