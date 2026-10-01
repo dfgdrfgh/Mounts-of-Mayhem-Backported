@@ -11,7 +11,7 @@ authors = "zzik2"
 description = '''
 Backports the Mounts of Mayhem update from Minecraft 1.21.11 to 1.21.1.
 '''
-logoFile = "assets/barched/icon.png"
+logoFile = "assets/mombackport/icon.png"
 
 [[dependencies.mombackport]]
 modId = "neoforge"
