@@ -1,4 +1,4 @@
-package zzik2.barched.mixin.damagesource;
+package zzik2.mombackport.mixin.damagesource;
 
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.damagesource.DamageSource;
@@ -7,8 +7,8 @@ import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.Entity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import zzik2.barched.Barched;
-import zzik2.barched.bridge.DamageSourcesBridge;
+import zzik2.mombackport.MomBackport;
+import zzik2.mombackport.bridge.DamageSourcesBridge;
 
 @Mixin(DamageSources.class)
 public abstract class DamageSourcesMixin implements DamageSourcesBridge {
@@ -17,6 +17,6 @@ public abstract class DamageSourcesMixin implements DamageSourcesBridge {
 
     @Override
     public DamageSource mace(Entity entity) {
-        return this.source(Barched.DamageTypes.MACE_SMASH, entity);
+        return this.source(MomBackport.DamageTypes.MACE_SMASH, entity);
     }
 }

@@ -1,4 +1,4 @@
-package zzik2.barched.mixin.client.renderer.entity;
+package zzik2.mombackport.mixin.client.renderer.entity;
 
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.PlayerModel;
@@ -15,8 +15,8 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import zzik2.barched.Barched;
-import zzik2.barched.BarchedClient;
+import zzik2.mombackport.MomBackport;
+import zzik2.mombackport.MomBackportClient;
 
 @Mixin(PlayerRenderer.class)
 public abstract class PlayerRendererMixin extends LivingEntityRenderer<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> {
@@ -26,24 +26,24 @@ public abstract class PlayerRendererMixin extends LivingEntityRenderer<AbstractC
     }
 
     @Inject(method = "getArmPose", at = @At("RETURN"), cancellable = true)
-    private static void barched$getArmPose(AbstractClientPlayer abstractClientPlayer, InteractionHand interactionHand, CallbackInfoReturnable<HumanoidModel.ArmPose> cir) {
+    private static void mombackport$getArmPose(AbstractClientPlayer abstractClientPlayer, InteractionHand interactionHand, CallbackInfoReturnable<HumanoidModel.ArmPose> cir) {
         ItemStack itemStack = abstractClientPlayer.getItemInHand(interactionHand);
         if (abstractClientPlayer.getUsedItemHand() == interactionHand && abstractClientPlayer.getUseItemRemainingTicks() > 0) {
             UseAnim useAnim = itemStack.getUseAnimation();
-            if (useAnim == Barched.UseAnim.BARCHED$SPEAR) {
-                cir.setReturnValue(BarchedClient.ArmPose.SPEAR);
+            if (useAnim == MomBackport.UseAnim.MOMBACKPORT$SPEAR) {
+                cir.setReturnValue(MomBackportClient.ArmPose.SPEAR);
                 return;
             }
         }
 
-        SwingAnimation swingAnimation = (SwingAnimation)itemStack.get(Barched.DataComponents.SWING_ANIMATION);
+        SwingAnimation swingAnimation = (SwingAnimation)itemStack.get(MomBackport.DataComponents.SWING_ANIMATION);
         if (swingAnimation != null && swingAnimation.type() == SwingAnimationType.STAB && abstractClientPlayer.swinging) {
-            cir.setReturnValue(BarchedClient.ArmPose.SPEAR);
+            cir.setReturnValue(MomBackportClient.ArmPose.SPEAR);
             return;
         }
 
-        if (itemStack.is(Barched.ItemTags.SPEARS)) {
-            cir.setReturnValue(BarchedClient.ArmPose.SPEAR);
+        if (itemStack.is(MomBackport.ItemTags.SPEARS)) {
+            cir.setReturnValue(MomBackportClient.ArmPose.SPEAR);
         }
     }
 }

@@ -1,7 +1,7 @@
-package zzik2.barched.mixin.component;
+package zzik2.mombackport.mixin.component;
 
 import org.spongepowered.asm.mixin.Mixin;
-import zzik2.barched.bridge.component.DataComponentTypeBridge;
+import zzik2.mombackport.bridge.component.DataComponentTypeBridge;
 
 @Mixin(targets = "net.minecraft.core.component.DataComponentType$Builder$SimpleType")
 public class DataComponentType$Builder$SimpleTypeMixin implements DataComponentTypeBridge {
@@ -14,7 +14,7 @@ public class DataComponentType$Builder$SimpleTypeMixin implements DataComponentT
     }
 
     @Override
-    public void barched$setIgnoreSwapAnimation(boolean value) {
+    public void mombackport$setIgnoreSwapAnimation(boolean value) {
         this.ignoreSwapAnimation = value;
     }
 }

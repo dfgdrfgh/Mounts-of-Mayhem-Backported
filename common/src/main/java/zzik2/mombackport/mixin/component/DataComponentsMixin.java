@@ -1,4 +1,4 @@
-package zzik2.barched.mixin.component;
+package zzik2.mombackport.mixin.component;
 
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponentType;
@@ -15,8 +15,8 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import zzik2.barched.Barched;
-import zzik2.barched.bridge.component.DataComponentTypeBridge;
+import zzik2.mombackport.MomBackport;
+import zzik2.mombackport.bridge.component.DataComponentTypeBridge;
 import zzik2.zreflex.mixin.ModifyAccess;
 
 import java.util.function.UnaryOperator;
@@ -33,12 +33,12 @@ public abstract class DataComponentsMixin {
     @Shadow public static DataComponentMap COMMON_ITEM_COMPONENTS;
 
     @Inject(method = "<clinit>", at = @At("TAIL"))
-    private static void barched$clinit(CallbackInfo ci) {
+    private static void mombackport$clinit(CallbackInfo ci) {
         DataComponentMap originalMap = COMMON_ITEM_COMPONENTS;
         DataComponentMap newMap = DataComponentMap.builder().addAll(originalMap).set(SWING_ANIMATION, SwingAnimation.DEFAULT).set(USE_EFFECTS, UseEffects.DEFAULT).build();
         COMMON_ITEM_COMPONENTS = newMap;
 
-        ((DataComponentTypeBridge) DataComponents.DAMAGE).barched$setIgnoreSwapAnimation(true);
+        ((DataComponentTypeBridge) DataComponents.DAMAGE).mombackport$setIgnoreSwapAnimation(true);
     }
 
     @Unique
@@ -56,7 +56,7 @@ public abstract class DataComponentsMixin {
     @Unique
     @ModifyAccess(access = Opcodes.ACC_PUBLIC)
     private static final DataComponentType<Float> MINIMUM_ATTACK_CHARGE = register("minimum_attack_charge", (builder) -> {
-        return builder.persistent(Barched.ExtraCodecs.floatRange(0.0F, 1.0F)).networkSynchronized(ByteBufCodecs.FLOAT);
+        return builder.persistent(MomBackport.ExtraCodecs.floatRange(0.0F, 1.0F)).networkSynchronized(ByteBufCodecs.FLOAT);
     });
 
     @Unique

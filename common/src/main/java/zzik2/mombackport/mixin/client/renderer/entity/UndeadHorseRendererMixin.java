@@ -1,4 +1,4 @@
-package zzik2.barched.mixin.client.renderer.entity;
+package zzik2.mombackport.mixin.client.renderer.entity;
 
 import net.minecraft.client.model.HorseModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
@@ -20,7 +20,7 @@ public abstract class UndeadHorseRendererMixin extends AbstractHorseRenderer<Abs
     }
 
     @Inject(method = "<init>", at = @At("TAIL"))
-    private void barched$init(EntityRendererProvider.Context context, ModelLayerLocation modelLayerLocation, CallbackInfo ci) {
+    private void mombackport$init(EntityRendererProvider.Context context, ModelLayerLocation modelLayerLocation, CallbackInfo ci) {
         this.addLayer(new UndeadHorseArmorLayer((UndeadHorseRenderer) (Object) this, context.getModelSet()));
     }
 }

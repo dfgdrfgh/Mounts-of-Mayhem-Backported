@@ -1,4 +1,4 @@
-package zzik2.barched.mixin.client.renderer.entity.layers;
+package zzik2.mombackport.mixin.client.renderer.entity.layers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
@@ -18,8 +18,8 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import zzik2.barched.bridge.entity.LivingEntityBridge;
-import zzik2.barched.bridge.item.ItemStackBridge;
+import zzik2.mombackport.bridge.entity.LivingEntityBridge;
+import zzik2.mombackport.bridge.item.ItemStackBridge;
 
 @Mixin(ItemInHandLayer.class)
 public abstract class ItemInHandLayerMixin<T extends LivingEntity, M extends EntityModel<T> & ArmedModel> extends RenderLayer<T, M> {
@@ -29,13 +29,13 @@ public abstract class ItemInHandLayerMixin<T extends LivingEntity, M extends Ent
     }
 
     @Inject(method = "renderArmWithItem", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;translate(FFF)V", shift = At.Shift.AFTER))
-    private void barched$renderArmWithItem(LivingEntity livingEntity, ItemStack itemStack, ItemDisplayContext itemDisplayContext, HumanoidArm humanoidArm, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, CallbackInfo ci) {
+    private void mombackport$renderArmWithItem(LivingEntity livingEntity, ItemStack itemStack, ItemDisplayContext itemDisplayContext, HumanoidArm humanoidArm, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, CallbackInfo ci) {
         float tick = Minecraft.getInstance().getTimer().getGameTimeDeltaPartialTick(true);
         if (livingEntity.getAttackAnim(tick) > 0.0F && livingEntity.getMainArm() == humanoidArm && ((ItemStackBridge) (Object) itemStack).getSwingAnimation().type() == SwingAnimationType.STAB) {
             SpearAnimations.thirdPersonAttackItem(livingEntity, poseStack);
         }
 
-        float f = ((LivingEntityBridge) livingEntity).barched$ticksUsingItem(humanoidArm, tick);
+        float f = ((LivingEntityBridge) livingEntity).mombackport$ticksUsingItem(humanoidArm, tick);
         if (f != 0.0F) {
             //TODO: add condition if is spear
             SpearAnimations.thirdPersonUseItem(livingEntity, poseStack, f, humanoidArm, itemStack);

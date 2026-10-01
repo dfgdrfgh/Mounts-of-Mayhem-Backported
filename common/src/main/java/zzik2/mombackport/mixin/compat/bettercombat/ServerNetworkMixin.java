@@ -1,4 +1,4 @@
-package zzik2.barched.mixin.compat.bettercombat;
+package zzik2.mombackport.mixin.compat.bettercombat;
 
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalBooleanRef;
@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import zzik2.barched.bridge.entity.PlayerBridge;
+import zzik2.mombackport.bridge.entity.PlayerBridge;
 
 /**
  * This compat patches from below:
@@ -24,19 +24,19 @@ public abstract class ServerNetworkMixin {
 
     @Dynamic
     @Inject(method = "lambda$handleAttackRequest$3", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/network/ServerGamePacketListenerImpl;handleInteract(Lnet/minecraft/network/protocol/game/ServerboundInteractPacket;)V", shift = At.Shift.AFTER))
-    private static void barched$captureAttack(ServerPlayer player, WeaponAttributes attributes, WeaponAttributes.Attack attack, AttackHand hand, ServerLevel world, Packets.C2S_AttackRequest request, boolean useVanillaPacket, ServerGamePacketListenerImpl handler, CallbackInfo ci, @Share("attackedAnyEntity") LocalBooleanRef attackedAnyEntity) {
+    private static void mombackport$captureAttack(ServerPlayer player, WeaponAttributes attributes, WeaponAttributes.Attack attack, AttackHand hand, ServerLevel world, Packets.C2S_AttackRequest request, boolean useVanillaPacket, ServerGamePacketListenerImpl handler, CallbackInfo ci, @Share("attackedAnyEntity") LocalBooleanRef attackedAnyEntity) {
         attackedAnyEntity.set(true);
     }
 
     @Dynamic
     @Inject(method = "lambda$handleAttackRequest$3", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/level/ServerPlayer;attack(Lnet/minecraft/world/entity/Entity;)V", shift = At.Shift.AFTER))
-    private static void barched$captureDirectAttack(ServerPlayer player, WeaponAttributes attributes, WeaponAttributes.Attack attack, AttackHand hand, ServerLevel world, Packets.C2S_AttackRequest request, boolean useVanillaPacket, ServerGamePacketListenerImpl handler, CallbackInfo ci, @Share("attackedAnyEntity") LocalBooleanRef attackedAnyEntity) {
+    private static void mombackport$captureDirectAttack(ServerPlayer player, WeaponAttributes attributes, WeaponAttributes.Attack attack, AttackHand hand, ServerLevel world, Packets.C2S_AttackRequest request, boolean useVanillaPacket, ServerGamePacketListenerImpl handler, CallbackInfo ci, @Share("attackedAnyEntity") LocalBooleanRef attackedAnyEntity) {
         attackedAnyEntity.set(true);
     }
 
     @Dynamic
     @Inject(method = "lambda$handleAttackRequest$3", at = @At(value = "INVOKE", target = "Lnet/bettercombat/logic/PlayerAttackProperties;setComboCount(I)V", shift = At.Shift.BEFORE))
-    private static void barched$applyLunge(ServerPlayer player, WeaponAttributes attributes, WeaponAttributes.Attack attack, AttackHand hand, ServerLevel world, Packets.C2S_AttackRequest request, boolean useVanillaPacket, ServerGamePacketListenerImpl handler, CallbackInfo ci, @Share("attackedAnyEntity") LocalBooleanRef attackedAnyEntity) {
+    private static void mombackport$applyLunge(ServerPlayer player, WeaponAttributes attributes, WeaponAttributes.Attack attack, AttackHand hand, ServerLevel world, Packets.C2S_AttackRequest request, boolean useVanillaPacket, ServerGamePacketListenerImpl handler, CallbackInfo ci, @Share("attackedAnyEntity") LocalBooleanRef attackedAnyEntity) {
         if (!attackedAnyEntity.get()) {
             ((PlayerBridge) player).lungeForwardMaybe();
         }
