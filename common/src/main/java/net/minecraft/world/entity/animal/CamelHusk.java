@@ -17,8 +17,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import zzik2.mombackport.MomBackport;
-import zzik2.mombackport.bridge.entity.CamelBridge;
+import zzik2.barched.Barched;
+import zzik2.barched.bridge.entity.CamelBridge;
 import zzik2.zreflex.mixin.ModifyName;
 
 public class CamelHusk extends Camel implements CamelBridge {
@@ -51,12 +51,12 @@ public class CamelHusk extends Camel implements CamelBridge {
 
     @Override
     public boolean isFood(ItemStack itemStack) {
-        return itemStack.is(MomBackport.ItemTags.CAMEL_HUSK_FOOD);
+        return itemStack.is(Barched.ItemTags.CAMEL_HUSK_FOOD);
     }
 
     @Override
     protected SoundEvent getAmbientSound() {
-        return MomBackport.SoundEvents.CAMEL_HUSK_AMBIENT;
+        return Barched.SoundEvents.CAMEL_HUSK_AMBIENT;
     }
 
     @Override
@@ -76,51 +76,51 @@ public class CamelHusk extends Camel implements CamelBridge {
 
     @Override
     protected SoundEvent getDeathSound() {
-        return MomBackport.SoundEvents.CAMEL_HUSK_DEATH;
+        return Barched.SoundEvents.CAMEL_HUSK_DEATH;
     }
 
     @Override
     protected SoundEvent getHurtSound(DamageSource damageSource) {
-        return MomBackport.SoundEvents.CAMEL_HUSK_HURT;
+        return Barched.SoundEvents.CAMEL_HUSK_HURT;
     }
 
     @Override
     protected void playStepSound(BlockPos blockPos, BlockState blockState) {
         if (blockState.is(BlockTags.CAMEL_SAND_STEP_SOUND_BLOCKS)) {
-            this.playSound(MomBackport.SoundEvents.CAMEL_HUSK_STEP_SAND, 0.4F, 1.0F);
+            this.playSound(Barched.SoundEvents.CAMEL_HUSK_STEP_SAND, 0.4F, 1.0F);
         } else {
-            this.playSound(MomBackport.SoundEvents.CAMEL_HUSK_STEP, 0.4F, 1.0F);
+            this.playSound(Barched.SoundEvents.CAMEL_HUSK_STEP, 0.4F, 1.0F);
         }
     }
 
     @Override
     public SoundEvent getDashingSound() {
-        return MomBackport.SoundEvents.CAMEL_HUSK_DASH;
+        return Barched.SoundEvents.CAMEL_HUSK_DASH;
     }
 
     @Override
     public SoundEvent getDashReadySound() {
-        return MomBackport.SoundEvents.CAMEL_HUSK_DASH_READY;
+        return Barched.SoundEvents.CAMEL_HUSK_DASH_READY;
     }
 
     @Override
     protected SoundEvent getEatingSound() {
-        return MomBackport.SoundEvents.CAMEL_HUSK_EAT;
+        return Barched.SoundEvents.CAMEL_HUSK_EAT;
     }
 
     @Override
     public SoundEvent getStandUpSound() {
-        return MomBackport.SoundEvents.CAMEL_HUSK_STAND;
+        return Barched.SoundEvents.CAMEL_HUSK_STAND;
     }
 
     @Override
     public SoundEvent getSitDownSound() {
-        return MomBackport.SoundEvents.CAMEL_HUSK_SIT;
+        return Barched.SoundEvents.CAMEL_HUSK_SIT;
     }
 
     @Override
     public @NotNull SoundEvent getSaddleSoundEvent() {
-        return MomBackport.SoundEvents.CAMEL_HUSK_SADDLE;
+        return Barched.SoundEvents.CAMEL_HUSK_SADDLE;
     }
 
     // TODO

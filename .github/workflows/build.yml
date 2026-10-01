@@ -38,17 +38,6 @@ jobs:
           persist-credentials: false
           show-progress: false
 
-      - name: Verify legacy namespace removed
-        run: |
-          legacy="bar""ched"
-          if find . -path './.git' -prune -o -iname "*${legacy}*" -print | grep -q .; then
-            find . -path './.git' -prune -o -iname "*${legacy}*" -print
-            exit 1
-          fi
-          if grep -RniI --exclude-dir=.git -i -E "${legacy}" .; then
-            exit 1
-          fi
-
       - name: Set up JDK 21
         uses: actions/setup-java@v6.0.1
         with:

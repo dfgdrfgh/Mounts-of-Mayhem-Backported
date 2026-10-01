@@ -8,8 +8,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.enchantment.EnchantedItemInUse;
 import net.minecraft.world.item.enchantment.LevelBasedValue;
 import net.minecraft.world.phys.Vec3;
-import zzik2.mombackport.bridge.Vec3Bridge;
-import zzik2.mombackport.bridge.entity.PlayerBridge;
+import zzik2.barched.bridge.Vec3Bridge;
+import zzik2.barched.bridge.entity.PlayerBridge;
 
 public record ApplyEntityImpulse(Vec3 direction, Vec3 coordinateScale, LevelBasedValue magnitude) implements EnchantmentEntityEffect {
 

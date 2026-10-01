@@ -8,7 +8,7 @@ import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.ExtraCodecs;
-import zzik2.mombackport.MomBackport;
+import zzik2.barched.Barched;
 
 import java.util.Optional;
 
@@ -34,7 +34,7 @@ public class SpearMobsTrigger extends SimpleCriterionTrigger<SpearMobsTrigger.Tr
       }
 
       public static Criterion<TriggerInstance> spearMobs(int i) {
-         return MomBackport.CriteriaTriggers.SPEAR_MOBS_TRIGGER.createCriterion(new SpearMobsTrigger.TriggerInstance(Optional.empty(), Optional.of(i)));
+         return Barched.CriteriaTriggers.SPEAR_MOBS_TRIGGER.createCriterion(new SpearMobsTrigger.TriggerInstance(Optional.empty(), Optional.of(i)));
       }
 
       public boolean matches(int i) {

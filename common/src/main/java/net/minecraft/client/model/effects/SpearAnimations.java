@@ -14,10 +14,10 @@ import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.KineticWeapon;
-import zzik2.mombackport.MomBackport;
-import zzik2.mombackport.bridge.entity.LivingEntityBridge;
-import zzik2.mombackport.mixin.accessor.LivingEntityAccessor;
-import zzik2.mombackport.mixin.accessor.client.HumanoidModelAccessor;
+import zzik2.barched.Barched;
+import zzik2.barched.bridge.entity.LivingEntityBridge;
+import zzik2.barched.mixin.accessor.LivingEntityAccessor;
+import zzik2.barched.mixin.accessor.client.HumanoidModelAccessor;
 
 @Environment(EnvType.CLIENT)
 public class SpearAnimations {
@@ -37,7 +37,7 @@ public class SpearAnimations {
       modelPart.yRot = 0.017453292F * Math.clamp(57.295776F * modelPart.yRot, -60.0F, 60.0F);
       modelPart.xRot = 0.017453292F * Math.clamp(57.295776F * modelPart.xRot, -120.0F, 30.0F);
       if (!(((LivingEntityBridge) livingEntity).getTicksUsingItem(tick) <= 0.0F) && (!livingEntity.isUsingItem() || livingEntity.getUsedItemHand() == (bl ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND))) {
-         KineticWeapon kineticWeapon = (KineticWeapon)itemStack.get(MomBackport.DataComponents.KINETIC_WEAPON);
+         KineticWeapon kineticWeapon = (KineticWeapon)itemStack.get(Barched.DataComponents.KINETIC_WEAPON);
          if (kineticWeapon != null) {
             SpearAnimations.UseParams useParams = SpearAnimations.UseParams.fromKineticWeapon(kineticWeapon, ((LivingEntityBridge) livingEntity).getTicksUsingItem(tick));
             modelPart.yRot += (float)(-i) * useParams.swayScaleFast() * 0.017453292F * useParams.swayIntensity() * 1.0F;
@@ -48,7 +48,7 @@ public class SpearAnimations {
    }
 
    public static <S extends LivingEntity> void thirdPersonUseItem(S livingEntity, PoseStack poseStack, float f, HumanoidArm humanoidArm, ItemStack itemStack) {
-      KineticWeapon kineticWeapon = (KineticWeapon)itemStack.get(MomBackport.DataComponents.KINETIC_WEAPON);
+      KineticWeapon kineticWeapon = (KineticWeapon)itemStack.get(Barched.DataComponents.KINETIC_WEAPON);
       if (kineticWeapon != null && f != 0.0F) {
          float tick = Minecraft.getInstance().getTimer().getGameTimeDeltaPartialTick(true);
          float g = Ease.inQuad(progress(livingEntity.getAttackAnim(tick), 0.05F, 0.2F));
@@ -90,7 +90,7 @@ public class SpearAnimations {
       float tick = Minecraft.getInstance().getTimer().getGameTimeDeltaPartialTick(true);
       float h = livingEntity.getAttackAnim(tick);
       if (!(h <= 0.0F)) {
-         KineticWeapon kineticWeapon = (KineticWeapon) ((LivingEntityBridge) livingEntity).mombackport$getMainHandItemStack().get(MomBackport.DataComponents.KINETIC_WEAPON);
+         KineticWeapon kineticWeapon = (KineticWeapon) ((LivingEntityBridge) livingEntity).barched$getMainHandItemStack().get(Barched.DataComponents.KINETIC_WEAPON);
          float f = kineticWeapon != null ? kineticWeapon.forwardMovement() : 0.0F;
          float g = 0.125F;
          float i = Ease.inQuad(progress(h, 0.05F, 0.2F));
@@ -105,7 +105,7 @@ public class SpearAnimations {
    }
 
    public static void firstPersonUse(float f, PoseStack poseStack, float g, HumanoidArm humanoidArm, ItemStack itemStack) {
-      KineticWeapon kineticWeapon = (KineticWeapon) itemStack.get(MomBackport.DataComponents.KINETIC_WEAPON);
+      KineticWeapon kineticWeapon = (KineticWeapon) itemStack.get(Barched.DataComponents.KINETIC_WEAPON);
       if (kineticWeapon != null) {
          SpearAnimations.UseParams useParams = SpearAnimations.UseParams.fromKineticWeapon(kineticWeapon, g);
          int i = humanoidArm == HumanoidArm.RIGHT ? 1 : -1;

@@ -16,9 +16,9 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.EntityHitResult;
-import zzik2.mombackport.MomBackport;
-import zzik2.mombackport.bridge.entity.LivingEntityBridge;
-import zzik2.mombackport.bridge.level.LevelBridge;
+import zzik2.barched.Barched;
+import zzik2.barched.bridge.entity.LivingEntityBridge;
+import zzik2.barched.bridge.level.LevelBridge;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -80,7 +80,7 @@ public record PiercingWeapon(boolean dealsKnockback, boolean dismounts, Optional
       boolean bl = false;
 
       EntityHitResult entityHitResult;
-      for(Iterator var6 = ((Collection) MomBackport.ProjectileUtil.getHitEntitiesAlong(livingEntity, attackRange, (entity) -> {
+      for(Iterator var6 = ((Collection) Barched.ProjectileUtil.getHitEntitiesAlong(livingEntity, attackRange, (entity) -> {
          return canHitEntity(livingEntity, entity);
       }, ClipContext.Block.COLLIDER).map((blockHitResult) -> {
          return List.of();

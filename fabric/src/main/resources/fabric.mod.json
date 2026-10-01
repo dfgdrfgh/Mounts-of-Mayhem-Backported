@@ -11,18 +11,18 @@
     "homepage": ""
   },
   "license": "MIT",
-  "icon": "assets/mombackport/icon.png",
+  "icon": "assets/barched/icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [
-      "zzik2.mombackport.fabric.MomBackportFabric"
+      "zzik2.barched.fabric.BarchedFabric"
     ],
     "client": [
-      "zzik2.mombackport.fabric.client.MomBackportFabricClient"
+      "zzik2.barched.fabric.client.BarchedFabricClient"
     ]
   },
   "mixins": [
-    "mombackport.mixins.json"
+    "barched.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=0.18.4",
