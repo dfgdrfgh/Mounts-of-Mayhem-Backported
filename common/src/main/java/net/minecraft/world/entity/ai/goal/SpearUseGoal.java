@@ -8,9 +8,9 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.item.component.KineticWeapon;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
-import zzik2.barched.Barched;
-import zzik2.barched.bridge.entity.MobBridge;
-import zzik2.barched.bridge.entity.ai.LandRandomPosBridge;
+import zzik2.mombackport.MomBackport;
+import zzik2.mombackport.bridge.entity.MobBridge;
+import zzik2.mombackport.bridge.entity.ai.LandRandomPosBridge;
 
 import java.util.EnumSet;
 import java.util.Optional;
@@ -43,11 +43,11 @@ public class SpearUseGoal<T extends Monster> extends Goal implements LandRandomP
    }
 
    private boolean ableToAttack() {
-      return this.mob.getTarget() != null && this.mob.getMainHandItem().has(Barched.DataComponents.KINETIC_WEAPON);
+      return this.mob.getTarget() != null && this.mob.getMainHandItem().has(MomBackport.DataComponents.KINETIC_WEAPON);
    }
 
    private int getKineticWeaponUseDuration() {
-      int i = (Integer) Optional.ofNullable((KineticWeapon)this.mob.getMainHandItem().get(Barched.DataComponents.KINETIC_WEAPON)).map(KineticWeapon::computeDamageUseDuration).orElse(0);
+      int i = (Integer) Optional.ofNullable((KineticWeapon)this.mob.getMainHandItem().get(MomBackport.DataComponents.KINETIC_WEAPON)).map(KineticWeapon::computeDamageUseDuration).orElse(0);
       return reducedTickDelay(i);
    }
 

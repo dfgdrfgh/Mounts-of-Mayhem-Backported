@@ -13,8 +13,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import zzik2.barched.Barched;
-import zzik2.barched.bridge.entity.EntityBridge;
+import zzik2.mombackport.MomBackport;
+import zzik2.mombackport.bridge.entity.EntityBridge;
 
 public class Parched extends AbstractSkeleton implements EntityBridge {
 
@@ -38,22 +38,22 @@ public class Parched extends AbstractSkeleton implements EntityBridge {
 
     @Override
     public SoundEvent getStepSound() {
-        return Barched.SoundEvents.PARCHED_STEP;
+        return MomBackport.SoundEvents.PARCHED_STEP;
     }
 
     @Override
     public SoundEvent getAmbientSound() {
-        return Barched.SoundEvents.PARCHED_AMBIENT;
+        return MomBackport.SoundEvents.PARCHED_AMBIENT;
     }
 
     @Override
     protected @NotNull SoundEvent getHurtSound(DamageSource damageSource) {
-        return Barched.SoundEvents.PARCHED_HURT;
+        return MomBackport.SoundEvents.PARCHED_HURT;
     }
 
     @Override
     protected @NotNull SoundEvent getDeathSound() {
-        return Barched.SoundEvents.PARCHED_DEATH;
+        return MomBackport.SoundEvents.PARCHED_DEATH;
     }
 
     @Override
