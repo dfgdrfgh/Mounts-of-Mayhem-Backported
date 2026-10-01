@@ -1,4 +1,4 @@
-package zzik2.barched;
+package zzik2.mombackport;
 
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
@@ -7,8 +7,8 @@ import me.shedaniel.autoconfig.annotation.ConfigEntry;
 import java.util.ArrayList;
 import java.util.List;
 
-@Config(name = Barched.MOD_ID)
-public class BarchedConfig implements ConfigData {
+@Config(name = MomBackport.MOD_ID)
+public class MomBackportConfig implements ConfigData {
 
     private static final int MAX_NATURAL_SPAWN_WEIGHT = 1000;
     private static final List<String> DEFAULT_ZOMBIE_HORSE_SPAWN_BIOMES = List.of(

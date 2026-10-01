@@ -1,4 +1,4 @@
-package zzik2.barched;
+package zzik2.mombackport;
 
 import com.mojang.datafixers.util.Either;
 import com.mojang.datafixers.util.Function9;
@@ -41,12 +41,12 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.*;
-import zzik2.barched.bridge.EnchantmentBridge;
-import zzik2.barched.bridge.component.DataComponentTypeBridge;
-import zzik2.barched.bridge.entity.AbstractHorseBridge;
-import zzik2.barched.bridge.entity.EntityBridge;
-import zzik2.barched.bridge.level.LevelBridge;
-import zzik2.barched.data.BarchedBiomeModifications;
+import zzik2.mombackport.bridge.EnchantmentBridge;
+import zzik2.mombackport.bridge.component.DataComponentTypeBridge;
+import zzik2.mombackport.bridge.entity.AbstractHorseBridge;
+import zzik2.mombackport.bridge.entity.EntityBridge;
+import zzik2.mombackport.bridge.level.LevelBridge;
+import zzik2.mombackport.data.MomBackportBiomeModifications;
 import zzik2.zreflex.enumeration.ZEnumTool;
 import zzik2.zreflex.reflection.ZReflectionTool;
 
@@ -57,7 +57,7 @@ import java.util.function.Predicate;
 import static net.minecraft.core.Direction.NORTH;
 import static net.minecraft.world.entity.Mob.checkMobSpawnRules;
 
-public final class Barched {
+public final class MomBackport {
 
     public static final String MOD_ID = "mombackport";
 
@@ -66,15 +66,15 @@ public final class Barched {
         Object o;
         o = EnchantmentEffectComponents.POST_PIERCING_ATTACK;
         o = Tiers.COPPER;
-        o = UseAnim.BARCHED$SPEAR;
+        o = UseAnim.MOMBACKPORT$SPEAR;
         o = ServerboundPlayerActionPacket$Action.STAB;
 
-        AutoConfig.register(BarchedConfig.class, GsonConfigSerializer::new);
-        BarchedBiomeModifications.register();
+        AutoConfig.register(MomBackportConfig.class, GsonConfigSerializer::new);
+        MomBackportBiomeModifications.register();
     }
 
-    public static BarchedConfig getConfig() {
-        return AutoConfig.getConfigHolder(BarchedConfig.class).getConfig();
+    public static MomBackportConfig getConfig() {
+        return AutoConfig.getConfigHolder(MomBackportConfig.class).getConfig();
     }
 
     public static class SoundEvents {
@@ -180,7 +180,7 @@ public final class Barched {
 
             @Override
             public TagKey<Block> getIncorrectBlocksForDrops() {
-                return Barched.BlockTags.INCORRECT_FOR_COPPER_TOOL;
+                return MomBackport.BlockTags.INCORRECT_FOR_COPPER_TOOL;
             }
 
             @Override
@@ -196,9 +196,9 @@ public final class Barched {
     }
 
     public static class UseAnim {
-        public static final net.minecraft.world.item.UseAnim BARCHED$SPEAR = ZEnumTool.addConstant(
+        public static final net.minecraft.world.item.UseAnim MOMBACKPORT$SPEAR = ZEnumTool.addConstant(
                 net.minecraft.world.item.UseAnim.class,
-                "BARCHED$SPEAR"
+                "MOMBACKPORT$SPEAR"
         );
     }
 
@@ -295,7 +295,7 @@ public final class Barched {
         public static void doLungeEffects(ServerLevel serverLevel, Entity entity) {
             if (entity instanceof LivingEntity) {
                 LivingEntity livingEntity = (LivingEntity)entity;
-                Barched.EnchantmentHelper.runIterationOnItem(entity.getWeaponItem(), EquipmentSlot.MAINHAND, livingEntity, (holder, i, enchantedItemInUse) -> {
+                MomBackport.EnchantmentHelper.runIterationOnItem(entity.getWeaponItem(), EquipmentSlot.MAINHAND, livingEntity, (holder, i, enchantedItemInUse) -> {
                     ((EnchantmentBridge) (Object) holder.value()).doLunge(serverLevel, i, enchantedItemInUse, entity);
                 });
             }

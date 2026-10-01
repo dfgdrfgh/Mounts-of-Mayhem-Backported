@@ -1,4 +1,4 @@
-package zzik2.barched;
+package zzik2.mombackport;
 
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
@@ -10,11 +10,11 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwingAnimationType;
-import zzik2.barched.bridge.item.ItemStackBridge;
+import zzik2.mombackport.bridge.item.ItemStackBridge;
 import zzik2.zreflex.enumeration.ZEnumTool;
 import zzik2.zreflex.reflection.ZReflectionTool;
 
-public class BarchedClient {
+public class MomBackportClient {
 
     public static void init() {
         //init fields
