@@ -5,7 +5,6 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ItemBasedSteering;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Strider;
@@ -72,18 +71,19 @@ public abstract class StriderMixin implements SaddleItemBridge {
             method = "dropEquipment",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/world/entity/Entity;spawnAtLocation(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/entity/item/ItemEntity;"
+                    target = "Lnet/minecraft/world/entity/monster/Strider;spawnAtLocation(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/entity/item/ItemEntity;"
             )
     )
-    private ItemEntity barched$dropStoredSaddle(Entity entity, ItemLike ignored) {
+    private ItemEntity barched$dropStoredSaddle(Strider strider, ItemLike ignored) {
         ItemStack saddle = this.barched$getSaddleItem();
         if (!saddle.isEmpty() && EnchantmentHelper.has(saddle, EnchantmentEffectComponents.PREVENT_EQUIPMENT_DROP)) {
             return null;
         }
-        ItemEntity dropped = entity.spawnAtLocation(saddle.isEmpty() ? new ItemStack(Items.SADDLE) : saddle.copy());
+
+        ItemEntity dropped = strider.spawnAtLocation(saddle.isEmpty() ? new ItemStack(Items.SADDLE) : saddle.copy());
         if (dropped != null) {
             this.barched$setSaddleItem(ItemStack.EMPTY);
-            entity.gameEvent(GameEvent.UNEQUIP);
+            strider.gameEvent(GameEvent.UNEQUIP);
         }
         return dropped;
     }
