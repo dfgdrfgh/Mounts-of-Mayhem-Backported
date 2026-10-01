@@ -88,7 +88,7 @@ public class NautilusEquipmentSyncTest {
         AbstractNautilus nautilus = mock(AbstractNautilus.class, CALLS_REAL_METHODS);
         Level level = mock(Level.class);
         when(level.isClientSide()).thenReturn(client);
-        doReturn(level).when(nautilus).level();
+        setField(Entity.class, "level", nautilus, level);
         doNothing().when(nautilus).onEquipItem(any(), any(), any());
         doNothing().when(nautilus).onSyncedDataUpdated(any(EntityDataAccessor.class));
         doNothing().when(nautilus).barched$onSaddleEquipItem(any(), any());
