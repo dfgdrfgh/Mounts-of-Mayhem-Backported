@@ -7,7 +7,7 @@ import me.shedaniel.autoconfig.annotation.ConfigEntry;
 import java.util.ArrayList;
 import java.util.List;
 
-@Config(name = Barched.MOD_ID)
+@Config(name = "barched")
 public class BarchedConfig implements ConfigData {
 
     private static final int MAX_NATURAL_SPAWN_WEIGHT = 1000;

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "id": "barched",
+  "id": "yarched",
   "version": "${version}",
   "name": "Yarched",
   "description": "Bringing Parched, Camel Husk and Spears from 1.21.11 to 1.21.1!",

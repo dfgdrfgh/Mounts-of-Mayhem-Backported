@@ -7,7 +7,7 @@ pluginManagement {
     }
 }
 
-rootProject.name = 'barched'
+rootProject.name = 'Yarched'
 
 include 'common'
 include 'fabric'
