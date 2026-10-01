@@ -12,6 +12,9 @@ import java.util.function.Predicate;
 
 public interface LivingEntityBridge extends EntityBridge {
 
+    // In 1.21.1 the protected hook belongs to Mob, not LivingEntity.
+    default void barched$playAttackSound() {}
+
     default void super$lungeForwardMaybe() {}
     default void lungeForwardMaybe() {}
 

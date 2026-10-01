@@ -52,6 +52,13 @@ public abstract class MobMixin extends LivingEntity implements MobBridge {
 
     @Shadow protected abstract boolean isSunBurnTick();
 
+    @Shadow protected abstract void playAttackSound();
+
+    @Override
+    public void barched$playAttackSound() {
+        this.playAttackSound();
+    }
+
     @Inject(method = "equipItemIfPossible", at = @At("HEAD"), cancellable = true)
     private void barched$restrictNautilusArmorAutoEquip(ItemStack stack, CallbackInfoReturnable<ItemStack> cir) {
         if (stack.getItem() instanceof NautilusArmorItem && !((Object) this instanceof AbstractNautilus)) {
