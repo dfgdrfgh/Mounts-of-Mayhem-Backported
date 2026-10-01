@@ -24,6 +24,15 @@ public abstract class ItemTagsMixin {
     private static final TagKey<Item> ZOMBIE_HORSE_FOOD = bind("zombie_horse_food");
 
     @ModifyAccess(access = Opcodes.ACC_PUBLIC)
+    private static final TagKey<Item> NAUTILUS_FOOD = bind("nautilus_food");
+
+    @ModifyAccess(access = Opcodes.ACC_PUBLIC)
+    private static final TagKey<Item> NAUTILUS_BUCKET_FOOD = bind("nautilus_bucket_food");
+
+    @ModifyAccess(access = Opcodes.ACC_PUBLIC)
+    private static final TagKey<Item> NAUTILUS_TAMING_ITEMS = bind("nautilus_taming_items");
+
+    @ModifyAccess(access = Opcodes.ACC_PUBLIC)
     private static final TagKey<Item> SPEARS = bind("spears");
 
     @ModifyAccess(access = Opcodes.ACC_PUBLIC)
@@ -31,4 +40,19 @@ public abstract class ItemTagsMixin {
 
     @ModifyAccess(access = Opcodes.ACC_PUBLIC)
     private static final TagKey<Item> MELEE_WEAPON_ENCHANTABLE = bind("enchantable/melee_weapon");
+
+    @ModifyAccess(access = Opcodes.ACC_PUBLIC)
+    private static final TagKey<Item> SKELETON_PREFERRED_WEAPONS = bind("skeleton_preferred_weapons");
+
+    @ModifyAccess(access = Opcodes.ACC_PUBLIC)
+    private static final TagKey<Item> DROWNED_PREFERRED_WEAPONS = bind("drowned_preferred_weapons");
+
+    @ModifyAccess(access = Opcodes.ACC_PUBLIC)
+    private static final TagKey<Item> PIGLIN_PREFERRED_WEAPONS = bind("piglin_preferred_weapons");
+
+    @ModifyAccess(access = Opcodes.ACC_PUBLIC)
+    private static final TagKey<Item> PILLAGER_PREFERRED_WEAPONS = bind("pillager_preferred_weapons");
+
+    @ModifyAccess(access = Opcodes.ACC_PUBLIC)
+    private static final TagKey<Item> WITHER_SKELETON_DISLIKED_WEAPONS = bind("wither_skeleton_disliked_weapons");
 }

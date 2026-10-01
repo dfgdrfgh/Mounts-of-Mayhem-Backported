@@ -9,12 +9,16 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityAttachment;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.animal.camel.Camel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.gameevent.GameEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import zzik2.barched.Barched;
@@ -41,7 +45,12 @@ public class CamelHusk extends Camel implements CamelBridge {
     @ModifyName(value = "interact")
     public InteractionResult interact0(Player player, InteractionHand interactionHand) {
         this.setPersistenceRequired();
-        return super.mobInteract(player, interactionHand);
+        return super.interact(player, interactionHand);
+    }
+
+    @Override
+    public InteractionResult mobInteract(Player player, InteractionHand hand) {
+        return super.mobInteract(player, hand);
     }
 
     @Override
@@ -123,7 +132,6 @@ public class CamelHusk extends Camel implements CamelBridge {
         return Barched.SoundEvents.CAMEL_HUSK_SADDLE;
     }
 
-    // TODO
     @Override
     public float chargeSpeedModifier() {
         return 4.0F;

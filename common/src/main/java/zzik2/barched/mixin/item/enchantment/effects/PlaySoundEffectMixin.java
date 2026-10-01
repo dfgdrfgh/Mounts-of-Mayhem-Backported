@@ -28,15 +28,15 @@ public abstract class PlaySoundEffectMixin implements EnchantmentEntityEffect {
     @Shadow @Final private Holder<SoundEvent> soundEvent;
     @Shadow @Final private FloatProvider volume;
     @Shadow @Final private FloatProvider pitch;
-    private static final List<Holder<SoundEvent>> SPEAR_SOUDNS = List.of(Barched.SoundEvents.LUNGE_1, Barched.SoundEvents.LUNGE_2, Barched.SoundEvents.LUNGE_3);
+    private static final List<Holder<SoundEvent>> SPEAR_SOUNDS = List.of(Barched.SoundEvents.LUNGE_1, Barched.SoundEvents.LUNGE_2, Barched.SoundEvents.LUNGE_3);
 
     @Inject(method = "apply", at =  @At("HEAD"), cancellable = true)
     private void barched$apply(ServerLevel serverLevel, int i, EnchantedItemInUse enchantedItemInUse, Entity entity, Vec3 vec3, CallbackInfo ci) {
-        if (this.soundEvent == Barched.SoundEvents.LUNGE) {
+        if (this.soundEvent == Barched.SoundEvents.LUNGE_1) {
             RandomSource randomSource = entity.getRandom();
             if (!entity.isSilent()) {
-                int j = Mth.clamp(i - 1, 0, SPEAR_SOUDNS.size() - 1);
-                ((LevelBridge) serverLevel).playSound(null, vec3.x(), vec3.y(), vec3.z(), SPEAR_SOUDNS.get(j), entity.getSoundSource(), this.volume.sample(randomSource), this.pitch.sample(randomSource));
+                int j = Mth.clamp(i - 1, 0, SPEAR_SOUNDS.size() - 1);
+                ((LevelBridge) serverLevel).playSound(null, vec3.x(), vec3.y(), vec3.z(), SPEAR_SOUNDS.get(j), entity.getSoundSource(), this.volume.sample(randomSource), this.pitch.sample(randomSource));
                 ci.cancel();
             }
         }

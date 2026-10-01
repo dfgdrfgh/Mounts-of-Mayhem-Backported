@@ -1,8 +1,10 @@
 package zzik2.barched.mixin.entity.player;
 
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.stats.Stats;
@@ -29,6 +31,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import zzik2.barched.Barched;
 import zzik2.barched.bridge.InteractionHandBridge;
@@ -75,13 +78,18 @@ public abstract class PlayerMixin extends LivingEntity implements PlayerBridge {
     @Unique
     private int itemSwapTicker;
 
+    @Redirect(
+            method = "attack",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Player;resetAttackStrengthTicker()V")
+    )
+    private void barched$use12111AttackReset(Player player) {
+        this.onAttack();
+    }
+
     @Inject(method = "attack", at = @At("TAIL"))
     private void barched$attack(Entity entity, CallbackInfo ci) {
-        if (entity.isAttackable()) {
-            this.onAttack();
-            if (!entity.skipAttackInteraction((Player) (Object) this)) {
-                this.lungeForwardMaybe();
-            }
+        if (entity.isAttackable() && !entity.skipAttackInteraction((Player) (Object) this)) {
+            this.lungeForwardMaybe();
         }
     }
 
@@ -186,6 +194,26 @@ public abstract class PlayerMixin extends LivingEntity implements PlayerBridge {
                     return true;
                 }
             }
+        }
+    }
+
+    @Override
+    public void causeExtraKnockback(Entity entity, float f, Vec3 vec3) {
+        if (f > 0.0F) {
+            if (entity instanceof LivingEntity livingEntity) {
+                livingEntity.knockback((double)f, (double)Mth.sin(this.getYRot() * 0.017453292F), (double)(-Mth.cos(this.getYRot() * 0.017453292F)));
+            } else {
+                entity.push((double)(-Mth.sin(this.getYRot() * 0.017453292F) * f), 0.1D, (double)(Mth.cos(this.getYRot() * 0.017453292F) * f));
+            }
+
+            this.setDeltaMovement(this.getDeltaMovement().multiply(0.6D, 1.0D, 0.6D));
+            this.setSprinting(false);
+        }
+
+        if (entity instanceof ServerPlayer serverPlayer && entity.hurtMarked) {
+            serverPlayer.connection.send(new ClientboundSetEntityMotionPacket(entity));
+            entity.hurtMarked = false;
+            entity.setDeltaMovement(vec3);
         }
     }
 

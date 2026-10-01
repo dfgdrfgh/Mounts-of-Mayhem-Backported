@@ -2,6 +2,7 @@ package zzik2.barched.data;
 
 import com.mojang.logging.LogUtils;
 import dev.architectury.registry.level.biome.BiomeModifications;
+import dev.architectury.hooks.level.biome.SpawnProperties;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -22,72 +23,134 @@ import java.util.function.Supplier;
 public final class BarchedBiomeModifications {
 
     private static final Logger LOGGER = LogUtils.getLogger();
+    private static final Set<ResourceLocation> VANILLA_ZOMBIE_HORSE_BIOMES = Set.of(
+            ResourceLocation.withDefaultNamespace("plains"),
+            ResourceLocation.withDefaultNamespace("sunflower_plains"),
+            ResourceLocation.withDefaultNamespace("snowy_plains"),
+            ResourceLocation.withDefaultNamespace("savanna"),
+            ResourceLocation.withDefaultNamespace("savanna_plateau"),
+            ResourceLocation.withDefaultNamespace("windswept_savanna")
+    );
 
     private BarchedBiomeModifications() {}
 
     public static void register() {
         BarchedConfig config = Barched.getConfig();
-        registerZombieHorseSpawn(
-                config.zombieHorseSpawnWeight,
-                config.zombieHorseSpawnBiomes
-        );
-        registerNaturalSpawn(
-                "parched",
-                config.parchedSpawnWeight,
-                config.parchedSpawnBiomes,
-                () -> Barched.EntityType.PARCHED,
-                4,
-                4
+        registerZombieHorseSpawn(config);
+        registerParchedSpawn(config);
+        registerNautilusSpawns();
+    }
+
+    private static void registerNautilusSpawns() {
+        addNautilusSpawns(Set.of(
+                ResourceLocation.withDefaultNamespace("ocean"),
+                ResourceLocation.withDefaultNamespace("deep_ocean"),
+                ResourceLocation.withDefaultNamespace("lukewarm_ocean"),
+                ResourceLocation.withDefaultNamespace("deep_lukewarm_ocean"),
+                ResourceLocation.withDefaultNamespace("warm_ocean")
+        ), 5);
+
+        addNautilusSpawns(Set.of(
+                ResourceLocation.withDefaultNamespace("cold_ocean"),
+                ResourceLocation.withDefaultNamespace("deep_cold_ocean"),
+                ResourceLocation.withDefaultNamespace("frozen_ocean"),
+                ResourceLocation.withDefaultNamespace("deep_frozen_ocean")
+        ), 2);
+    }
+
+    private static void addNautilusSpawns(Set<ResourceLocation> biomes, int weight) {
+        BiomeModifications.addProperties(
+                context -> context.getKey().map(biomes::contains).orElse(false),
+                (context, properties) -> properties.getSpawnProperties().addSpawn(
+                        MobCategory.WATER_CREATURE,
+                        new MobSpawnSettings.SpawnerData(Barched.EntityType.NAUTILUS, weight, 1, 1)
+                )
         );
     }
 
-    private static void registerZombieHorseSpawn(int weight, List<String> configuredBiomes) {
+    private static void registerZombieHorseSpawn(BarchedConfig config) {
+        int weight = config.zombieHorseSpawnWeight;
         if (weight <= 0) {
             return;
         }
 
-        BiomeSelection selection = parseBiomeSelection("zombie horse", configuredBiomes);
+        BiomeSelection selection = parseBiomeSelection("zombie horse", config.zombieHorseSpawnBiomes);
         if (selection.isEmpty()) {
             LOGGER.warn("Natural spawning for zombie horse is disabled because no valid biome selectors are configured");
             return;
         }
 
-        BiomeModifications.replaceProperties(
+        BiomeModifications.addProperties(
                 selection::matches,
-                (context, properties) -> {
-                    var spawnProperties = properties.getSpawnProperties();
-                    // Architectury's Fabric getSpawners() implementation returns null.
-                    // Capture the live entries through the supported removal callback,
-                    // then add replacements after iteration has finished on both loaders.
-                    var zombieSpawns = new ArrayList<MobSpawnSettings.SpawnerData>();
-                    spawnProperties.removeSpawns((category, data) -> {
-                        if (category == MobCategory.MONSTER && data.type == EntityType.ZOMBIE) {
-                            zombieSpawns.add(data);
-                            return true;
-                        }
-                        return false;
-                    });
-                    for (MobSpawnSettings.SpawnerData zombieSpawn : zombieSpawns) {
-                        int adjustedWeight = Math.max(0, zombieSpawn.getWeight().asInt() - weight);
-                        if (adjustedWeight > 0) {
-                            spawnProperties.addSpawn(
-                                    MobCategory.MONSTER,
-                                    new MobSpawnSettings.SpawnerData(
-                                            EntityType.ZOMBIE,
-                                            adjustedWeight,
-                                            zombieSpawn.minCount,
-                                            zombieSpawn.maxCount
-                                    )
-                            );
-                        }
-                    }
-
-                    spawnProperties.addSpawn(
-                            MobCategory.MONSTER,
-                            new MobSpawnSettings.SpawnerData(EntityType.ZOMBIE_HORSE, weight, 1, 1)
-                    );
-                }
+                (context, properties) -> properties.getSpawnProperties().addSpawn(
+                        MobCategory.MONSTER,
+                        new MobSpawnSettings.SpawnerData(EntityType.ZOMBIE_HORSE, weight, 1, 1)
+                )
         );
+
+        // In 1.21.11, the vanilla Zombie Horse biomes reserve part of the normal
+        // Zombie spawn weight for Zombie Horses: Zombie 95 -> 90 and Zombie Horse 5.
+        // Preserve that relationship when backporting to 1.21.1.
+        BiomeModifications.replaceProperties(
+                context -> selection.matches(context)
+                        && context.getKey().map(VANILLA_ZOMBIE_HORSE_BIOMES::contains).orElse(false),
+                (context, properties) -> reduceMonsterSpawnWeight(
+                        properties.getSpawnProperties(), EntityType.ZOMBIE, weight
+                )
+        );
+    }
+
+    private static void registerParchedSpawn(BarchedConfig config) {
+        int weight = config.parchedSpawnWeight;
+        if (weight <= 0) {
+            return;
+        }
+
+        BiomeSelection selection = parseBiomeSelection("parched", config.parchedSpawnBiomes);
+        if (selection.isEmpty()) {
+            LOGGER.warn("Natural spawning for parched is disabled because no valid biome selectors are configured");
+            return;
+        }
+
+        BiomeModifications.addProperties(
+                selection::matches,
+                (context, properties) -> properties.getSpawnProperties().addSpawn(
+                        MobCategory.MONSTER,
+                        new MobSpawnSettings.SpawnerData(Barched.EntityType.PARCHED, weight, 4, 4)
+                )
+        );
+
+        // In 1.21.11, Parched replace part of the regular Skeleton population in Deserts:
+        // Skeleton weight 100 -> 50, with Parched added at weight 50.
+        ResourceLocation desert = ResourceLocation.withDefaultNamespace("desert");
+        if (selection.biomeIds().contains(desert)) {
+            BiomeModifications.replaceProperties(
+                    context -> context.getKey().map(desert::equals).orElse(false),
+                    (context, properties) -> reduceMonsterSpawnWeight(
+                            properties.getSpawnProperties(), EntityType.SKELETON, weight
+                    )
+            );
+        }
+    }
+
+    static void reduceMonsterSpawnWeight(SpawnProperties.Mutable spawnProperties, EntityType<?> entityType, int weight) {
+        // Fabric does not implement getSpawners(); use the live removal callback.
+        // Add replacements only after iteration ends, preserving all group sizes.
+        var existingSpawns = new ArrayList<MobSpawnSettings.SpawnerData>();
+        spawnProperties.removeSpawns((category, data) -> {
+            if (category == MobCategory.MONSTER && data.type == entityType) {
+                existingSpawns.add(data);
+                return true;
+            }
+            return false;
+        });
+        for (MobSpawnSettings.SpawnerData spawn : existingSpawns) {
+            int adjustedWeight = Math.max(0, spawn.getWeight().asInt() - weight);
+            if (adjustedWeight > 0) {
+                spawnProperties.addSpawn(MobCategory.MONSTER,
+                        new MobSpawnSettings.SpawnerData(entityType, adjustedWeight, spawn.minCount, spawn.maxCount));
+            }
+        }
     }
 
     private static void registerNaturalSpawn(String name, int weight, List<String> configuredBiomes, Supplier<EntityType<?>> entityType, int minGroupSize, int maxGroupSize) {

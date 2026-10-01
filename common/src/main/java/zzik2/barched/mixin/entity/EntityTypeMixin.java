@@ -5,18 +5,37 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.animal.CamelHusk;
 import net.minecraft.world.entity.monster.Parched;
+import net.minecraft.world.entity.animal.nautilus.Nautilus;
+import net.minecraft.world.entity.animal.nautilus.ZombieNautilus;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.Slice;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.EitherHolder;
+import zzik2.barched.Barched;
+import zzik2.barched.nautilus.ZombieNautilusVariant;
+import java.util.function.Consumer;
 import zzik2.zreflex.mixin.ModifyAccess;
 
 
 @Mixin(EntityType.class)
 public abstract class EntityTypeMixin {
+
+    @Inject(method = "appendCustomNameConfig", at = @At("RETURN"), cancellable = true)
+    private static <T extends Entity> void barched$applyNautilusVariant(Consumer<T> consumer, ItemStack stack, CallbackInfoReturnable<Consumer<T>> cir) {
+        EitherHolder<ZombieNautilusVariant> variant = stack.get(Barched.DataComponents.ZOMBIE_NAUTILUS_VARIANT);
+        if (variant != null) {
+            cir.setReturnValue(cir.getReturnValue().andThen(entity -> {
+                if (entity instanceof ZombieNautilus nautilus) variant.unwrap(entity.registryAccess()).ifPresent(nautilus::setVariant);
+            }));
+        }
+    }
 
     @Shadow
     private static <T extends Entity> EntityType<T> register(String string, EntityType.Builder<T> arg) {
@@ -35,4 +54,12 @@ public abstract class EntityTypeMixin {
     @Unique
     @ModifyAccess(access = Opcodes.ACC_PUBLIC)
     private static final EntityType<CamelHusk> CAMEL_HUSK = register("camel_husk", EntityType.Builder.of(CamelHusk::new, MobCategory.MONSTER).sized(1.7F, 2.375F).eyeHeight(2.275F).clientTrackingRange(10));
+
+    @Unique
+    @ModifyAccess(access = Opcodes.ACC_PUBLIC)
+    private static final EntityType<Nautilus> NAUTILUS = register("nautilus", EntityType.Builder.of(Nautilus::new, MobCategory.WATER_CREATURE).sized(0.875F, 0.95F).eyeHeight(0.2751F).passengerAttachments(1.1375F).clientTrackingRange(10));
+
+    @Unique
+    @ModifyAccess(access = Opcodes.ACC_PUBLIC)
+    private static final EntityType<ZombieNautilus> ZOMBIE_NAUTILUS = register("zombie_nautilus", EntityType.Builder.of(ZombieNautilus::new, MobCategory.MONSTER).sized(0.875F, 0.95F).eyeHeight(0.2751F).passengerAttachments(1.1375F).clientTrackingRange(10));
 }

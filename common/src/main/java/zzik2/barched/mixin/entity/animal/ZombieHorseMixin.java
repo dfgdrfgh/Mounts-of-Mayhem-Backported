@@ -1,5 +1,6 @@
 package zzik2.barched.mixin.entity.animal;
 
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
@@ -20,8 +21,10 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.AnimalArmorItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.pathfinder.PathType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -41,6 +44,12 @@ import java.util.function.DoubleSupplier;
 
 @Mixin(ZombieHorse.class)
 public abstract class ZombieHorseMixin extends AbstractHorse implements EntityBridge, AbstractHorseBridge {
+
+    @Unique
+    private static final EntityDimensions BARCHED_BABY_DIMENSIONS = EntityType.ZOMBIE_HORSE
+            .getDimensions()
+            .withAttachments(EntityAttachments.builder().attach(EntityAttachment.PASSENGER, 0.0F, EntityType.ZOMBIE_HORSE.getHeight() - 0.03125F, 0.0F))
+            .scale(0.5F);
 
     protected ZombieHorseMixin(EntityType<? extends AbstractHorse> entityType, Level level) {
         super(entityType, level);
@@ -188,6 +197,11 @@ public abstract class ZombieHorseMixin extends AbstractHorse implements EntityBr
     }
 
     @Override
+    public @Nullable AgeableMob getBreedOffspring(ServerLevel serverLevel, AgeableMob ageableMob) {
+        return null;
+    }
+
+    @Override
     public boolean canFallInLove() {
         return false;
     }
@@ -201,6 +215,12 @@ public abstract class ZombieHorseMixin extends AbstractHorse implements EntityBr
     public void aiStep() {
         super.aiStep();
         this.burnUndead();
+    }
+
+
+    @Override
+    public EntityDimensions getDefaultDimensions(Pose pose) {
+        return this.isBaby() ? BARCHED_BABY_DIMENSIONS : super.getDefaultDimensions(pose);
     }
 
     @Override

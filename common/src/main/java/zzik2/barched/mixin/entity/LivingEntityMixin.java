@@ -4,18 +4,30 @@ import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import dev.architectury.platform.Platform;
 import it.unimi.dsi.fastutil.objects.Object2LongMap;
 import it.unimi.dsi.fastutil.objects.Object2LongOpenHashMap;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.FluidTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.effect.MobEffectUtil;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.animal.horse.SkeletonHorse;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.AttackRange;
 import net.minecraft.world.item.component.KineticWeapon;
+import net.minecraft.world.item.component.UseEffects;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
@@ -24,15 +36,22 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import zzik2.barched.Barched;
 import zzik2.barched.bridge.entity.LivingEntityBridge;
 import zzik2.barched.bridge.item.ItemStackBridge;
 
+import java.util.Objects;
 import java.util.function.Predicate;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity implements LivingEntityBridge {
+
+    @Unique
+    private static final TagKey<EntityType<?>> BARCHED_CAN_FLOAT_WHILE_RIDDEN =
+            TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.withDefaultNamespace("can_float_while_ridden"));
 
     @Shadow public abstract boolean isUsingItem();
 
@@ -43,6 +62,8 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityBr
     @Shadow public abstract ItemStack getItemBySlot(EquipmentSlot arg);
 
     @Shadow protected abstract float getKnockback(Entity arg, DamageSource arg2);
+
+    @Shadow protected abstract void playAttackSound();
 
     @Shadow public abstract void setLastHurtMob(Entity arg);
 
@@ -64,6 +85,8 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityBr
 
     @Shadow public abstract int getTicksUsingItem();
 
+    @Shadow protected abstract int increaseAirSupply(int air);
+
     @Nullable protected Object2LongMap<Entity> recentKineticEnemies;
     private long lastKineticHitFeedbackTime;
 
@@ -71,9 +94,59 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityBr
         super(entityType, level);
     }
 
+    @Inject(method = "canUseSlot", at = @At("HEAD"), cancellable = true)
+    private void barched$skeletonHorseCanUseSlots(EquipmentSlot slot, CallbackInfoReturnable<Boolean> cir) {
+        if ((Object) this instanceof SkeletonHorse) {
+            cir.setReturnValue(true);
+        }
+    }
+
     @Inject(method = "<init>", at = @At("TAIL"))
     private void barched$init(EntityType<?> entityType, Level level, CallbackInfo ci) {
         this.lastKineticHitFeedbackTime = -2147483648L;
+    }
+
+    @Inject(method = "baseTick", at = @At("TAIL"))
+    private void barched$match12111BreathingRefill(CallbackInfo ci) {
+        LivingEntity self = (LivingEntity) (Object) this;
+        boolean wouldDrown = !self.canBreatheUnderwater()
+                && !MobEffectUtil.hasWaterBreathing(self)
+                && (!(self instanceof Player player) || !player.getAbilities().invulnerable);
+        boolean shouldRefill = !self.hasEffect(Barched.MobEffects.BREATH_OF_THE_NAUTILUS)
+                || self.hasEffect(MobEffects.WATER_BREATHING)
+                || self.hasEffect(MobEffects.CONDUIT_POWER);
+        if (!this.level().isClientSide
+                && self.isAlive()
+                && self.isEyeInFluid(FluidTags.WATER)
+                && !this.level().getBlockState(BlockPos.containing(self.getX(), self.getEyeY(), self.getZ())).is(Blocks.BUBBLE_COLUMN)
+                && self.getAirSupply() < self.getMaxAirSupply()
+                && !wouldDrown
+                && shouldRefill) {
+            self.setAirSupply(this.increaseAirSupply(self.getAirSupply()));
+        }
+    }
+
+    @Inject(method = "travel", at = @At("TAIL"))
+    private void barched$floatIfRidden(Vec3 travelVector, CallbackInfo ci) {
+        if (this.getType().is(BARCHED_CAN_FLOAT_WHILE_RIDDEN)
+                && this.isVehicle()
+                && this.getFluidHeight(FluidTags.WATER) > this.getFluidJumpThreshold()) {
+            this.setDeltaMovement(this.getDeltaMovement().add(0.0D, 0.04D, 0.0D));
+        }
+    }
+
+    @Redirect(
+            method = {"startUsingItem", "stopUsingItem"},
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/world/entity/LivingEntity;gameEvent(Lnet/minecraft/core/Holder;)V"
+            )
+    )
+    private void barched$respectUseVibrations(LivingEntity entity, Holder<GameEvent> event) {
+        UseEffects effects = (UseEffects) this.useItem.getOrDefault(Barched.DataComponents.USE_EFFECTS, UseEffects.DEFAULT);
+        if (effects.interactVibrations()) {
+            entity.gameEvent(event);
+        }
     }
 
     @Inject(method = "startUsingItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;gameEvent(Lnet/minecraft/core/Holder;)V", shift = At.Shift.AFTER))
@@ -167,7 +240,18 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityBr
 
     @Override
     public int stabbedEntities(Predicate<Entity> predicate) {
-        return this.recentKineticEnemies == null ? 0 : (int)this.recentKineticEnemies.keySet().stream().filter(predicate).count();
+        if (this.recentKineticEnemies == null) {
+            return 0;
+        }
+
+        Objects.requireNonNull(predicate);
+        int count = 0;
+        for (Entity entity : this.recentKineticEnemies.keySet()) {
+            if (predicate.test(entity)) {
+                count++;
+            }
+        }
+        return count;
     }
 
     @Override
@@ -199,10 +283,10 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityBr
                 entity.stopRiding();
             }
 
-            if (entity instanceof LivingEntity) {
-                LivingEntity livingEntity = (LivingEntity)entity;
-                if ((LivingEntity) (Object) this instanceof Player player) {
-                    itemStack.hurtEnemy(livingEntity, player);
+            if (entity instanceof LivingEntity livingEntity) {
+                LivingEntity attacker = (LivingEntity) (Object) this;
+                if (itemStack.getItem().hurtEnemy(itemStack, livingEntity, attacker)) {
+                    itemStack.getItem().postHurtEnemy(itemStack, livingEntity, attacker);
                 }
             }
 
@@ -214,7 +298,7 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityBr
                 return false;
             } else {
                 this.setLastHurtMob(entity);
-//                this.playAttackSound(); // TODO?
+                this.playAttackSound();
                 return true;
             }
         }

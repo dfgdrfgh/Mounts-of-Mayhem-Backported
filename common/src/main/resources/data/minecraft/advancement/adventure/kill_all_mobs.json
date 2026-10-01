@@ -546,6 +546,20 @@
         ]
       },
       "trigger": "minecraft:player_killed_entity"
+    },
+    "minecraft:zombie_nautilus": {
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "minecraft:zombie_nautilus"
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:player_killed_entity"
     }
   },
   "display": {
@@ -678,6 +692,9 @@
     ],
     [
       "minecraft:zombified_piglin"
+    ],
+    [
+      "minecraft:zombie_nautilus"
     ]
   ],
   "rewards": {

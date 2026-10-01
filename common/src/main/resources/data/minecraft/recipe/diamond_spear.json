@@ -6,7 +6,7 @@
       "item": "minecraft:stick"
     },
     "X": {
-      "item": "minecraft:diamond"
+      "tag": "minecraft:diamond_tool_materials"
     }
   },
   "pattern": [

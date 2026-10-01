@@ -6,6 +6,7 @@ on:
   pull_request:
     paths: &build-paths
       - ".github/workflows/build.yml"
+      - ".github/scripts/**"
       - "common/**"
       - "fabric/**"
       - "neoforge/**"
@@ -56,6 +57,9 @@ jobs:
 
       - name: Build Fabric and NeoForge
         run: ./gradlew build --build-cache --stacktrace
+
+      - name: Verify recovered content and packaged resources
+        run: python3 .github/scripts/verify_artifacts.py
 
       - name: Upload Fabric JARs
         if: always()

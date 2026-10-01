@@ -18,6 +18,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import zzik2.barched.Barched;
@@ -33,6 +34,11 @@ public abstract class ItemInHandRendererMixin {
     @Shadow protected abstract void applyItemArmAttackTransform(PoseStack arg, HumanoidArm arg2, float g);
 
     @Shadow protected abstract void applyItemArmTransform(PoseStack poseStack, HumanoidArm humanoidArm, float f);
+
+    @ModifyVariable(method = "renderArmWithItem", at = @At("HEAD"), argsOnly = true, index = 7)
+    private float barched$spearSwapAnimationScale(float equippedProgress, @Local(argsOnly = true) ItemStack itemStack) {
+        return itemStack.is(Barched.ItemTags.SPEARS) ? equippedProgress * 1.95F : equippedProgress;
+    }
 
     @Inject(method = "renderArmWithItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;getUseAnimation()Lnet/minecraft/world/item/UseAnim;", ordinal = 0))
     private void barched$firstPersonUse(AbstractClientPlayer abstractClientPlayer, float f, float g, InteractionHand interactionHand, float h, ItemStack itemStack, float i, PoseStack poseStack, MultiBufferSource multiBufferSource, int j, CallbackInfo ci, @Local(ordinal = 0) HumanoidArm humanoidArm , @Local(ordinal = 1) int q) {

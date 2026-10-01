@@ -1,7 +1,7 @@
 {
-  "type": "minecraft:smelting",
+  "type": "minecraft:blasting",
   "category": "misc",
-  "cookingtime": 200,
+  "cookingtime": 100,
   "experience": 0.1,
   "ingredient": [
     {
@@ -36,6 +36,9 @@
     },
     {
       "item": "minecraft:golden_horse_armor"
+    },
+    {
+      "item": "minecraft:golden_nautilus_armor"
     }
   ],
   "result": {

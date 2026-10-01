@@ -1,10 +1,25 @@
 package zzik2.barched.mixin.entity;
 
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityAttachment;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.Saddleable;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.animal.horse.AbstractHorse;
+import net.minecraft.world.entity.animal.nautilus.AbstractNautilus;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.AnimalArmorItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -12,8 +27,13 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import zzik2.barched.Barched;
 import zzik2.barched.bridge.entity.EntityBridge;
 import zzik2.barched.bridge.entity.PlayerBridge;
+import zzik2.barched.bridge.entity.SaddleItemBridge;
+import zzik2.barched.item.NautilusArmorItem;
+import zzik2.barched.util.EntityAttachmentUtil;
 
 @Mixin(Entity.class)
 public abstract class EntityMixin implements EntityBridge {
@@ -52,6 +72,87 @@ public abstract class EntityMixin implements EntityBridge {
     @Inject(method = "reapplyPosition", at = @At("HEAD"))
     private void barched$reapplyPosition(CallbackInfo ci) {
         this.lastKnownPosition = null;
+    }
+
+    @Inject(method = "interact", at = @At("HEAD"), cancellable = true)
+    private void barched$shearMountEquipment(Player player, InteractionHand hand, CallbackInfoReturnable<InteractionResult> cir) {
+        Entity self = (Entity) (Object) this;
+        if (self.isVehicle() || player.isSecondaryUseActive()) {
+            return;
+        }
+
+        ItemStack shears = player.getItemInHand(hand);
+        if (!shears.is(Items.SHEARS)) {
+            return;
+        }
+
+        ItemStack bodyArmor = ItemStack.EMPTY;
+        SoundEvent bodyUnequipSound = null;
+        if (self instanceof AbstractHorse horse) {
+            ItemStack candidate = horse.getBodyArmorItem();
+            if (candidate.getItem() instanceof AnimalArmorItem armor
+                    && armor.getBodyType() == AnimalArmorItem.BodyType.EQUESTRIAN) {
+                bodyArmor = candidate;
+                bodyUnequipSound = Barched.SoundEvents.HORSE_ARMOR_UNEQUIP;
+            }
+        } else if (self instanceof AbstractNautilus nautilus) {
+            ItemStack candidate = nautilus.getBodyArmorItem();
+            if (candidate.getItem() instanceof NautilusArmorItem) {
+                bodyArmor = candidate;
+                bodyUnequipSound = Barched.SoundEvents.NAUTILUS_ARMOR_UNEQUIP;
+            }
+        }
+
+        if (!bodyArmor.isEmpty()
+                && (player.isCreative()
+                || !EnchantmentHelper.has(bodyArmor, EnchantmentEffectComponents.PREVENT_ARMOR_CHANGE))) {
+            if (!self.level().isClientSide()) {
+                ItemStack removed = bodyArmor.copy();
+                shears.hurtAndBreak(1, player, LivingEntity.getSlotForHand(hand));
+                ((Mob) self).setBodyArmorItem(ItemStack.EMPTY);
+                self.gameEvent(GameEvent.SHEAR, player);
+                self.playSound(bodyUnequipSound);
+                self.spawnAtLocation(
+                        removed,
+                        EntityAttachmentUtil.averageY(self, EntityAttachment.PASSENGER)
+                );
+            }
+
+            cir.setReturnValue(InteractionResult.SUCCESS);
+            return;
+        }
+
+        if (!(self instanceof Saddleable saddleable) || !(self instanceof SaddleItemBridge saddleBridge)) {
+            return;
+        }
+
+        ItemStack saddle = saddleBridge.barched$getSaddleItem();
+        if (!saddleable.isSaddled()
+                || saddle.isEmpty()
+                || (!player.isCreative()
+                && EnchantmentHelper.has(saddle, EnchantmentEffectComponents.PREVENT_ARMOR_CHANGE))) {
+            return;
+        }
+
+        if (!self.level().isClientSide()) {
+            ItemStack removed = saddle.copy();
+            shears.hurtAndBreak(1, player, LivingEntity.getSlotForHand(hand));
+            saddleBridge.barched$setSaddleItem(ItemStack.EMPTY);
+            if (self instanceof Mob mob) {
+                mob.setPersistenceRequired();
+            }
+            if (!(self instanceof AbstractNautilus)) {
+                self.gameEvent(GameEvent.UNEQUIP);
+            }
+            self.gameEvent(GameEvent.SHEAR, player);
+            self.playSound(Barched.SoundEvents.SADDLE_UNEQUIP);
+            self.spawnAtLocation(
+                    removed,
+                    EntityAttachmentUtil.averageY(self, EntityAttachment.PASSENGER)
+            );
+        }
+
+        cir.setReturnValue(InteractionResult.SUCCESS);
     }
 
     @Inject(method = "baseTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/profiling/ProfilerFiller;push(Ljava/lang/String;)V", shift = At.Shift.AFTER, ordinal = 0))

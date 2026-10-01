@@ -27,6 +27,7 @@ public abstract class SpawnPlacementsMixin {
     }
 
     static {
+        register(Barched.EntityType.NAUTILUS, SpawnPlacementTypes.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, net.minecraft.world.entity.animal.nautilus.AbstractNautilus::checkNautilusSpawnRules);
         register(Barched.EntityType.PARCHED, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Barched.Monster::checkSurfaceMonstersSpawnRules);
         register(Barched.EntityType.CAMEL_HUSK, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Barched.Monster::checkSurfaceMonstersSpawnRules);
     }

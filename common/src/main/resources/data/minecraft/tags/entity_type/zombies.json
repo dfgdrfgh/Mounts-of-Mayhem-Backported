@@ -1,6 +1,8 @@
 {
   "replace": false,
   "values": [
-    "minecraft:camel_husk"
+    "minecraft:camel_husk",
+    "minecraft:zombie_horse",
+    "minecraft:zombie_nautilus"
   ]
 }

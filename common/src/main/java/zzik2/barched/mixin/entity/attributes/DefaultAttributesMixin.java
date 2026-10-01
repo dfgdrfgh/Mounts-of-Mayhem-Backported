@@ -19,6 +19,8 @@ public class DefaultAttributesMixin {
     private static ImmutableMap<EntityType<? extends LivingEntity>, AttributeSupplier> barched$build(ImmutableMap.Builder instance) {
         instance.put(Barched.EntityType.PARCHED, Parched.createAttributes().build());
         instance.put(Barched.EntityType.CAMEL_HUSK, Camel.createAttributes().build());
+        instance.put(Barched.EntityType.NAUTILUS, net.minecraft.world.entity.animal.nautilus.AbstractNautilus.createAttributes().build());
+        instance.put(Barched.EntityType.ZOMBIE_NAUTILUS, net.minecraft.world.entity.animal.nautilus.ZombieNautilus.createAttributes().build());
         return instance.build();
     }
 }

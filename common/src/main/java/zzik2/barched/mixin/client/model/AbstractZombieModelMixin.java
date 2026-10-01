@@ -62,19 +62,12 @@ public abstract class AbstractZombieModelMixin<T extends Monster> extends Humano
 
     @Unique
     public ArmPose barched$getArmPose(T livingEntity, HumanoidArm humanoidArm, HumanoidModel.ArmPose fallback) {
-        boolean aggressive = this.isAggressive(livingEntity);
-
-        if (!aggressive) {
-            SwingAnimation swingAnimation = (SwingAnimation)((LivingEntityBridge) livingEntity).getItemHeldByArm(humanoidArm.getOpposite()).get(Barched.DataComponents.SWING_ANIMATION);
-            if (swingAnimation != null && swingAnimation.type() == SwingAnimationType.STAB) {
-                return BarchedClient.ArmPose.SPEAR;
-            }
+        SwingAnimation swingAnimation = (SwingAnimation)((LivingEntityBridge) livingEntity)
+                .getItemHeldByArm(humanoidArm.getOpposite())
+                .get(Barched.DataComponents.SWING_ANIMATION);
+        if (swingAnimation != null && swingAnimation.type() == SwingAnimationType.STAB) {
+            return BarchedClient.ArmPose.SPEAR;
         }
-
-        HumanoidModel.ArmPose superPose = super$getArmPose(livingEntity, humanoidArm, getArmPoseFallback());
-        if (superPose == BarchedClient.ArmPose.SPEAR) {
-            return aggressive ? superPose : getArmPoseFallback();
-        }
-        return superPose;
+        return super$getArmPose(livingEntity, humanoidArm, fallback);
     }
 }

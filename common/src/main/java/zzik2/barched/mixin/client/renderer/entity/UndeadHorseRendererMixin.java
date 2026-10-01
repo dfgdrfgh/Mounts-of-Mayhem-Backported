@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.entity.AbstractHorseRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.UndeadHorseRenderer;
 import net.minecraft.client.renderer.entity.layers.UndeadHorseArmorLayer;
+import net.minecraft.client.renderer.entity.layers.UndeadHorseSaddleGlintLayer;
 import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -22,5 +23,6 @@ public abstract class UndeadHorseRendererMixin extends AbstractHorseRenderer<Abs
     @Inject(method = "<init>", at = @At("TAIL"))
     private void barched$init(EntityRendererProvider.Context context, ModelLayerLocation modelLayerLocation, CallbackInfo ci) {
         this.addLayer(new UndeadHorseArmorLayer((UndeadHorseRenderer) (Object) this, context.getModelSet()));
+        this.addLayer(new UndeadHorseSaddleGlintLayer((UndeadHorseRenderer) (Object) this, context.getModelSet(), modelLayerLocation));
     }
 }

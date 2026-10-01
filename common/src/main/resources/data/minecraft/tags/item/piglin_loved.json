@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "minecraft:golden_spear"
+    "minecraft:golden_spear",
+    "minecraft:golden_nautilus_armor"
   ]
 }

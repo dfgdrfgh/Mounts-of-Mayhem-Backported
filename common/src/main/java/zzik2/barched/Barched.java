@@ -78,12 +78,53 @@ public final class Barched {
     }
 
     public static class SoundEvents {
+        public static final SoundEvent NAUTILUS_AMBIENT = ZReflectionTool.getStaticFieldValue(net.minecraft.sounds.SoundEvents.class, "NAUTILUS_AMBIENT");
+        public static final SoundEvent NAUTILUS_AMBIENT_LAND = ZReflectionTool.getStaticFieldValue(net.minecraft.sounds.SoundEvents.class, "NAUTILUS_AMBIENT_LAND");
+        public static final SoundEvent NAUTILUS_DEATH = ZReflectionTool.getStaticFieldValue(net.minecraft.sounds.SoundEvents.class, "NAUTILUS_DEATH");
+        public static final SoundEvent NAUTILUS_DEATH_LAND = ZReflectionTool.getStaticFieldValue(net.minecraft.sounds.SoundEvents.class, "NAUTILUS_DEATH_LAND");
+        public static final SoundEvent NAUTILUS_EAT = ZReflectionTool.getStaticFieldValue(net.minecraft.sounds.SoundEvents.class, "NAUTILUS_EAT");
+        public static final SoundEvent NAUTILUS_HURT = ZReflectionTool.getStaticFieldValue(net.minecraft.sounds.SoundEvents.class, "NAUTILUS_HURT");
+        public static final SoundEvent NAUTILUS_HURT_LAND = ZReflectionTool.getStaticFieldValue(net.minecraft.sounds.SoundEvents.class, "NAUTILUS_HURT_LAND");
+        public static final SoundEvent NAUTILUS_SWIM = ZReflectionTool.getStaticFieldValue(net.minecraft.sounds.SoundEvents.class, "NAUTILUS_SWIM");
+        public static final SoundEvent NAUTILUS_DASH = ZReflectionTool.getStaticFieldValue(net.minecraft.sounds.SoundEvents.class, "NAUTILUS_DASH");
+        public static final SoundEvent NAUTILUS_DASH_LAND = ZReflectionTool.getStaticFieldValue(net.minecraft.sounds.SoundEvents.class, "NAUTILUS_DASH_LAND");
+        public static final SoundEvent NAUTILUS_DASH_READY = ZReflectionTool.getStaticFieldValue(net.minecraft.sounds.SoundEvents.class, "NAUTILUS_DASH_READY");
+        public static final SoundEvent NAUTILUS_DASH_READY_LAND = ZReflectionTool.getStaticFieldValue(net.minecraft.sounds.SoundEvents.class, "NAUTILUS_DASH_READY_LAND");
+        public static final SoundEvent ZOMBIE_NAUTILUS_AMBIENT = ZReflectionTool.getStaticFieldValue(net.minecraft.sounds.SoundEvents.class, "ZOMBIE_NAUTILUS_AMBIENT");
+        public static final SoundEvent ZOMBIE_NAUTILUS_AMBIENT_LAND = ZReflectionTool.getStaticFieldValue(net.minecraft.sounds.SoundEvents.class, "ZOMBIE_NAUTILUS_AMBIENT_LAND");
+        public static final SoundEvent ZOMBIE_NAUTILUS_DEATH = ZReflectionTool.getStaticFieldValue(net.minecraft.sounds.SoundEvents.class, "ZOMBIE_NAUTILUS_DEATH");
+        public static final SoundEvent ZOMBIE_NAUTILUS_DEATH_LAND = ZReflectionTool.getStaticFieldValue(net.minecraft.sounds.SoundEvents.class, "ZOMBIE_NAUTILUS_DEATH_LAND");
+        public static final SoundEvent ZOMBIE_NAUTILUS_EAT = ZReflectionTool.getStaticFieldValue(net.minecraft.sounds.SoundEvents.class, "ZOMBIE_NAUTILUS_EAT");
+        public static final SoundEvent ZOMBIE_NAUTILUS_HURT = ZReflectionTool.getStaticFieldValue(net.minecraft.sounds.SoundEvents.class, "ZOMBIE_NAUTILUS_HURT");
+        public static final SoundEvent ZOMBIE_NAUTILUS_HURT_LAND = ZReflectionTool.getStaticFieldValue(net.minecraft.sounds.SoundEvents.class, "ZOMBIE_NAUTILUS_HURT_LAND");
+        public static final SoundEvent ZOMBIE_NAUTILUS_SWIM = ZReflectionTool.getStaticFieldValue(net.minecraft.sounds.SoundEvents.class, "ZOMBIE_NAUTILUS_SWIM");
+        public static final SoundEvent ZOMBIE_NAUTILUS_DASH = ZReflectionTool.getStaticFieldValue(net.minecraft.sounds.SoundEvents.class, "ZOMBIE_NAUTILUS_DASH");
+        public static final SoundEvent ZOMBIE_NAUTILUS_DASH_LAND = ZReflectionTool.getStaticFieldValue(net.minecraft.sounds.SoundEvents.class, "ZOMBIE_NAUTILUS_DASH_LAND");
+        public static final SoundEvent ZOMBIE_NAUTILUS_DASH_READY = ZReflectionTool.getStaticFieldValue(net.minecraft.sounds.SoundEvents.class, "ZOMBIE_NAUTILUS_DASH_READY");
+        public static final SoundEvent ZOMBIE_NAUTILUS_DASH_READY_LAND = ZReflectionTool.getStaticFieldValue(net.minecraft.sounds.SoundEvents.class, "ZOMBIE_NAUTILUS_DASH_READY_LAND");
+        public static final SoundEvent BABY_NAUTILUS_AMBIENT = ZReflectionTool.getStaticFieldValue(net.minecraft.sounds.SoundEvents.class, "BABY_NAUTILUS_AMBIENT");
+        public static final SoundEvent BABY_NAUTILUS_AMBIENT_LAND = ZReflectionTool.getStaticFieldValue(net.minecraft.sounds.SoundEvents.class, "BABY_NAUTILUS_AMBIENT_LAND");
+        public static final SoundEvent BABY_NAUTILUS_DEATH = ZReflectionTool.getStaticFieldValue(net.minecraft.sounds.SoundEvents.class, "BABY_NAUTILUS_DEATH");
+        public static final SoundEvent BABY_NAUTILUS_DEATH_LAND = ZReflectionTool.getStaticFieldValue(net.minecraft.sounds.SoundEvents.class, "BABY_NAUTILUS_DEATH_LAND");
+        public static final SoundEvent BABY_NAUTILUS_EAT = ZReflectionTool.getStaticFieldValue(net.minecraft.sounds.SoundEvents.class, "BABY_NAUTILUS_EAT");
+        public static final SoundEvent BABY_NAUTILUS_HURT = ZReflectionTool.getStaticFieldValue(net.minecraft.sounds.SoundEvents.class, "BABY_NAUTILUS_HURT");
+        public static final SoundEvent BABY_NAUTILUS_HURT_LAND = ZReflectionTool.getStaticFieldValue(net.minecraft.sounds.SoundEvents.class, "BABY_NAUTILUS_HURT_LAND");
+        public static final SoundEvent BABY_NAUTILUS_SWIM = ZReflectionTool.getStaticFieldValue(net.minecraft.sounds.SoundEvents.class, "BABY_NAUTILUS_SWIM");
+        public static final SoundEvent NAUTILUS_RIDING = ZReflectionTool.getStaticFieldValue(net.minecraft.sounds.SoundEvents.class, "NAUTILUS_RIDING");
+        public static final SoundEvent NAUTILUS_ARMOR_EQUIP = ZReflectionTool.getStaticFieldValue(net.minecraft.sounds.SoundEvents.class, "NAUTILUS_ARMOR_EQUIP");
+        public static final SoundEvent NAUTILUS_ARMOR_UNEQUIP = ZReflectionTool.getStaticFieldValue(net.minecraft.sounds.SoundEvents.class, "NAUTILUS_ARMOR_UNEQUIP");
+        public static final SoundEvent HORSE_ARMOR_UNEQUIP = ZReflectionTool.getStaticFieldValue(net.minecraft.sounds.SoundEvents.class, "HORSE_ARMOR_UNEQUIP");
+        public static final SoundEvent SADDLE_UNEQUIP = ZReflectionTool.getStaticFieldValue(net.minecraft.sounds.SoundEvents.class, "SADDLE_UNEQUIP");
+        public static final SoundEvent NAUTILUS_SADDLE_EQUIP = ZReflectionTool.getStaticFieldValue(net.minecraft.sounds.SoundEvents.class, "NAUTILUS_SADDLE_EQUIP");
+        public static final SoundEvent NAUTILUS_SADDLE_UNDERWATER_EQUIP = ZReflectionTool.getStaticFieldValue(net.minecraft.sounds.SoundEvents.class, "NAUTILUS_SADDLE_UNDERWATER_EQUIP");
+        public static final SoundEvent PARROT_IMITATE_ZOMBIE_NAUTILUS = ZReflectionTool.getStaticFieldValue(net.minecraft.sounds.SoundEvents.class, "PARROT_IMITATE_ZOMBIE_NAUTILUS");
         public static final SoundEvent PARCHED_AMBIENT = ZReflectionTool.getStaticFieldValue(net.minecraft.sounds.SoundEvents.class, "PARCHED_AMBIENT");
         public static final SoundEvent PARCHED_HURT = ZReflectionTool.getStaticFieldValue(net.minecraft.sounds.SoundEvents.class, "PARCHED_HURT");
         public static final SoundEvent PARCHED_DEATH = ZReflectionTool.getStaticFieldValue(net.minecraft.sounds.SoundEvents.class, "PARCHED_DEATH");
         public static final SoundEvent PARCHED_STEP = ZReflectionTool.getStaticFieldValue(net.minecraft.sounds.SoundEvents.class, "PARCHED_STEP");
         public static final SoundEvent PARROT_IMITATE_PARCHED = ZReflectionTool.getStaticFieldValue(net.minecraft.sounds.SoundEvents.class, "PARROT_IMITATE_PARCHED");
         public static final SoundEvent PARROT_IMITATE_CAMEL_HUSK = ZReflectionTool.getStaticFieldValue(net.minecraft.sounds.SoundEvents.class, "PARROT_IMITATE_CAMEL_HUSK");
+        public static final SoundEvent PARROT_IMITATE_ZOMBIE_HORSE = ZReflectionTool.getStaticFieldValue(net.minecraft.sounds.SoundEvents.class, "PARROT_IMITATE_ZOMBIE_HORSE");
         public static final SoundEvent CAMEL_HUSK_AMBIENT = ZReflectionTool.getStaticFieldValue(net.minecraft.sounds.SoundEvents.class, "CAMEL_HUSK_AMBIENT");
         public static final SoundEvent CAMEL_HUSK_DASH = ZReflectionTool.getStaticFieldValue(net.minecraft.sounds.SoundEvents.class, "CAMEL_HUSK_DASH");
         public static final SoundEvent CAMEL_HUSK_DASH_READY = ZReflectionTool.getStaticFieldValue(net.minecraft.sounds.SoundEvents.class, "CAMEL_HUSK_DASH_READY");
@@ -97,7 +138,6 @@ public final class Barched {
         public static final SoundEvent CAMEL_HUSK_STEP_SAND = ZReflectionTool.getStaticFieldValue(net.minecraft.sounds.SoundEvents.class, "CAMEL_HUSK_STEP_SAND");
         public static final SoundEvent ZOMBIE_HORSE_ANGRY = ZReflectionTool.getStaticFieldValue(net.minecraft.sounds.SoundEvents.class, "ZOMBIE_HORSE_ANGRY");
         public static final SoundEvent ZOMBIE_HORSE_EAT = ZReflectionTool.getStaticFieldValue(net.minecraft.sounds.SoundEvents.class, "ZOMBIE_HORSE_EAT");
-        public static final Holder<SoundEvent> LUNGE = ZReflectionTool.getStaticFieldValue(net.minecraft.sounds.SoundEvents.class, "LUNGE");
         public static final Holder<SoundEvent> LUNGE_1 = ZReflectionTool.getStaticFieldValue(net.minecraft.sounds.SoundEvents.class, "LUNGE_1");
         public static final Holder<SoundEvent> LUNGE_2 = ZReflectionTool.getStaticFieldValue(net.minecraft.sounds.SoundEvents.class, "LUNGE_2");
         public static final Holder<SoundEvent> LUNGE_3 = ZReflectionTool.getStaticFieldValue(net.minecraft.sounds.SoundEvents.class, "LUNGE_3");
@@ -113,6 +153,8 @@ public final class Barched {
     }
 
     public static class EntityType {
+        public static final net.minecraft.world.entity.EntityType<net.minecraft.world.entity.animal.nautilus.ZombieNautilus> ZOMBIE_NAUTILUS = ZReflectionTool.getStaticFieldValue(net.minecraft.world.entity.EntityType.class, "ZOMBIE_NAUTILUS");
+        public static final net.minecraft.world.entity.EntityType<net.minecraft.world.entity.animal.nautilus.Nautilus> NAUTILUS = ZReflectionTool.getStaticFieldValue(net.minecraft.world.entity.EntityType.class, "NAUTILUS");
         public static final net.minecraft.world.entity.EntityType<Parched> PARCHED = ZReflectionTool.getStaticFieldValue(net.minecraft.world.entity.EntityType.class, "PARCHED");
         public static final net.minecraft.world.entity.EntityType<CamelHusk> CAMEL_HUSK = ZReflectionTool.getStaticFieldValue(net.minecraft.world.entity.EntityType.class, "CAMEL_HUSK");
     }
@@ -136,6 +178,14 @@ public final class Barched {
     }
 
     public static class Items {
+        public static final Item COPPER_NAUTILUS_ARMOR = ZReflectionTool.getStaticFieldValue(net.minecraft.world.item.Items.class, "COPPER_NAUTILUS_ARMOR");
+        public static final Item IRON_NAUTILUS_ARMOR = ZReflectionTool.getStaticFieldValue(net.minecraft.world.item.Items.class, "IRON_NAUTILUS_ARMOR");
+        public static final Item GOLDEN_NAUTILUS_ARMOR = ZReflectionTool.getStaticFieldValue(net.minecraft.world.item.Items.class, "GOLDEN_NAUTILUS_ARMOR");
+        public static final Item DIAMOND_NAUTILUS_ARMOR = ZReflectionTool.getStaticFieldValue(net.minecraft.world.item.Items.class, "DIAMOND_NAUTILUS_ARMOR");
+        public static final Item NETHERITE_NAUTILUS_ARMOR = ZReflectionTool.getStaticFieldValue(net.minecraft.world.item.Items.class, "NETHERITE_NAUTILUS_ARMOR");
+        public static final Item NAUTILUS_SPAWN_EGG = ZReflectionTool.getStaticFieldValue(net.minecraft.world.item.Items.class, "NAUTILUS_SPAWN_EGG");
+        public static final Item ZOMBIE_NAUTILUS_SPAWN_EGG = ZReflectionTool.getStaticFieldValue(net.minecraft.world.item.Items.class, "ZOMBIE_NAUTILUS_SPAWN_EGG");
+        public static final Item NETHERITE_HORSE_ARMOR = ZReflectionTool.getStaticFieldValue(net.minecraft.world.item.Items.class, "NETHERITE_HORSE_ARMOR");
         public static final Item PARCHED_SPAWN_EGG = ZReflectionTool.getStaticFieldValue(net.minecraft.world.item.Items.class, "PARCHED_SPAWN_EGG");
         public static final Item CAMEL_HUSK_SPAWN_EGG = ZReflectionTool.getStaticFieldValue(net.minecraft.world.item.Items.class, "CAMEL_HUSK_SPAWN_EGG");
         public static final Item WOODEN_SPEAR = ZReflectionTool.getStaticFieldValue(net.minecraft.world.item.Items.class, "WOODEN_SPEAR");
@@ -145,6 +195,11 @@ public final class Barched {
         public static final Item GOLDEN_SPEAR = ZReflectionTool.getStaticFieldValue(net.minecraft.world.item.Items.class, "GOLDEN_SPEAR");
         public static final Item DIAMOND_SPEAR = ZReflectionTool.getStaticFieldValue(net.minecraft.world.item.Items.class, "DIAMOND_SPEAR");
         public static final Item NETHERITE_SPEAR = ZReflectionTool.getStaticFieldValue(net.minecraft.world.item.Items.class, "NETHERITE_SPEAR");
+    }
+
+    public static class MobEffects {
+        public static final Holder<net.minecraft.world.effect.MobEffect> BREATH_OF_THE_NAUTILUS =
+                ZReflectionTool.getStaticFieldValue(net.minecraft.world.effect.MobEffects.class, "BREATH_OF_THE_NAUTILUS");
     }
 
     public static class Enchantments {
@@ -205,9 +260,24 @@ public final class Barched {
     public static class ItemTags {
         public static final TagKey<Item> CAMEL_HUSK_FOOD = ZReflectionTool.getStaticFieldValue(net.minecraft.tags.ItemTags.class, "CAMEL_HUSK_FOOD");
         public static final TagKey<Item> ZOMBIE_HORSE_FOOD = ZReflectionTool.getStaticFieldValue(net.minecraft.tags.ItemTags.class, "ZOMBIE_HORSE_FOOD");
+        public static final TagKey<Item> NAUTILUS_FOOD = ZReflectionTool.getStaticFieldValue(net.minecraft.tags.ItemTags.class, "NAUTILUS_FOOD");
+        public static final TagKey<Item> NAUTILUS_BUCKET_FOOD = ZReflectionTool.getStaticFieldValue(net.minecraft.tags.ItemTags.class, "NAUTILUS_BUCKET_FOOD");
+        public static final TagKey<Item> NAUTILUS_TAMING_ITEMS = ZReflectionTool.getStaticFieldValue(net.minecraft.tags.ItemTags.class, "NAUTILUS_TAMING_ITEMS");
+        public static final TagKey<Item> SKELETON_PREFERRED_WEAPONS = ZReflectionTool.getStaticFieldValue(net.minecraft.tags.ItemTags.class, "SKELETON_PREFERRED_WEAPONS");
+        public static final TagKey<Item> DROWNED_PREFERRED_WEAPONS = ZReflectionTool.getStaticFieldValue(net.minecraft.tags.ItemTags.class, "DROWNED_PREFERRED_WEAPONS");
+        public static final TagKey<Item> PIGLIN_PREFERRED_WEAPONS = ZReflectionTool.getStaticFieldValue(net.minecraft.tags.ItemTags.class, "PIGLIN_PREFERRED_WEAPONS");
+        public static final TagKey<Item> PILLAGER_PREFERRED_WEAPONS = ZReflectionTool.getStaticFieldValue(net.minecraft.tags.ItemTags.class, "PILLAGER_PREFERRED_WEAPONS");
+        public static final TagKey<Item> WITHER_SKELETON_DISLIKED_WEAPONS = ZReflectionTool.getStaticFieldValue(net.minecraft.tags.ItemTags.class, "WITHER_SKELETON_DISLIKED_WEAPONS");
         public static final TagKey<Item> SPEARS = ZReflectionTool.getStaticFieldValue(net.minecraft.tags.ItemTags.class, "SPEARS");
         public static final TagKey<Item> LUNGE_ENCHANTABLE = ZReflectionTool.getStaticFieldValue(net.minecraft.tags.ItemTags.class, "LUNGE_ENCHANTABLE");
         public static final TagKey<Item> MELEE_WEAPON_ENCHANTABLE = ZReflectionTool.getStaticFieldValue(net.minecraft.tags.ItemTags.class, "MELEE_WEAPON_ENCHANTABLE");
+        public static final TagKey<Item> WOODEN_TOOL_MATERIALS = TagKey.create(Registries.ITEM, ResourceLocation.withDefaultNamespace("wooden_tool_materials"));
+        public static final TagKey<Item> STONE_TOOL_MATERIALS = TagKey.create(Registries.ITEM, ResourceLocation.withDefaultNamespace("stone_tool_materials"));
+        public static final TagKey<Item> COPPER_TOOL_MATERIALS = TagKey.create(Registries.ITEM, ResourceLocation.withDefaultNamespace("copper_tool_materials"));
+        public static final TagKey<Item> IRON_TOOL_MATERIALS = TagKey.create(Registries.ITEM, ResourceLocation.withDefaultNamespace("iron_tool_materials"));
+        public static final TagKey<Item> GOLD_TOOL_MATERIALS = TagKey.create(Registries.ITEM, ResourceLocation.withDefaultNamespace("gold_tool_materials"));
+        public static final TagKey<Item> DIAMOND_TOOL_MATERIALS = TagKey.create(Registries.ITEM, ResourceLocation.withDefaultNamespace("diamond_tool_materials"));
+        public static final TagKey<Item> NETHERITE_TOOL_MATERIALS = TagKey.create(Registries.ITEM, ResourceLocation.withDefaultNamespace("netherite_tool_materials"));
     }
 
     public static class BlockTags {
@@ -227,6 +297,8 @@ public final class Barched {
     }
 
     public static class DataComponents {
+        public static final net.minecraft.core.component.DataComponentType<EitherHolder<zzik2.barched.nautilus.ZombieNautilusVariant>> ZOMBIE_NAUTILUS_VARIANT = ZReflectionTool.getStaticFieldValue(net.minecraft.core.component.DataComponents.class, "ZOMBIE_NAUTILUS_VARIANT");
+
         public static final net.minecraft.core.component.DataComponentType<UseEffects> USE_EFFECTS = ZReflectionTool.getStaticFieldValue(net.minecraft.core.component.DataComponents.class, "USE_EFFECTS");
 
         public static final net.minecraft.core.component.DataComponentType<EitherHolder<DamageType>> DAMAGE_TYPE = ZReflectionTool.getStaticFieldValue(net.minecraft.core.component.DataComponents.class, "DAMAGE_TYPE");
@@ -283,6 +355,8 @@ public final class Barched {
     }
 
     public static class MemoryModuleType {
+        public static final net.minecraft.world.entity.ai.memory.MemoryModuleType<Integer> ATTACK_TARGET_COOLDOWN = ZReflectionTool.getStaticFieldValue(net.minecraft.world.entity.ai.memory.MemoryModuleType.class, "ATTACK_TARGET_COOLDOWN");
+        public static final net.minecraft.world.entity.ai.memory.MemoryModuleType<Integer> CHARGE_COOLDOWN_TICKS = ZReflectionTool.getStaticFieldValue(net.minecraft.world.entity.ai.memory.MemoryModuleType.class, "CHARGE_COOLDOWN_TICKS");
         public static final net.minecraft.world.entity.ai.memory.MemoryModuleType<Integer> SPEAR_FLEEING_TIME = ZReflectionTool.getStaticFieldValue(net.minecraft.world.entity.ai.memory.MemoryModuleType.class, "SPEAR_FLEEING_TIME");
         public static final net.minecraft.world.entity.ai.memory.MemoryModuleType<Vec3> SPEAR_FLEEING_POSITION = ZReflectionTool.getStaticFieldValue(net.minecraft.world.entity.ai.memory.MemoryModuleType.class, "SPEAR_FLEEING_POSITION");
         public static final net.minecraft.world.entity.ai.memory.MemoryModuleType<Vec3> SPEAR_CHARGE_POSITION = ZReflectionTool.getStaticFieldValue(net.minecraft.world.entity.ai.memory.MemoryModuleType.class, "SPEAR_CHARGE_POSITION");

@@ -23,7 +23,9 @@ public class ParrotMixin {
 
     @Inject(method = "<clinit>", at = @At("TAIL"))
     private static void barched$addImitationSounds(CallbackInfo ci) {
+        MOB_SOUND_MAP.put(Barched.EntityType.ZOMBIE_NAUTILUS, Barched.SoundEvents.PARROT_IMITATE_ZOMBIE_NAUTILUS);
         MOB_SOUND_MAP.put(Barched.EntityType.PARCHED, Barched.SoundEvents.PARROT_IMITATE_PARCHED);
         MOB_SOUND_MAP.put(Barched.EntityType.CAMEL_HUSK, Barched.SoundEvents.PARROT_IMITATE_CAMEL_HUSK);
+        MOB_SOUND_MAP.put(EntityType.ZOMBIE_HORSE, Barched.SoundEvents.PARROT_IMITATE_ZOMBIE_HORSE);
     }
 }

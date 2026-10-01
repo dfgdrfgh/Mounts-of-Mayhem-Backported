@@ -546,6 +546,20 @@
         ]
       },
       "trigger": "minecraft:player_killed_entity"
+    },
+    "minecraft:zombie_nautilus": {
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "minecraft:zombie_nautilus"
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:player_killed_entity"
     }
   },
   "display": {
@@ -600,7 +614,8 @@
       "minecraft:zombie_villager",
       "minecraft:zombie",
       "minecraft:zombie_horse",
-      "minecraft:zombified_piglin"
+      "minecraft:zombified_piglin",
+      "minecraft:zombie_nautilus"
     ]
   ],
   "sends_telemetry_event": true
