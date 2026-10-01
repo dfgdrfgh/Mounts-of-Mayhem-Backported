@@ -1,4 +1,4 @@
-package zzik2.barched.bridge.entity;
+package zzik2.mombackport.bridge.entity;
 
 import net.minecraft.world.entity.EquipmentSlot;
 

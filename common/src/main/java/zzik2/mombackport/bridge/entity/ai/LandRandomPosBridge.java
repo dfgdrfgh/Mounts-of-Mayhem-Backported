@@ -1,4 +1,4 @@
-package zzik2.barched.bridge.entity.ai;
+package zzik2.mombackport.bridge.entity.ai;
 
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.phys.Vec3;

@@ -1,4 +1,4 @@
-package zzik2.barched.bridge.item;
+package zzik2.mombackport.bridge.item;
 
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;

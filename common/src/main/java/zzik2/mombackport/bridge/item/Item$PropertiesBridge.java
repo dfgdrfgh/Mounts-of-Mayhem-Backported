@@ -1,4 +1,4 @@
-package zzik2.barched.bridge.item;
+package zzik2.mombackport.bridge.item;
 
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Tier;
