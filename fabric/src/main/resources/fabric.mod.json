@@ -11,7 +11,7 @@
     "homepage": ""
   },
   "license": "MIT",
-  "icon": "assets/mombackport/icon.png",
+  "icon": "assets/barched/icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [
