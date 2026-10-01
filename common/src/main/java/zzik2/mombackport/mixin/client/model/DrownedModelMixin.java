@@ -1,4 +1,4 @@
-package zzik2.barched.mixin.client.model;
+package zzik2.mombackport.mixin.client.model;
 
 import net.minecraft.client.model.DrownedModel;
 import net.minecraft.client.model.ZombieModel;
@@ -9,8 +9,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
-import zzik2.barched.bridge.client.HumanoidModelBridge;
-import zzik2.barched.bridge.entity.LivingEntityBridge;
+import zzik2.mombackport.bridge.client.HumanoidModelBridge;
+import zzik2.mombackport.bridge.entity.LivingEntityBridge;
 
 @Mixin(DrownedModel.class)
 public abstract class DrownedModelMixin<T extends Zombie> extends ZombieModel<T> implements HumanoidModelBridge<T> {

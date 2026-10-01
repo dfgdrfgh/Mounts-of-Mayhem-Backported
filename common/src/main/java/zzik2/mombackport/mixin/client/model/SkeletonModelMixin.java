@@ -1,4 +1,4 @@
-package zzik2.barched.mixin.client.model;
+package zzik2.mombackport.mixin.client.model;
 
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.SkeletonModel;
@@ -9,7 +9,7 @@ import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.item.Items;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
-import zzik2.barched.bridge.client.HumanoidModelBridge;
+import zzik2.mombackport.bridge.client.HumanoidModelBridge;
 
 @Mixin(SkeletonModel.class)
 public abstract class SkeletonModelMixin<T extends Mob & RangedAttackMob> extends HumanoidModel<T> implements HumanoidModelBridge<T> {

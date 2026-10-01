@@ -1,4 +1,4 @@
-package zzik2.barched.mixin.client.model;
+package zzik2.mombackport.mixin.client.model;
 
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.effects.SpearAnimations;
@@ -15,11 +15,11 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import zzik2.barched.Barched;
-import zzik2.barched.BarchedClient;
-import zzik2.barched.bridge.client.HumanoidModelBridge;
-import zzik2.barched.bridge.entity.LivingEntityBridge;
-import zzik2.barched.bridge.item.ItemStackBridge;
+import zzik2.mombackport.MomBackport;
+import zzik2.mombackport.MomBackportClient;
+import zzik2.mombackport.bridge.client.HumanoidModelBridge;
+import zzik2.mombackport.bridge.entity.LivingEntityBridge;
+import zzik2.mombackport.bridge.item.ItemStackBridge;
 
 @Mixin(HumanoidModel.class)
 public abstract class HumanoidModelMixin<T extends LivingEntity> implements HumanoidModelBridge<T> {
@@ -35,21 +35,21 @@ public abstract class HumanoidModelMixin<T extends LivingEntity> implements Huma
     @Shadow @Final public ModelPart leftArm;
 
     @Inject(method = "prepareMobModel(Lnet/minecraft/world/entity/LivingEntity;FFF)V", at = @At("HEAD"))
-    private void barched$prepareMobModel(T livingEntity, float f, float g, float h, CallbackInfo ci) {
-        this.rightArmPose = barched$updateArmPose(livingEntity, HumanoidArm.RIGHT, this.rightArmPose);
-        this.leftArmPose = barched$updateArmPose(livingEntity, HumanoidArm.LEFT, this.leftArmPose);
+    private void mombackport$prepareMobModel(T livingEntity, float f, float g, float h, CallbackInfo ci) {
+        this.rightArmPose = mombackport$updateArmPose(livingEntity, HumanoidArm.RIGHT, this.rightArmPose);
+        this.leftArmPose = mombackport$updateArmPose(livingEntity, HumanoidArm.LEFT, this.leftArmPose);
     }
 
     @Unique
-    private HumanoidModel.ArmPose barched$updateArmPose(T livingEntity, HumanoidArm humanoidArm, HumanoidModel.ArmPose currentArmPose) {
+    private HumanoidModel.ArmPose mombackport$updateArmPose(T livingEntity, HumanoidArm humanoidArm, HumanoidModel.ArmPose currentArmPose) {
         HumanoidModel.ArmPose pose = getArmPose(livingEntity, humanoidArm, getArmPoseFallback());
         if (pose != null) return pose;
-        if (currentArmPose == BarchedClient.ArmPose.SPEAR) return HumanoidModel.ArmPose.EMPTY;
+        if (currentArmPose == MomBackportClient.ArmPose.SPEAR) return HumanoidModel.ArmPose.EMPTY;
         return currentArmPose != null ? currentArmPose : HumanoidModel.ArmPose.EMPTY;
     }
 
     @Inject(method = "setupAttackAnimation", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/Mth;sin(F)F", ordinal = 4, shift = At.Shift.AFTER), cancellable = true)
-    private void barched$setupAttackAnimation(T livingEntity, float f, CallbackInfo ci) {
+    private void mombackport$setupAttackAnimation(T livingEntity, float f, CallbackInfo ci) {
         ItemStack itemStack = livingEntity.getMainHandItem();
         if (((ItemStackBridge) (Object) itemStack).getSwingAnimation().type() == SwingAnimationType.STAB) {
             SpearAnimations.thirdPersonAttackHand((HumanoidModel) (Object) this, livingEntity);
@@ -58,29 +58,29 @@ public abstract class HumanoidModelMixin<T extends LivingEntity> implements Huma
     }
 
     @Inject(method = "poseRightArm", at = @At("HEAD"), cancellable = true)
-    private void barched$poseRightArm(T livingEntity, CallbackInfo ci) {
-        if (this.rightArmPose == BarchedClient.ArmPose.SPEAR) {
-            SpearAnimations.thirdPersonHandUse(this.rightArm, this.head, true, ((LivingEntityBridge) livingEntity).barched$getUseItemStackForArm(HumanoidArm.RIGHT), livingEntity);
+    private void mombackport$poseRightArm(T livingEntity, CallbackInfo ci) {
+        if (this.rightArmPose == MomBackportClient.ArmPose.SPEAR) {
+            SpearAnimations.thirdPersonHandUse(this.rightArm, this.head, true, ((LivingEntityBridge) livingEntity).mombackport$getUseItemStackForArm(HumanoidArm.RIGHT), livingEntity);
             ci.cancel();
         }
     }
 
     @Inject(method = "poseLeftArm", at = @At("HEAD"), cancellable = true)
-    private void barched$poseLeftArm(T livingEntity, CallbackInfo ci) {
-        if (this.leftArmPose == BarchedClient.ArmPose.SPEAR) {
-            SpearAnimations.thirdPersonHandUse(this.leftArm, this.head, false, ((LivingEntityBridge) livingEntity).barched$getUseItemStackForArm(HumanoidArm.LEFT), livingEntity);
+    private void mombackport$poseLeftArm(T livingEntity, CallbackInfo ci) {
+        if (this.leftArmPose == MomBackportClient.ArmPose.SPEAR) {
+            SpearAnimations.thirdPersonHandUse(this.leftArm, this.head, false, ((LivingEntityBridge) livingEntity).mombackport$getUseItemStackForArm(HumanoidArm.LEFT), livingEntity);
             ci.cancel();
         }
     }
 
     @Override
     public HumanoidModel.ArmPose super$getArmPose(T livingEntity, HumanoidArm humanoidArm, HumanoidModel.ArmPose fallback) {
-        return barched$getArmPose(livingEntity, humanoidArm, fallback);
+        return mombackport$getArmPose(livingEntity, humanoidArm, fallback);
     }
 
     @Override
     public HumanoidModel.ArmPose getArmPose(T livingEntity, HumanoidArm humanoidArm, HumanoidModel.ArmPose fallback) {
-        return barched$getArmPose(livingEntity, humanoidArm, fallback);
+        return mombackport$getArmPose(livingEntity, humanoidArm, fallback);
     }
 
     @Override
@@ -89,13 +89,13 @@ public abstract class HumanoidModelMixin<T extends LivingEntity> implements Huma
     }
 
     @Unique
-    public HumanoidModel.ArmPose barched$getArmPose(T livingEntity, HumanoidArm humanoidArm, HumanoidModel.ArmPose fallback) {
+    public HumanoidModel.ArmPose mombackport$getArmPose(T livingEntity, HumanoidArm humanoidArm, HumanoidModel.ArmPose fallback) {
         ItemStack itemStack = ((LivingEntityBridge) livingEntity).getItemHeldByArm(humanoidArm);
-        SwingAnimation swingAnimation = (SwingAnimation)itemStack.get(Barched.DataComponents.SWING_ANIMATION);
+        SwingAnimation swingAnimation = (SwingAnimation)itemStack.get(MomBackport.DataComponents.SWING_ANIMATION);
         if (swingAnimation != null && swingAnimation.type() == SwingAnimationType.STAB && livingEntity.swinging) {
-            return BarchedClient.ArmPose.SPEAR;
+            return MomBackportClient.ArmPose.SPEAR;
         } else {
-            return itemStack.is(Barched.ItemTags.SPEARS) ? BarchedClient.ArmPose.SPEAR : fallback;
+            return itemStack.is(MomBackport.ItemTags.SPEARS) ? MomBackportClient.ArmPose.SPEAR : fallback;
         }
     }
 }

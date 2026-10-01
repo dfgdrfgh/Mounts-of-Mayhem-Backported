@@ -1,4 +1,4 @@
-package zzik2.barched.mixin.client;
+package zzik2.mombackport.mixin.client;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.client.Minecraft;
@@ -9,8 +9,8 @@ import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import zzik2.barched.Barched;
-import zzik2.barched.bridge.entity.PlayerBridge;
+import zzik2.mombackport.MomBackport;
+import zzik2.mombackport.bridge.entity.PlayerBridge;
 
 @Mixin(Gui.class)
 public class GuiMixin {
@@ -18,7 +18,7 @@ public class GuiMixin {
     @Shadow @Final private Minecraft minecraft;
 
     @ModifyExpressionValue(method = "renderCrosshair", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;isAlive()Z", ordinal = 0))
-    private boolean barched$renderCrossHair(boolean original) {
+    private boolean mombackport$renderCrossHair(boolean original) {
         if (!original) {
             return false;
         }
@@ -32,7 +32,7 @@ public class GuiMixin {
             return true;
         }
 
-        AttackRange attackRange = ((PlayerBridge) this.minecraft.player).getActiveItem().get(Barched.DataComponents.ATTACK_RANGE);
+        AttackRange attackRange = ((PlayerBridge) this.minecraft.player).getActiveItem().get(MomBackport.DataComponents.ATTACK_RANGE);
         return attackRange == null || attackRange.isInRange(this.minecraft.player, hit.getLocation());
     }
 }

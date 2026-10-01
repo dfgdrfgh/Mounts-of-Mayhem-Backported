@@ -1,4 +1,4 @@
-package zzik2.barched.mixin.client;
+package zzik2.mombackport.mixin.client;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.client.Minecraft;
@@ -21,9 +21,9 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import zzik2.barched.Barched;
-import zzik2.barched.bridge.client.MultiPlayerGameModeBridge;
-import zzik2.barched.bridge.entity.PlayerBridge;
+import zzik2.mombackport.MomBackport;
+import zzik2.mombackport.bridge.client.MultiPlayerGameModeBridge;
+import zzik2.mombackport.bridge.entity.PlayerBridge;
 
 @Mixin(Minecraft.class)
 public class MinecraftMixin {
@@ -39,13 +39,13 @@ public class MinecraftMixin {
     @Shadow protected int missTime;
 
     @Inject(method = "startAttack", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;getItemInHand(Lnet/minecraft/world/InteractionHand;)Lnet/minecraft/world/item/ItemStack;"), cancellable = true)
-    private void barched$startAttack(CallbackInfoReturnable<Boolean> cir) {
+    private void mombackport$startAttack(CallbackInfoReturnable<Boolean> cir) {
         ItemStack itemStack = this.player.getItemInHand(InteractionHand.MAIN_HAND);
         if (itemStack.isItemEnabled(this.level.enabledFeatures())) {
             if (((PlayerBridge) this.player).cannotAttackWithItem(itemStack, 0)) {
                 cir.setReturnValue(false);
             } else {
-                PiercingWeapon piercingWeapon = (PiercingWeapon)itemStack.get(Barched.DataComponents.PIERCING_WEAPON);
+                PiercingWeapon piercingWeapon = (PiercingWeapon)itemStack.get(MomBackport.DataComponents.PIERCING_WEAPON);
                 if (piercingWeapon != null && !(this.gameMode.getPlayerMode() == GameType.SPECTATOR)) {
                     ((MultiPlayerGameModeBridge) this.gameMode).piercingAttack(piercingWeapon);
                     this.player.swing(InteractionHand.MAIN_HAND);
@@ -56,23 +56,23 @@ public class MinecraftMixin {
     }
 
     @Redirect(method = "startAttack", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/MultiPlayerGameMode;attack(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/entity/Entity;)V"))
-    private void barched$attack(MultiPlayerGameMode instance, Player arg, Entity arg2) {
+    private void mombackport$attack(MultiPlayerGameMode instance, Player arg, Entity arg2) {
         ItemStack itemStack = this.player.getItemInHand(InteractionHand.MAIN_HAND);
-        AttackRange attackRange = (AttackRange)itemStack.get(Barched.DataComponents.ATTACK_RANGE);
+        AttackRange attackRange = (AttackRange)itemStack.get(MomBackport.DataComponents.ATTACK_RANGE);
         if (attackRange == null || attackRange.isInRange(this.player, this.hitResult.getLocation())) {
             this.gameMode.attack(this.player, ((EntityHitResult)this.hitResult).getEntity());
         }
     }
 
     @Redirect(method = "startAttack", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;swing(Lnet/minecraft/world/InteractionHand;)V"))
-    private void barched$swing(LocalPlayer instance, InteractionHand interactionHand) {
+    private void mombackport$swing(LocalPlayer instance, InteractionHand interactionHand) {
         if (!instance.isSpectator()) {
             instance.swing(interactionHand);
         }
     }
 
     @ModifyExpressionValue(method = "continueAttack", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;isUsingItem()Z"))
-    private boolean barched$continueAttack(boolean original) {
-        return original || this.player.getItemInHand(InteractionHand.MAIN_HAND).has(Barched.DataComponents.PIERCING_WEAPON);
+    private boolean mombackport$continueAttack(boolean original) {
+        return original || this.player.getItemInHand(InteractionHand.MAIN_HAND).has(MomBackport.DataComponents.PIERCING_WEAPON);
     }
 }
