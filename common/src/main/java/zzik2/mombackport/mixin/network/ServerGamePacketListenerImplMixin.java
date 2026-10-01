@@ -1,4 +1,4 @@
-package zzik2.barched.mixin.network;
+package zzik2.mombackport.mixin.network;
 
 import net.minecraft.network.protocol.game.ServerboundPlayerActionPacket;
 import net.minecraft.server.level.ServerPlayer;
@@ -12,8 +12,8 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import zzik2.barched.Barched;
-import zzik2.barched.bridge.entity.PlayerBridge;
+import zzik2.mombackport.MomBackport;
+import zzik2.mombackport.bridge.entity.PlayerBridge;
 
 @Mixin(ServerGamePacketListenerImpl.class)
 public class ServerGamePacketListenerImplMixin {
@@ -21,7 +21,7 @@ public class ServerGamePacketListenerImplMixin {
     @Shadow public ServerPlayer player;
 
     @Inject(method = "handlePlayerAction", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/level/ServerPlayer;resetLastActionTime()V", shift = At.Shift.AFTER), cancellable = true)
-    private void barched$handlePlayerAction(ServerboundPlayerActionPacket serverboundPlayerActionPacket, CallbackInfo ci) {
+    private void mombackport$handlePlayerAction(ServerboundPlayerActionPacket serverboundPlayerActionPacket, CallbackInfo ci) {
         ServerboundPlayerActionPacket.Action action = serverboundPlayerActionPacket.getAction();
         if (action.name().equals("STAB")) {
             if (this.player.isSpectator()) {
@@ -34,7 +34,7 @@ public class ServerGamePacketListenerImplMixin {
                     return;
                 }
 
-                PiercingWeapon piercingWeapon = (PiercingWeapon)itemStack.get(Barched.DataComponents.PIERCING_WEAPON);
+                PiercingWeapon piercingWeapon = (PiercingWeapon)itemStack.get(MomBackport.DataComponents.PIERCING_WEAPON);
                 if (piercingWeapon != null) {
                     piercingWeapon.attack(this.player, EquipmentSlot.MAINHAND);
                 }

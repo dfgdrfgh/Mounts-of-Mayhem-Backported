@@ -1,4 +1,4 @@
-package zzik2.barched.mixin.util.datafix;
+package zzik2.mombackport.mixin.util.datafix;
 
 import com.mojang.datafixers.DataFixerBuilder;
 import com.mojang.datafixers.schemas.Schema;
@@ -22,7 +22,7 @@ public class DataFixersMixin {
     @Shadow @Final private static BiFunction<Integer, Schema, Schema> SAME_NAMESPACED;
 
     @Inject(method = "addFixers", at = @At("TAIL"))
-    private static void barched$addFixers(DataFixerBuilder dataFixerBuilder, CallbackInfo ci) {
+    private static void mombackport$addFixers(DataFixerBuilder dataFixerBuilder, CallbackInfo ci) {
         Schema schema281 = dataFixerBuilder.addSchema(3955, SAME_NAMESPACED); //4649 -> 3955
         dataFixerBuilder.addFixer(new TridentAnimationFix(schema281));
 

@@ -1,4 +1,4 @@
-package zzik2.barched.mixin.phys;
+package zzik2.mombackport.mixin.phys;
 
 import net.minecraft.core.Position;
 import net.minecraft.util.Mth;
@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
-import zzik2.barched.bridge.Vec3Bridge;
+import zzik2.mombackport.bridge.Vec3Bridge;
 import zzik2.zreflex.mixin.ModifyAccess;
 
 @Mixin(Vec3.class)

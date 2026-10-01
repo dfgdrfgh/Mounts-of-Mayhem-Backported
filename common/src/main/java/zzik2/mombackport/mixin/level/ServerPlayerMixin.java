@@ -1,4 +1,4 @@
-package zzik2.barched.mixin.level;
+package zzik2.mombackport.mixin.level;
 
 import com.mojang.authlib.GameProfile;
 import net.minecraft.core.BlockPos;
@@ -9,8 +9,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import zzik2.barched.bridge.entity.EntityBridge;
-import zzik2.barched.bridge.entity.PlayerBridge;
+import zzik2.mombackport.bridge.entity.EntityBridge;
+import zzik2.mombackport.bridge.entity.PlayerBridge;
 
 @Mixin(ServerPlayer.class)
 public abstract class ServerPlayerMixin extends Player implements PlayerBridge {

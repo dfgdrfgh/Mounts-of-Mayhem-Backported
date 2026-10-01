@@ -1,4 +1,4 @@
-package zzik2.barched.mixin.tags;
+package zzik2.mombackport.mixin.tags;
 
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
