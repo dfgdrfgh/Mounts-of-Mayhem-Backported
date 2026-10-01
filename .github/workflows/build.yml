@@ -64,6 +64,18 @@ jobs:
       - name: Smoke test Fabric client startup
         run: python3 .github/scripts/smoke_client.py
 
+      - name: Upload client smoke diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          name: MoMBackport-client-smoke-diagnostics
+          path: |
+            fabric/build/client-smoke.log
+            fabric/run/crash-reports/**
+            fabric/run/logs/**
+          if-no-files-found: warn
+          archive: true
+
       - name: Upload Fabric JARs
         if: always()
         uses: actions/upload-artifact@v7.0.1
