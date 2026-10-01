@@ -11,9 +11,9 @@ import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.item.component.KineticWeapon;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
-import zzik2.barched.Barched;
-import zzik2.barched.bridge.entity.MobBridge;
-import zzik2.barched.bridge.entity.ai.LandRandomPosBridge;
+import zzik2.mombackport.MomBackport;
+import zzik2.mombackport.bridge.entity.MobBridge;
+import zzik2.mombackport.bridge.entity.ai.LandRandomPosBridge;
 
 import java.util.Map;
 import java.util.Optional;
@@ -28,7 +28,7 @@ public class SpearAttack extends Behavior<PathfinderMob> implements LandRandomPo
    float targetInRangeRadiusSq;
 
    public SpearAttack(double d, double e, float f, float g) {
-      super(Map.of(Barched.MemoryModuleType.SPEAR_STATUS, MemoryStatus.VALUE_PRESENT));
+      super(Map.of(MomBackport.MemoryModuleType.SPEAR_STATUS, MemoryStatus.VALUE_PRESENT));
       this.speedModifierWhenCharging = d;
       this.speedModifierWhenRepositioning = e;
       this.approachDistanceSq = f * f;
@@ -41,27 +41,27 @@ public class SpearAttack extends Behavior<PathfinderMob> implements LandRandomPo
    }
 
    private boolean ableToAttack(PathfinderMob pathfinderMob) {
-      return this.getTarget(pathfinderMob) != null && pathfinderMob.getMainHandItem().has(Barched.DataComponents.KINETIC_WEAPON);
+      return this.getTarget(pathfinderMob) != null && pathfinderMob.getMainHandItem().has(MomBackport.DataComponents.KINETIC_WEAPON);
    }
 
    private int getKineticWeaponUseDuration(PathfinderMob pathfinderMob) {
-      return (Integer) Optional.ofNullable((KineticWeapon)pathfinderMob.getMainHandItem().get(Barched.DataComponents.KINETIC_WEAPON)).map(KineticWeapon::computeDamageUseDuration).orElse(0);
+      return (Integer) Optional.ofNullable((KineticWeapon)pathfinderMob.getMainHandItem().get(MomBackport.DataComponents.KINETIC_WEAPON)).map(KineticWeapon::computeDamageUseDuration).orElse(0);
    }
 
    protected boolean checkExtraStartConditions(ServerLevel serverLevel, PathfinderMob pathfinderMob) {
-      return pathfinderMob.getBrain().getMemory(Barched.MemoryModuleType.SPEAR_STATUS).orElse(SpearAttack.SpearStatus.APPROACH) == SpearAttack.SpearStatus.CHARGING && this.ableToAttack(pathfinderMob) && !pathfinderMob.isUsingItem();
+      return pathfinderMob.getBrain().getMemory(MomBackport.MemoryModuleType.SPEAR_STATUS).orElse(SpearAttack.SpearStatus.APPROACH) == SpearAttack.SpearStatus.CHARGING && this.ableToAttack(pathfinderMob) && !pathfinderMob.isUsingItem();
    }
 
    protected void start(ServerLevel serverLevel, PathfinderMob pathfinderMob, long l) {
       pathfinderMob.setAggressive(true);
-      pathfinderMob.getBrain().setMemory(Barched.MemoryModuleType.SPEAR_ENGAGE_TIME, this.getKineticWeaponUseDuration(pathfinderMob));
-      pathfinderMob.getBrain().eraseMemory(Barched.MemoryModuleType.SPEAR_CHARGE_POSITION);
+      pathfinderMob.getBrain().setMemory(MomBackport.MemoryModuleType.SPEAR_ENGAGE_TIME, this.getKineticWeaponUseDuration(pathfinderMob));
+      pathfinderMob.getBrain().eraseMemory(MomBackport.MemoryModuleType.SPEAR_CHARGE_POSITION);
       pathfinderMob.startUsingItem(InteractionHand.MAIN_HAND);
       super.start(serverLevel, pathfinderMob, l);
    }
 
    protected boolean canStillUse(ServerLevel serverLevel, PathfinderMob pathfinderMob, long l) {
-      return (Integer)pathfinderMob.getBrain().getMemory(Barched.MemoryModuleType.SPEAR_ENGAGE_TIME).orElse(0) > 0 && this.ableToAttack(pathfinderMob);
+      return (Integer)pathfinderMob.getBrain().getMemory(MomBackport.MemoryModuleType.SPEAR_ENGAGE_TIME).orElse(0) > 0 && this.ableToAttack(pathfinderMob);
    }
 
    protected void tick(ServerLevel serverLevel, PathfinderMob pathfinderMob, long l) {
@@ -76,19 +76,19 @@ public class SpearAttack extends Behavior<PathfinderMob> implements LandRandomPo
 
       int i = pathfinderMob.isPassenger() ? 2 : 0;
       pathfinderMob.getBrain().setMemory(MemoryModuleType.LOOK_TARGET, (new EntityTracker(livingEntity, true)));
-      pathfinderMob.getBrain().setMemory(Barched.MemoryModuleType.SPEAR_ENGAGE_TIME, (pathfinderMob.getBrain().getMemory(Barched.MemoryModuleType.SPEAR_ENGAGE_TIME).orElse(0) - 1));
-      Vec3 vec3 = (Vec3)pathfinderMob.getBrain().getMemory(Barched.MemoryModuleType.SPEAR_CHARGE_POSITION).orElse(null);
+      pathfinderMob.getBrain().setMemory(MomBackport.MemoryModuleType.SPEAR_ENGAGE_TIME, (pathfinderMob.getBrain().getMemory(MomBackport.MemoryModuleType.SPEAR_ENGAGE_TIME).orElse(0) - 1));
+      Vec3 vec3 = (Vec3)pathfinderMob.getBrain().getMemory(MomBackport.MemoryModuleType.SPEAR_CHARGE_POSITION).orElse(null);
       if (vec3 != null) {
          pathfinderMob.getNavigation().moveTo(vec3.x, vec3.y, vec3.z, (double)f * this.speedModifierWhenRepositioning);
          if (pathfinderMob.getNavigation().isDone()) {
-            pathfinderMob.getBrain().eraseMemory(Barched.MemoryModuleType.SPEAR_CHARGE_POSITION);
+            pathfinderMob.getBrain().eraseMemory(MomBackport.MemoryModuleType.SPEAR_CHARGE_POSITION);
          }
       } else {
          pathfinderMob.getNavigation().moveTo((Entity)livingEntity, (double)f * this.speedModifierWhenCharging);
          if (d < (double)this.targetInRangeRadiusSq || pathfinderMob.getNavigation().isDone()) {
             double e = Math.sqrt(d);
             Vec3 vec32 = this.getPosAway0(pathfinderMob, (double)(6 + i) - e, (double)(7 + i) - e, 7, livingEntity.position());
-            pathfinderMob.getBrain().setMemory(Barched.MemoryModuleType.SPEAR_CHARGE_POSITION, vec32);
+            pathfinderMob.getBrain().setMemory(MomBackport.MemoryModuleType.SPEAR_CHARGE_POSITION, vec32);
          }
       }
 
@@ -97,9 +97,9 @@ public class SpearAttack extends Behavior<PathfinderMob> implements LandRandomPo
    protected void stop(ServerLevel serverLevel, PathfinderMob pathfinderMob, long l) {
       pathfinderMob.getNavigation().stop();
       pathfinderMob.stopUsingItem();
-      pathfinderMob.getBrain().eraseMemory(Barched.MemoryModuleType.SPEAR_CHARGE_POSITION);
-      pathfinderMob.getBrain().eraseMemory(Barched.MemoryModuleType.SPEAR_ENGAGE_TIME);
-      pathfinderMob.getBrain().setMemory(Barched.MemoryModuleType.SPEAR_STATUS, SpearAttack.SpearStatus.RETREAT);
+      pathfinderMob.getBrain().eraseMemory(MomBackport.MemoryModuleType.SPEAR_CHARGE_POSITION);
+      pathfinderMob.getBrain().eraseMemory(MomBackport.MemoryModuleType.SPEAR_ENGAGE_TIME);
+      pathfinderMob.getBrain().setMemory(MomBackport.MemoryModuleType.SPEAR_STATUS, SpearAttack.SpearStatus.RETREAT);
    }
 
    protected boolean timedOut(long l) {
