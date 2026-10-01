@@ -88,7 +88,7 @@ public class NautilusEquipmentSyncTest {
         when(level.isClientSide()).thenReturn(client);
         doReturn(level).when(nautilus).level();
         doNothing().when(nautilus).onEquipItem(any(), any(), any());
-        doNothing().when(nautilus).onSyncedDataUpdated(any());
+        doNothing().when(nautilus).onSyncedDataUpdated(any(EntityDataAccessor.class));
         doNothing().when(nautilus).barched$onSaddleEquipItem(any(), any());
         doNothing().when(nautilus).setDropChance(any(), anyFloat());
         setField(Mob.class, "bodyArmorItem", nautilus, ItemStack.EMPTY);
