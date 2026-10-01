@@ -10,6 +10,7 @@
     "client.GuiMixin",
     "client.HumanoidModel$ArmPoseMixin",
     "client.MinecraftMixin",
+    "client.color.item.ItemColorsMixin",
     "client.model.AbstractZombieModelMixin",
     "client.model.DrownedModelMixin",
     "client.model.HumanoidModelMixin",
