@@ -1,9 +1,9 @@
-package zzik2.barched.mixin;
+package zzik2.mombackport.mixin;
 
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EquipmentSlot;
 import org.spongepowered.asm.mixin.Mixin;
-import zzik2.barched.bridge.InteractionHandBridge;
+import zzik2.mombackport.bridge.InteractionHandBridge;
 
 import static net.minecraft.world.InteractionHand.MAIN_HAND;
 

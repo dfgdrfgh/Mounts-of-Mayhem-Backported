@@ -1,4 +1,4 @@
-package zzik2.barched.mixin.accessor;
+package zzik2.mombackport.mixin.accessor;
 
 import net.minecraft.world.entity.LivingEntity;
 import org.spongepowered.asm.mixin.Mixin;

@@ -1,10 +1,10 @@
-package zzik2.barched.mixin;
+package zzik2.mombackport.mixin;
 
 import zzik2.zreflex.mixin.ModifyAccessTransformer;
 
-public final class BarchedMixinPlugin extends ModifyAccessTransformer {
+public final class MomBackportMixinPlugin extends ModifyAccessTransformer {
 
-    private static final String COMPAT_MIXIN_PACKAGE = BarchedMixinPlugin.class.getPackageName() + ".compat.";
+    private static final String COMPAT_MIXIN_PACKAGE = MomBackportMixinPlugin.class.getPackageName() + ".compat.";
 
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
@@ -13,6 +13,6 @@ public final class BarchedMixinPlugin extends ModifyAccessTransformer {
 
     private static boolean isClassPresent(String className) {
         String resourceName = className.replace('.', '/') + ".class";
-        return BarchedMixinPlugin.class.getClassLoader().getResource(resourceName) != null;
+        return MomBackportMixinPlugin.class.getClassLoader().getResource(resourceName) != null;
     }
 }

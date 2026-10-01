@@ -1,4 +1,4 @@
-package zzik2.barched.mixin.accessor.client;
+package zzik2.mombackport.mixin.accessor.client;
 
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.world.entity.Entity;

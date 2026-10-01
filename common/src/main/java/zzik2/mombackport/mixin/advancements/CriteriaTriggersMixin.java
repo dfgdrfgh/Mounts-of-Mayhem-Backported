@@ -1,4 +1,4 @@
-package zzik2.barched.mixin.advancements;
+package zzik2.mombackport.mixin.advancements;
 
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.advancements.CriterionTrigger;
@@ -23,6 +23,6 @@ public abstract class CriteriaTriggersMixin {
     private static final SpearMobsTrigger SPEAR_MOBS_TRIGGER = register("spear_mobs", new SpearMobsTrigger());
 
     @Inject(method = "<clinit>", at = @At("TAIL"))
-    private static void barched$clinit(CallbackInfo ci) {
+    private static void mombackport$clinit(CallbackInfo ci) {
     }
 }

@@ -1,4 +1,4 @@
-package zzik2.barched.mixin.advancements.critereon;
+package zzik2.mombackport.mixin.advancements.critereon;
 
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import zzik2.barched.bridge.advancements.critereon.EntityFlagsPredicateBridge;
+import zzik2.mombackport.bridge.advancements.critereon.EntityFlagsPredicateBridge;
 import zzik2.zreflex.mixin.ModifyAccess;
 
 import java.util.Optional;
@@ -27,12 +27,12 @@ public abstract class EntityFlagsPredicateMixin implements EntityFlagsPredicateB
     @Shadow
     public static Codec<EntityFlagsPredicate> CODEC;
 
-    @Unique private Optional<Boolean> barched$isInWater = Optional.empty();
+    @Unique private Optional<Boolean> mombackport$isInWater = Optional.empty();
 
-    @Unique private Optional<Boolean> barched$isFallFlying = Optional.empty();
+    @Unique private Optional<Boolean> mombackport$isFallFlying = Optional.empty();
 
     @Inject(method = "<clinit>", at = @At("TAIL"))
-    private static void barched$extendCodec(CallbackInfo ci) {
+    private static void mombackport$extendCodec(CallbackInfo ci) {
         MapCodec<EntityFlagsPredicate> baseMap = ((MapCodec.MapCodecCodec<EntityFlagsPredicate>) CODEC).codec();
 
         MapCodec<Pair<Optional<Boolean>, Optional<Boolean>>> extrasMap = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -45,13 +45,13 @@ public abstract class EntityFlagsPredicateMixin implements EntityFlagsPredicateB
                     EntityFlagsPredicate predicate = pair.getFirst();
                     Pair<Optional<Boolean>, Optional<Boolean>> extras = pair.getSecond();
                     EntityFlagsPredicateBridge bridge = (EntityFlagsPredicateBridge) (Object) predicate;
-                    bridge.barched$setIsInWater(extras.getFirst());
-                    bridge.barched$setIsFallFlying(extras.getSecond());
+                    bridge.mombackport$setIsInWater(extras.getFirst());
+                    bridge.mombackport$setIsFallFlying(extras.getSecond());
                     return predicate;
                 },
                 predicate -> {
                     EntityFlagsPredicateBridge bridge = (EntityFlagsPredicateBridge) (Object) predicate;
-                    return Pair.of(predicate, Pair.of(bridge.barched$isInWater(), bridge.barched$isFallFlying()));
+                    return Pair.of(predicate, Pair.of(bridge.mombackport$isInWater(), bridge.mombackport$isFallFlying()));
                 }
         );
 
@@ -59,40 +59,40 @@ public abstract class EntityFlagsPredicateMixin implements EntityFlagsPredicateB
     }
 
     @Inject(method = "matches", at = @At("RETURN"), cancellable = true)
-    private void barched$matches(Entity entity, CallbackInfoReturnable<Boolean> cir) {
+    private void mombackport$matches(Entity entity, CallbackInfoReturnable<Boolean> cir) {
         if (!cir.getReturnValueZ()) {
             return;
         }
 
-        if (this.barched$isInWater.isPresent() && entity.isInWater() != this.barched$isInWater.get()) {
+        if (this.mombackport$isInWater.isPresent() && entity.isInWater() != this.mombackport$isInWater.get()) {
             cir.setReturnValue(false);
             return;
         }
 
-        if (this.barched$isFallFlying.isPresent() && entity instanceof LivingEntity livingEntity) {
-            if (livingEntity.isFallFlying() != this.barched$isFallFlying.get()) {
+        if (this.mombackport$isFallFlying.isPresent() && entity instanceof LivingEntity livingEntity) {
+            if (livingEntity.isFallFlying() != this.mombackport$isFallFlying.get()) {
                 cir.setReturnValue(false);
             }
         }
     }
 
     @Override
-    public Optional<Boolean> barched$isInWater() {
-        return this.barched$isInWater;
+    public Optional<Boolean> mombackport$isInWater() {
+        return this.mombackport$isInWater;
     }
 
     @Override
-    public Optional<Boolean> barched$isFallFlying() {
-        return this.barched$isFallFlying;
+    public Optional<Boolean> mombackport$isFallFlying() {
+        return this.mombackport$isFallFlying;
     }
 
     @Override
-    public void barched$setIsInWater(Optional<Boolean> value) {
-        this.barched$isInWater = value;
+    public void mombackport$setIsInWater(Optional<Boolean> value) {
+        this.mombackport$isInWater = value;
     }
 
     @Override
-    public void barched$setIsFallFlying(Optional<Boolean> value) {
-        this.barched$isFallFlying = value;
+    public void mombackport$setIsFallFlying(Optional<Boolean> value) {
+        this.mombackport$isFallFlying = value;
     }
 }

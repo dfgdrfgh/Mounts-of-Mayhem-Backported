@@ -1,4 +1,4 @@
-package zzik2.barched.data;
+package zzik2.mombackport.data;
 
 import com.mojang.logging.LogUtils;
 import dev.architectury.registry.level.biome.BiomeModifications;
@@ -10,22 +10,22 @@ import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.MobSpawnSettings;
 import org.slf4j.Logger;
-import zzik2.barched.Barched;
-import zzik2.barched.BarchedConfig;
+import zzik2.mombackport.MomBackport;
+import zzik2.mombackport.MomBackportConfig;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
 
-public final class BarchedBiomeModifications {
+public final class MomBackportBiomeModifications {
 
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    private BarchedBiomeModifications() {}
+    private MomBackportBiomeModifications() {}
 
     public static void register() {
-        BarchedConfig config = Barched.getConfig();
+        MomBackportConfig config = MomBackport.getConfig();
         registerZombieHorseSpawn(
                 config.zombieHorseSpawnWeight,
                 config.zombieHorseSpawnBiomes
@@ -34,7 +34,7 @@ public final class BarchedBiomeModifications {
                 "parched",
                 config.parchedSpawnWeight,
                 config.parchedSpawnBiomes,
-                () -> Barched.EntityType.PARCHED,
+                () -> MomBackport.EntityType.PARCHED,
                 4,
                 4
         );

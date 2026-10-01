@@ -1,4 +1,4 @@
-package zzik2.barched.mixin.accessor.client;
+package zzik2.mombackport.mixin.accessor.client;
 
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
