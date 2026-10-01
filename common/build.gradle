@@ -8,6 +8,7 @@ tasks.withType(Test).configureEach {
 
 dependencies {
     testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.mockito:mockito-core:5.14.2'
 
     // We depend on Fabric Loader here to use the Fabric @Environment annotations,
     // which get remapped to the correct annotations on each platform.

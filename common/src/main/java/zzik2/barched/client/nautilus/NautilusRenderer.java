@@ -4,8 +4,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.model.animal.nautilus.*;
 import net.minecraft.client.model.monster.nautilus.ZombieNautilusCoralModel;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.entity.*;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -43,7 +41,12 @@ public class NautilusRenderer extends MobRenderer<AbstractNautilus, NautilusMode
         private void draw(NautilusModel model, ResourceLocation texture, ItemStack stack, PoseStack pose, MultiBufferSource buffers, int light, AbstractNautilus entity, float limbSwing, float limbAmount, float age, float yaw, float pitch) {
             this.getParentModel().copyPropertiesTo(model);
             model.setupAnim(entity, limbSwing, limbAmount, age, yaw, pitch);
-            model.renderToBuffer(pose, ItemRenderer.getArmorFoilBuffer(buffers, RenderType.armorCutoutNoCull(texture), stack.hasFoil()), light, OverlayTexture.NO_OVERLAY, -1);
+            model.renderToBuffer(pose, buffers.getBuffer(NautilusEquipmentRenderType.armor(texture)), light, OverlayTexture.NO_OVERLAY, -1);
+            // Custom types use the shared buffer, so finish armor vertices before
+            // requesting glint instead of retaining two consumers into one buffer.
+            if (stack.hasFoil()) {
+                model.renderToBuffer(pose, buffers.getBuffer(NautilusEquipmentRenderType.glint()), light, OverlayTexture.NO_OVERLAY, -1);
+            }
         }
     }
 }

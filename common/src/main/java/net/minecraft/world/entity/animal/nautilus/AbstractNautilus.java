@@ -602,6 +602,11 @@ PlayerRideableJumping, Saddleable, ContainerListener, SaddleItemBridge {
 
     @Override
     public void containerChanged(Container container) {
+        // Only the server inventory owns equipment. On the client, the menu has
+        // a separate container and saddle/armor arrive in independent packets.
+        // Publishing this local inventory would erase the synchronized saddle
+        // when an armor packet arrives, which also disables rider control.
+        if (this.level().isClientSide()) return;
         // 1.21.1 has no saddle equipment slot. Synchronize the stack as well
         // as its presence so clients can render components such as glint, and
         // reproduce the native SADDLE slot's LivingEntity.onEquipItem callback.
@@ -617,11 +622,9 @@ PlayerRideableJumping, Saddleable, ContainerListener, SaddleItemBridge {
 
     @Override
     public void setItemSlot(EquipmentSlot slot, ItemStack stack) {
-        ItemStack previous = slot == EquipmentSlot.BODY ? this.getItemBySlot(slot) : ItemStack.EMPTY;
         super.setItemSlot(slot, stack);
         if (slot == EquipmentSlot.BODY) {
-            this.onEquipItem(slot, previous, stack);
-            if (this.inventory != null) {
+            if (!this.level().isClientSide() && this.inventory != null) {
                 if (!stack.isEmpty()) this.setDropChance(EquipmentSlot.BODY, 2.0F);
                 if (this.inventory.getItem(1) != stack) this.inventory.setItem(1, stack);
             }
@@ -647,8 +650,17 @@ PlayerRideableJumping, Saddleable, ContainerListener, SaddleItemBridge {
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
-        this.inventory.setItem(0, ItemStack.parseOptional(this.registryAccess(), tag.getCompound("SaddleItem")));
-        this.inventory.setItem(1, this.getBodyArmorItem());
+        // Mob loads BODY directly, before our container is populated. Restore
+        // both slots together so loading the saddle cannot overwrite that armor
+        // with the still-empty inventory armor slot through containerChanged.
+        this.inventory.removeListener(this);
+        try {
+            this.inventory.setItem(0, ItemStack.parseOptional(this.registryAccess(), tag.getCompound("SaddleItem")));
+            this.inventory.setItem(1, this.getBodyArmorItem());
+        } finally {
+            this.inventory.addListener(this);
+        }
+        this.containerChanged(this.inventory);
     }
 
     @Override
