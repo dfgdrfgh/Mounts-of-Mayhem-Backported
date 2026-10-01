@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import zzik2.barched.Barched;
 import zzik2.barched.BarchedConfig;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -55,29 +56,29 @@ public final class BarchedBiomeModifications {
                 selection::matches,
                 (context, properties) -> {
                     var spawnProperties = properties.getSpawnProperties();
-                    var monsterSpawns = spawnProperties.getSpawners().get(MobCategory.MONSTER);
-                    if (monsterSpawns != null) {
-                        var zombieSpawns = monsterSpawns.stream()
-                                .filter(data -> data.type == EntityType.ZOMBIE)
-                                .toList();
-                        if (!zombieSpawns.isEmpty()) {
-                            spawnProperties.removeSpawns(
-                                    (category, data) -> category == MobCategory.MONSTER && data.type == EntityType.ZOMBIE
+                    // Architectury's Fabric getSpawners() implementation returns null.
+                    // Capture the live entries through the supported removal callback,
+                    // then add replacements after iteration has finished on both loaders.
+                    var zombieSpawns = new ArrayList<MobSpawnSettings.SpawnerData>();
+                    spawnProperties.removeSpawns((category, data) -> {
+                        if (category == MobCategory.MONSTER && data.type == EntityType.ZOMBIE) {
+                            zombieSpawns.add(data);
+                            return true;
+                        }
+                        return false;
+                    });
+                    for (MobSpawnSettings.SpawnerData zombieSpawn : zombieSpawns) {
+                        int adjustedWeight = Math.max(0, zombieSpawn.getWeight().asInt() - weight);
+                        if (adjustedWeight > 0) {
+                            spawnProperties.addSpawn(
+                                    MobCategory.MONSTER,
+                                    new MobSpawnSettings.SpawnerData(
+                                            EntityType.ZOMBIE,
+                                            adjustedWeight,
+                                            zombieSpawn.minCount,
+                                            zombieSpawn.maxCount
+                                    )
                             );
-                            for (MobSpawnSettings.SpawnerData zombieSpawn : zombieSpawns) {
-                                int adjustedWeight = Math.max(0, zombieSpawn.getWeight().asInt() - weight);
-                                if (adjustedWeight > 0) {
-                                    spawnProperties.addSpawn(
-                                            MobCategory.MONSTER,
-                                            new MobSpawnSettings.SpawnerData(
-                                                    EntityType.ZOMBIE,
-                                                    adjustedWeight,
-                                                    zombieSpawn.minCount,
-                                                    zombieSpawn.maxCount
-                                            )
-                                    );
-                                }
-                            }
                         }
                     }
 
