@@ -89,13 +89,18 @@ public abstract class ZombieHorseMixin extends AbstractHorse implements EntityBr
         return this.getFirstPassenger() instanceof Mob;
     }
 
-    @Inject(method = "randomizeAttributes", at = @At("TAIL"))
+    @Inject(method = "randomizeAttributes", at = @At("HEAD"), cancellable = true)
     private void barched$randomizeAttributes(RandomSource randomSource, CallbackInfo ci) {
-        AttributeInstance var10000 = this.getAttribute(Attributes.JUMP_STRENGTH);
-        var10000.setBaseValue(generateZombieHorseJumpStrength(randomSource::nextDouble));
-        var10000 = this.getAttribute(Attributes.MOVEMENT_SPEED);
+        AttributeInstance attribute = this.getAttribute(Attributes.JUMP_STRENGTH);
+        attribute.setBaseValue(generateZombieHorseJumpStrength(randomSource::nextDouble));
+
+        attribute = this.getAttribute(Attributes.MOVEMENT_SPEED);
         Objects.requireNonNull(randomSource);
-        var10000.setBaseValue(generateZombieHorseSpeed(randomSource::nextDouble));
+        attribute.setBaseValue(generateZombieHorseSpeed(randomSource::nextDouble));
+
+        // Replace 1.21.1's Zombie Horse randomization instead of running both versions.
+        // This matches 1.21.11's random consumption as well as its final attributes.
+        ci.cancel();
     }
 
     @Unique
