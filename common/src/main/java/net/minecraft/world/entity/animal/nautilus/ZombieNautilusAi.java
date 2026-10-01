@@ -8,6 +8,7 @@ import java.util.List;
 import net.minecraft.server.level.ServerLevel;
 import java.util.Map;
 import java.util.Set;
+import java.util.Optional;
 import zzik2.barched.Barched;
 import zzik2.barched.nautilus.NautilusRegistries;
 import net.minecraft.world.entity.ai.Brain;
@@ -59,15 +60,19 @@ public class ZombieNautilusAi {
     }
 
     private static void initIdleActivity(Brain<ZombieNautilus> $$02) {
-        $$02.addActivity(Activity.IDLE, ImmutableList.of(Pair.of(1, new FollowTemptation($$0 -> Float.valueOf(0.9f), $$0 -> $$0.isBaby() ? 2.5 : 3.5)), Pair.of(2, StartAttacking.<ZombieNautilus>create(mob -> NautilusAi.findNearestValidAttackTarget((ServerLevel)mob.level(), mob))), Pair.of(3, new GateBehavior(ImmutableMap.of(MemoryModuleType.WALK_TARGET, (MemoryStatus.VALUE_ABSENT)), ImmutableSet.of(), GateBehavior.OrderPolicy.ORDERED, GateBehavior.RunningPolicy.TRY_ALL, ImmutableList.of(Pair.of(RandomStroll.swim(1.0f), 2), Pair.of(SetWalkTargetFromLookTarget.create(1.0f, 3), 3))))));
+        $$02.addActivity(Activity.IDLE, ImmutableList.of(Pair.of(1, new FollowTemptation($$0 -> Float.valueOf(0.9f), $$0 -> $$0.isBaby() ? 2.5 : 3.5)), Pair.of(2, StartAttacking.<ZombieNautilus>create(mob -> mob.isMobControlled() ? NautilusAi.findNearestValidAttackTarget((ServerLevel)mob.level(), mob) : Optional.empty())), Pair.of(3, new GateBehavior(ImmutableMap.of(MemoryModuleType.WALK_TARGET, (MemoryStatus.VALUE_ABSENT)), ImmutableSet.of(), GateBehavior.OrderPolicy.ORDERED, GateBehavior.RunningPolicy.TRY_ALL, ImmutableList.of(Pair.of(RandomStroll.swim(1.0f), 2), Pair.of(SetWalkTargetFromLookTarget.create(1.0f, 3), 3))))));
     }
 
     private static void initFightActivity(Brain<ZombieNautilus> $$0) {
         $$0.addActivityWithConditions(Activity.FIGHT, ImmutableList.of(Pair.of(0, new ChargeAttack(80, NautilusAi.ATTACK_TARGET_CONDITIONS, 0.5f, 2.0f, 12.0, 11.0, Barched.SoundEvents.ZOMBIE_NAUTILUS_DASH))), ImmutableSet.of(Pair.of(MemoryModuleType.ATTACK_TARGET, (MemoryStatus.VALUE_PRESENT)), Pair.of(MemoryModuleType.TEMPTING_PLAYER, (MemoryStatus.VALUE_ABSENT)), Pair.of(MemoryModuleType.BREED_TARGET, (MemoryStatus.VALUE_ABSENT)), Pair.of(Barched.MemoryModuleType.CHARGE_COOLDOWN_TICKS, (MemoryStatus.VALUE_ABSENT))));
     }
 
-    public static void updateActivity(ZombieNautilus $$0) {
-        $$0.getBrain().setActiveActivityToFirstValid(ImmutableList.of(Activity.FIGHT, Activity.IDLE));
+    public static void updateActivity(ZombieNautilus $0) {
+        if (!$0.isMobControlled()) {
+            $0.getBrain().eraseMemory(MemoryModuleType.ATTACK_TARGET);
+            $0.getBrain().eraseMemory(MemoryModuleType.ANGRY_AT);
+        }
+        $0.getBrain().setActiveActivityToFirstValid(ImmutableList.of(Activity.FIGHT, Activity.IDLE));
     }
 }
 
