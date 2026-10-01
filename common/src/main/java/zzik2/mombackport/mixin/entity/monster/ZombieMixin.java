@@ -1,4 +1,4 @@
-package zzik2.barched.mixin.entity.monster;
+package zzik2.mombackport.mixin.entity.monster;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.util.RandomSource;
@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import zzik2.barched.Barched;
+import zzik2.mombackport.MomBackport;
 
 @Mixin(Zombie.class)
 public class ZombieMixin extends Monster {
@@ -25,18 +25,18 @@ public class ZombieMixin extends Monster {
     }
 
     @Inject(method = "addBehaviourGoals", at = @At("HEAD"))
-    private void barched$addBehaviourGoals(CallbackInfo ci) {
+    private void mombackport$addBehaviourGoals(CallbackInfo ci) {
         this.goalSelector.addGoal(2, new SpearUseGoal(this, 1.0D, 1.0D, 10.0F, 2.0F));
     }
 
     // 2 -> 3
     @ModifyArg(method = "addBehaviourGoals", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/ai/goal/GoalSelector;addGoal(ILnet/minecraft/world/entity/ai/goal/Goal;)V", ordinal = 0))
-    private int barched$addBehaviourGoals(int i) {
+    private int mombackport$addBehaviourGoals(int i) {
         return 3;
     }
 
     @ModifyArg(method = "populateDefaultEquipmentSlots", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/RandomSource;nextInt(I)I"), index = 0)
-    private int barched$nextInt(int i) {
+    private int mombackport$nextInt(int i) {
         if (i == 3) {
             return 6;
         }
@@ -44,16 +44,16 @@ public class ZombieMixin extends Monster {
     }
 
     @Inject(method = "populateDefaultEquipmentSlots", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/util/RandomSource;nextInt(I)I"))
-    private void barched$setItemSlot(RandomSource randomSource, DifficultyInstance difficultyInstance, CallbackInfo ci, @Local(ordinal = 0) int i) {
+    private void mombackport$setItemSlot(RandomSource randomSource, DifficultyInstance difficultyInstance, CallbackInfo ci, @Local(ordinal = 0) int i) {
         if (i == 1) {
-            this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Barched.Items.IRON_SPEAR));
+            this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(MomBackport.Items.IRON_SPEAR));
         }
     }
 
     @Inject(method = "populateDefaultEquipmentSlots", at = @At("TAIL"))
-    private void barched$overrideSpearByConfig(RandomSource randomSource, DifficultyInstance difficultyInstance, CallbackInfo ci) {
-        if (randomSource.nextFloat() < Barched.getConfig().getZombieOverrideSpearSpawnChanceAsFloat()) {
-            this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Barched.Items.IRON_SPEAR));
+    private void mombackport$overrideSpearByConfig(RandomSource randomSource, DifficultyInstance difficultyInstance, CallbackInfo ci) {
+        if (randomSource.nextFloat() < MomBackport.getConfig().getZombieOverrideSpearSpawnChanceAsFloat()) {
+            this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(MomBackport.Items.IRON_SPEAR));
         }
     }
 }

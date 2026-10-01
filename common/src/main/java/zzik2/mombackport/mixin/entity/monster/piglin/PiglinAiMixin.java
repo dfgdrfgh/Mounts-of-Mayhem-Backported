@@ -1,4 +1,4 @@
-package zzik2.barched.mixin.entity.monster.piglin;
+package zzik2.mombackport.mixin.entity.monster.piglin;
 
 import com.google.common.collect.ImmutableList;
 import net.minecraft.world.entity.ai.behavior.BehaviorControl;
@@ -18,7 +18,7 @@ import java.util.List;
 public abstract class PiglinAiMixin {
 
     @ModifyArg(method = "initFightActivity", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/ai/Brain;addActivityAndRemoveMemoryWhenStopped(Lnet/minecraft/world/entity/schedule/Activity;ILcom/google/common/collect/ImmutableList;Lnet/minecraft/world/entity/ai/memory/MemoryModuleType;)V"), index = 2)
-    private static ImmutableList<? extends BehaviorControl<? super Piglin>> barched$initFightActivity(ImmutableList<? extends BehaviorControl<? super Piglin>> immutableList) {
+    private static ImmutableList<? extends BehaviorControl<? super Piglin>> mombackport$initFightActivity(ImmutableList<? extends BehaviorControl<? super Piglin>> immutableList) {
         List<BehaviorControl<? super Piglin>> modifiedList = new ArrayList<>(immutableList);
         modifiedList.add(3, new SpearApproach(1.0D, 10.0F));
         modifiedList.add(4, new SpearAttack(1.0D, 1.0D, 10.0F, 2.0F));

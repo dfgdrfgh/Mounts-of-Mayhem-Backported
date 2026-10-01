@@ -1,4 +1,4 @@
-package zzik2.barched.mixin.entity.monster;
+package zzik2.mombackport.mixin.entity.monster;
 
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.EntityType;
@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import zzik2.barched.Barched;
+import zzik2.mombackport.MomBackport;
 import zzik2.zreflex.mixin.ModifyAccess;
 
 @Mixin(AbstractSkeleton.class)
@@ -28,8 +28,8 @@ public abstract class AbstractSkeletonMixin extends Monster {
     }
 
     @Redirect(method = "aiStep", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/monster/AbstractSkeleton;isSunBurnTick()Z"))
-    private boolean barched$isSunBurnTick(AbstractSkeleton instance) {
-        if (instance.getType() == Barched.EntityType.PARCHED) {
+    private boolean mombackport$isSunBurnTick(AbstractSkeleton instance) {
+        if (instance.getType() == MomBackport.EntityType.PARCHED) {
             return false;
         }
         return this.isSunBurnTick();
@@ -37,6 +37,6 @@ public abstract class AbstractSkeletonMixin extends Monster {
 
     @Override
     public boolean wantsToPickUp(ItemStack itemStack) {
-        return itemStack.is(Barched.ItemTags.SPEARS) ? false : super.wantsToPickUp(itemStack);
+        return itemStack.is(MomBackport.ItemTags.SPEARS) ? false : super.wantsToPickUp(itemStack);
     }
 }

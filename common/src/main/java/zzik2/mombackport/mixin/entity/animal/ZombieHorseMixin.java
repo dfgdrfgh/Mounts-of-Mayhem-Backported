@@ -1,4 +1,4 @@
-package zzik2.barched.mixin.entity.animal;
+package zzik2.mombackport.mixin.entity.animal;
 
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -31,9 +31,9 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import zzik2.barched.Barched;
-import zzik2.barched.bridge.entity.AbstractHorseBridge;
-import zzik2.barched.bridge.entity.EntityBridge;
+import zzik2.mombackport.MomBackport;
+import zzik2.mombackport.bridge.entity.AbstractHorseBridge;
+import zzik2.mombackport.bridge.entity.EntityBridge;
 import zzik2.zreflex.mixin.ModifyName;
 
 import java.util.Objects;
@@ -47,20 +47,20 @@ public abstract class ZombieHorseMixin extends AbstractHorse implements EntityBr
     }
 
     @Inject(method = "addBehaviourGoals", at = @At("TAIL"))
-    private void barched$addBehaviourGoals(CallbackInfo ci) {
+    private void mombackport$addBehaviourGoals(CallbackInfo ci) {
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(3, new TemptGoal(this, 1.25D,
-                itemStack -> itemStack.is(Barched.ItemTags.ZOMBIE_HORSE_FOOD), false));
+                itemStack -> itemStack.is(MomBackport.ItemTags.ZOMBIE_HORSE_FOOD), false));
     }
 
     @Inject(method = "<init>", at = @At("TAIL"))
-    private void barched$init(EntityType entityType, Level level, CallbackInfo ci) {
+    private void mombackport$init(EntityType entityType, Level level, CallbackInfo ci) {
         this.setPathfindingMalus(PathType.DANGER_OTHER, -1.0F);
         this.setPathfindingMalus(PathType.DAMAGE_OTHER, -1.0F);
     }
 
     @Inject(method = "createAttributes", at = @At("RETURN"), cancellable = true)
-    private static void barched$createAttributes(CallbackInfoReturnable<AttributeSupplier.Builder> cir) {
+    private static void mombackport$createAttributes(CallbackInfoReturnable<AttributeSupplier.Builder> cir) {
         cir.setReturnValue(createBaseHorseAttributes().add(Attributes.MAX_HEALTH, 25.0D));
     }
 
@@ -81,7 +81,7 @@ public abstract class ZombieHorseMixin extends AbstractHorse implements EntityBr
     }
 
     @Inject(method = "randomizeAttributes", at = @At("TAIL"))
-    private void barched$randomizeAttributes(RandomSource randomSource, CallbackInfo ci) {
+    private void mombackport$randomizeAttributes(RandomSource randomSource, CallbackInfo ci) {
         AttributeInstance var10000 = this.getAttribute(Attributes.JUMP_STRENGTH);
         var10000.setBaseValue(generateZombieHorseJumpStrength(randomSource::nextDouble));
         var10000 = this.getAttribute(Attributes.MOVEMENT_SPEED);
@@ -101,12 +101,12 @@ public abstract class ZombieHorseMixin extends AbstractHorse implements EntityBr
 
     @Override
     protected SoundEvent getAngrySound() {
-        return Barched.SoundEvents.ZOMBIE_HORSE_ANGRY;
+        return MomBackport.SoundEvents.ZOMBIE_HORSE_ANGRY;
     }
 
     @Override
     protected SoundEvent getEatingSound() {
-        return Barched.SoundEvents.ZOMBIE_HORSE_EAT;
+        return MomBackport.SoundEvents.ZOMBIE_HORSE_EAT;
     }
 
     @Override
@@ -147,7 +147,7 @@ public abstract class ZombieHorseMixin extends AbstractHorse implements EntityBr
             if (zombie != null) {
                 zombie.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), 0.0F);
                 zombie.finalizeSpawn(serverLevelAccessor, difficultyInstance, mobSpawnType, (SpawnGroupData)null);
-                zombie.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Barched.Items.IRON_SPEAR));
+                zombie.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(MomBackport.Items.IRON_SPEAR));
                 zombie.startRiding((ZombieHorse) (Object) this, false);
             }
         }
@@ -184,7 +184,7 @@ public abstract class ZombieHorseMixin extends AbstractHorse implements EntityBr
 
     @Override
     public boolean isFood(ItemStack itemStack) {
-        return itemStack.is(Barched.ItemTags.ZOMBIE_HORSE_FOOD);
+        return itemStack.is(MomBackport.ItemTags.ZOMBIE_HORSE_FOOD);
     }
 
     @Override

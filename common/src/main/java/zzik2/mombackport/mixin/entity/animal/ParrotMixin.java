@@ -1,4 +1,4 @@
-package zzik2.barched.mixin.entity.animal;
+package zzik2.mombackport.mixin.entity.animal;
 
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.EntityType;
@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import zzik2.barched.Barched;
+import zzik2.mombackport.MomBackport;
 import zzik2.zreflex.mixin.ModifyAccess;
 
 import java.util.Map;
@@ -22,8 +22,8 @@ public class ParrotMixin {
     @Shadow @Final @Deprecated static Map<EntityType<?>, SoundEvent> MOB_SOUND_MAP;
 
     @Inject(method = "<clinit>", at = @At("TAIL"))
-    private static void barched$addImitationSounds(CallbackInfo ci) {
-        MOB_SOUND_MAP.put(Barched.EntityType.PARCHED, Barched.SoundEvents.PARROT_IMITATE_PARCHED);
-        MOB_SOUND_MAP.put(Barched.EntityType.CAMEL_HUSK, Barched.SoundEvents.PARROT_IMITATE_CAMEL_HUSK);
+    private static void mombackport$addImitationSounds(CallbackInfo ci) {
+        MOB_SOUND_MAP.put(MomBackport.EntityType.PARCHED, MomBackport.SoundEvents.PARROT_IMITATE_PARCHED);
+        MOB_SOUND_MAP.put(MomBackport.EntityType.CAMEL_HUSK, MomBackport.SoundEvents.PARROT_IMITATE_CAMEL_HUSK);
     }
 }

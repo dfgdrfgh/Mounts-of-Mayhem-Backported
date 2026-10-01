@@ -1,4 +1,4 @@
-package zzik2.barched.mixin.entity.monster;
+package zzik2.mombackport.mixin.entity.monster;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
@@ -16,7 +16,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
-import zzik2.barched.Barched;
+import zzik2.mombackport.MomBackport;
 
 @Mixin(Husk.class)
 public class HuskMixin extends Zombie {
@@ -35,24 +35,24 @@ public class HuskMixin extends Zombie {
         }
 
         if (spawnGroupData != null) {
-            spawnGroupData = new Barched.HuskGroupData((Zombie.ZombieGroupData) spawnGroupData);
-            ((Barched.HuskGroupData)spawnGroupData).triedToSpawnCamelHusk = mobSpawnType != MobSpawnType.NATURAL;
+            spawnGroupData = new MomBackport.HuskGroupData((Zombie.ZombieGroupData) spawnGroupData);
+            ((MomBackport.HuskGroupData)spawnGroupData).triedToSpawnCamelHusk = mobSpawnType != MobSpawnType.NATURAL;
         }
 
-        if (spawnGroupData instanceof Barched.HuskGroupData huskGroupData) {
+        if (spawnGroupData instanceof MomBackport.HuskGroupData huskGroupData) {
             if (!huskGroupData.triedToSpawnCamelHusk) {
                 BlockPos blockPos = this.blockPosition();
-                if (serverLevelAccessor.noCollision(Barched.EntityType.CAMEL_HUSK.getSpawnAABB((double)blockPos.getX() + (double)0.5F, (double)blockPos.getY(), (double)blockPos.getZ() + (double)0.5F))) {
+                if (serverLevelAccessor.noCollision(MomBackport.EntityType.CAMEL_HUSK.getSpawnAABB((double)blockPos.getX() + (double)0.5F, (double)blockPos.getY(), (double)blockPos.getZ() + (double)0.5F))) {
                     huskGroupData.triedToSpawnCamelHusk = true;
-                    if (randomSource.nextFloat() < Barched.getConfig().getCamelHuskSpawnChanceAsFloat()) {
-                        this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Barched.Items.IRON_SPEAR));
-                        CamelHusk camelHusk = (CamelHusk)Barched.EntityType.CAMEL_HUSK.create(this.level());
+                    if (randomSource.nextFloat() < MomBackport.getConfig().getCamelHuskSpawnChanceAsFloat()) {
+                        this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(MomBackport.Items.IRON_SPEAR));
+                        CamelHusk camelHusk = (CamelHusk)MomBackport.EntityType.CAMEL_HUSK.create(this.level());
                         if (camelHusk != null) {
                             camelHusk.setPos(this.getX(), this.getY(), this.getZ());
                             camelHusk.finalizeSpawn(serverLevelAccessor, difficultyInstance, mobSpawnType, (SpawnGroupData)null);
                             this.startRiding(camelHusk, true);
                             serverLevelAccessor.addFreshEntity(camelHusk);
-                            Parched parched = (Parched)Barched.EntityType.PARCHED.create(this.level());
+                            Parched parched = (Parched)MomBackport.EntityType.PARCHED.create(this.level());
                             if (parched != null) {
                                 parched.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), 0.0F);
                                 parched.finalizeSpawn(serverLevelAccessor, difficultyInstance, mobSpawnType, (SpawnGroupData)null);
