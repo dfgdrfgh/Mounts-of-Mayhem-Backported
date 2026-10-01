@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "id": "barched",
+  "id": "mombackport",
   "version": "${version}",
-  "name": "Barched",
-  "description": "Bringing Parched, Camel Husk and Spears from 1.21.11 to 1.21.1!",
+  "name": "MoM Backport",
+  "description": "Backports the Mounts of Mayhem update from Minecraft 1.21.11 to 1.21.1.",
   "authors": [
     "zzik2"
   ],

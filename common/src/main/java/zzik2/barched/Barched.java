@@ -59,7 +59,7 @@ import static net.minecraft.world.entity.Mob.checkMobSpawnRules;
 
 public final class Barched {
 
-    public static final String MOD_ID = "barched";
+    public static final String MOD_ID = "mombackport";
 
     public static void init() {
         //why the hell field is not loaded?!@?!#?!@?!?#

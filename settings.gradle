@@ -7,7 +7,7 @@ pluginManagement {
     }
 }
 
-rootProject.name = 'barched'
+rootProject.name = 'MoMBackport'
 
 include 'common'
 include 'fabric'

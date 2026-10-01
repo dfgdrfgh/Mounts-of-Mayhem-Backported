@@ -4,37 +4,37 @@ loaderVersion = "[2,)"
 license = "MIT"
 
 [[mods]]
-modId = "barched"
+modId = "mombackport"
 version = "${version}"
-displayName = "Barched"
+displayName = "MoM Backport"
 authors = "zzik2"
 description = '''
-Bringing Parched, Camel Husk and Spears from 1.21.11 to 1.21.1!
+Backports the Mounts of Mayhem update from Minecraft 1.21.11 to 1.21.1.
 '''
 logoFile = "assets/barched/icon.png"
 
-[[dependencies.barched]]
+[[dependencies.mombackport]]
 modId = "neoforge"
 type = "required"
 versionRange = "[21,)"
 ordering = "NONE"
 side = "BOTH"
 
-[[dependencies.barched]]
+[[dependencies.mombackport]]
 modId = "minecraft"
 type = "required"
 versionRange = "[1.21.1,)"
 ordering = "NONE"
 side = "BOTH"
 
-[[dependencies.barched]]
+[[dependencies.mombackport]]
 modId = "architectury"
 type = "required"
 versionRange = "[13.0.8,)"
 ordering = "AFTER"
 side = "BOTH"
 
-[[dependencies.barched]]
+[[dependencies.mombackport]]
 modId = "cloth_config"
 type = "required"
 versionRange = "[15.0.140,)"
