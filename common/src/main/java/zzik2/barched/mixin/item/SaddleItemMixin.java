@@ -47,7 +47,8 @@ public abstract class SaddleItemMixin {
         }
         if (!(target instanceof Saddleable saddleable)
                 || !target.isAlive()
-                || saddleable.isSaddled()) {
+                || saddleable.isSaddled()
+                || !saddleable.isSaddleable()) {
             return;
         }
 
