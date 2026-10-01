@@ -480,9 +480,12 @@ PlayerRideableJumping, Saddleable, ContainerListener, SaddleItemBridge {
     public boolean hurt(DamageSource $$1, float $$2) {
         Entity entity;
         boolean $$3 = super.hurt($$1, $$2);
-        if ($$3 && (entity = $$1.getEntity()) instanceof LivingEntity) {
-            LivingEntity $$4 = (LivingEntity)entity;
-            if (this.level() instanceof ServerLevel serverLevel) NautilusAi.setAngerTarget(serverLevel, this, $$4);
+        if ($3 && (entity = $1.getEntity()) instanceof LivingEntity) {
+            LivingEntity $4 = (LivingEntity)entity;
+            if (this.level() instanceof ServerLevel serverLevel
+                    && (!(this instanceof ZombieNautilus) || this.isMobControlled())) {
+                NautilusAi.setAngerTarget(serverLevel, this, $4);
+            }
         }
         return $$3;
     }
