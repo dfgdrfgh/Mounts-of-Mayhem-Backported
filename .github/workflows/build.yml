@@ -40,11 +40,12 @@ jobs:
 
       - name: Verify legacy namespace removed
         run: |
-          if find . -path './.git' -prune -o -iname '*barched*' -print | grep -q .; then
-            find . -path './.git' -prune -o -iname '*barched*' -print
+          legacy="bar""ched"
+          if find . -path './.git' -prune -o -iname "*${legacy}*" -print | grep -q .; then
+            find . -path './.git' -prune -o -iname "*${legacy}*" -print
             exit 1
           fi
-          if grep -RniI --exclude-dir=.git -E 'barched' .; then
+          if grep -RniI --exclude-dir=.git -i -E "${legacy}" .; then
             exit 1
           fi
 
