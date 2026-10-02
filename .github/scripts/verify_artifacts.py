@@ -60,6 +60,8 @@ def verify(jar, platform):
             "data/minecraft/loot_table/entities/parched.json",
             "data/minecraft/loot_table/entities/zombie_horse.json",
             "assets/minecraft/textures/mob_effect/breath_of_the_nautilus.png",
+            "assets/minecraft/textures/item/zombie_horse_spawn_egg.png",
+            "assets/mombackport/models/item/zombie_horse_spawn_egg.json",
         }
         for item in ["netherite_horse_armor", "nautilus_spawn_egg", "zombie_nautilus_spawn_egg",
                      "camel_husk_spawn_egg", "parched_spawn_egg"]:
@@ -96,6 +98,8 @@ def verify(jar, platform):
         for mixin in config.get("mixins", []) + config.get("client", []):
             class_name = (config["package"] + "." + mixin).replace(".", "/") + ".class"
             assert class_name in names, f"Missing registered mixin: {class_name}"
+        zombie_horse_egg = "assets/minecraft/textures/item/zombie_horse_spawn_egg.png"
+        assert archive.read(zombie_horse_egg) == (RESOURCES / zombie_horse_egg).read_bytes(), "Zombie Horse Spawn Egg texture differs from the 1.21.11 source asset"
         icon = "assets/barched/icon.png"
         assert archive.read(icon) == (RESOURCES / icon).read_bytes(), "Packaged icon differs from approved source"
         if platform == "fabric":
