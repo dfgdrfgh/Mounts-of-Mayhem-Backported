@@ -8,10 +8,8 @@ import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -23,7 +21,6 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import zzik2.barched.Barched;
-import zzik2.barched.BarchedClient;
 import zzik2.zreflex.mixin.ModifyAccess;
 
 @Mixin(ItemRenderer.class)
@@ -69,24 +66,6 @@ public class ItemRendererMixin {
     @Unique private ItemDisplayContext barched$itemDisplayContext;
     @Unique private ItemStack barched$itemStack;
 
-    @Inject(method = "<init>", at = @At("TAIL"))
-    private void barched$registerZombieHorseSpawnEggModel(CallbackInfo ci) {
-        this.itemModelShaper.register(
-                Items.ZOMBIE_HORSE_SPAWN_EGG,
-                BarchedClient.ItemRenderer.ZOMBIE_HORSE_SPAWN_EGG_MODEL
-        );
-    }
-
-    @Inject(method = "onResourceManagerReload", at = @At("HEAD"))
-    private void barched$keepZombieHorseSpawnEggModel(ResourceManager resourceManager, CallbackInfo ci) {
-        // Resource packs may replace minecraft:zombie_horse_spawn_egg, so keep the
-        // vanilla item permanently mapped to MoMBackport's private model instead.
-        this.itemModelShaper.register(
-                Items.ZOMBIE_HORSE_SPAWN_EGG,
-                BarchedClient.ItemRenderer.ZOMBIE_HORSE_SPAWN_EGG_MODEL
-        );
-    }
-
     @Inject(method = "render", at = @At("HEAD"))
     private void barched$captureItemStack(ItemStack itemStack, ItemDisplayContext itemDisplayContext, boolean bl, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, int j, BakedModel bakedModel, CallbackInfo ci) {
         this.barched$itemStack = itemStack;
@@ -96,10 +75,6 @@ public class ItemRendererMixin {
 
     @ModifyVariable(method = "render", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;pushPose()V", shift = At.Shift.AFTER, ordinal = 0), argsOnly = true, index = 8)
     private BakedModel barched$render(BakedModel bakedModel) {
-        if (barched$itemStack.is(Items.ZOMBIE_HORSE_SPAWN_EGG)) {
-            return this.itemModelShaper.getModelManager().getModel(BarchedClient.ItemRenderer.ZOMBIE_HORSE_SPAWN_EGG_MODEL);
-        }
-
         boolean bl2 = barched$itemDisplayContext == ItemDisplayContext.GUI || barched$itemDisplayContext == ItemDisplayContext.GROUND || barched$itemDisplayContext == ItemDisplayContext.FIXED;
         if (bl2) {
             if (barched$itemStack.is(Barched.Items.WOODEN_SPEAR)) {
@@ -128,9 +103,7 @@ public class ItemRendererMixin {
 
     @Redirect(method = "getModel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/ItemModelShaper;getItemModel(Lnet/minecraft/world/item/ItemStack;)Lnet/minecraft/client/resources/model/BakedModel;"))
     private BakedModel barched$getModel(ItemModelShaper instance, ItemStack bakedModel) {
-        if (bakedModel.is(Items.ZOMBIE_HORSE_SPAWN_EGG)) {
-            return this.itemModelShaper.getModelManager().getModel(BarchedClient.ItemRenderer.ZOMBIE_HORSE_SPAWN_EGG_MODEL);
-        } else if (bakedModel.is(Barched.Items.WOODEN_SPEAR)) {
+        if (bakedModel.is(Barched.Items.WOODEN_SPEAR)) {
             return this.itemModelShaper.getModelManager().getModel(WOODEN_SPEAR_IN_HAND_MODEL);
         } else if (bakedModel.is(Barched.Items.STONE_SPEAR)) {
             return this.itemModelShaper.getModelManager().getModel(STONE_SPEAR_IN_HAND_MODEL);

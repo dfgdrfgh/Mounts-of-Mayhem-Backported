@@ -28,6 +28,5 @@ public abstract class ModelBakeryMixin {
         this.loadSpecialItemModelAndDependencies(BarchedClient.ItemRenderer.GOLDEN_SPEAR_IN_HAND_MODEL);
         this.loadSpecialItemModelAndDependencies(BarchedClient.ItemRenderer.DIAMOND_SPEAR_IN_HAND_MODEL);
         this.loadSpecialItemModelAndDependencies(BarchedClient.ItemRenderer.NETHERITE_SPEAR_IN_HAND_MODEL);
-        this.loadSpecialItemModelAndDependencies(BarchedClient.ItemRenderer.ZOMBIE_HORSE_SPAWN_EGG_MODEL);
     }
 }

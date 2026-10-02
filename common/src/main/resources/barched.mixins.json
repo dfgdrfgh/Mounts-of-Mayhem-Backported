@@ -27,7 +27,16 @@
     "client.player.LocalPlayerMixin",
     "client.renderer.GameRendererMixin",
     "client.renderer.ItemInHandRendererMixin",
-    "client.renderer.ItemModelShaperMixin"
+    "client.renderer.ItemRendererMixin",
+    "client.renderer.entity.CamelRendererMixin",
+    "client.renderer.entity.ChestedHorseRendererMixin",
+    "client.renderer.entity.EntityRenderersMixin",
+    "client.renderer.entity.HorseRendererMixin",
+    "client.renderer.entity.LivingEntityRendererMixin",
+    "client.renderer.entity.PlayerRendererMixin",
+    "client.renderer.entity.UndeadHorseRendererMixin",
+    "client.renderer.entity.layers.ItemInHandLayerMixin",
+    "client.renderer.entity.layers.SaddleLayerMixin"
   ],
   "mixins": [
     "InteractionHandMixin",
