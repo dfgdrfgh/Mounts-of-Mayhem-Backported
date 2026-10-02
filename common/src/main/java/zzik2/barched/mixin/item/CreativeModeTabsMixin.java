@@ -2,10 +2,13 @@ package zzik2.barched.mixin.item;
 
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.ItemLike;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import zzik2.barched.Barched;
 
@@ -32,9 +35,21 @@ public class CreativeModeTabsMixin {
         output.accept(Barched.Items.ZOMBIE_NAUTILUS_SPAWN_EGG);
     }
 
-    @Inject(method = "method_51325", at = @At(value = "FIELD", target = "Lnet/minecraft/world/item/Items;DIAMOND_HORSE_ARMOR:Lnet/minecraft/world/item/Item;", opcode = Opcodes.GETSTATIC, shift = At.Shift.BEFORE))
-    private static void barched$acceptNetheriteHorseArmor(CreativeModeTab.ItemDisplayParameters itemDisplayParameters, CreativeModeTab.Output output, CallbackInfo ci) {
-        output.accept(Barched.Items.NETHERITE_HORSE_ARMOR);
+    @Redirect(
+        method = "method_51325",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/world/item/CreativeModeTab$Output;accept(Lnet/minecraft/world/level/ItemLike;)V"
+        )
+    )
+    private static void barched$placeNetheriteHorseArmorBeforeDiamond(
+        CreativeModeTab.Output output,
+        ItemLike item
+    ) {
+        if (item == Items.DIAMOND_HORSE_ARMOR) {
+            output.accept(Barched.Items.NETHERITE_HORSE_ARMOR);
+        }
+        output.accept(item);
     }
 
     @Inject(method = "method_51325", at = @At(value = "FIELD", target = "Lnet/minecraft/world/item/Items;WOLF_ARMOR:Lnet/minecraft/world/item/Item;", opcode = Opcodes.GETSTATIC, shift = At.Shift.AFTER))
