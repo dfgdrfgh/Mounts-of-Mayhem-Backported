@@ -364,6 +364,8 @@ public final class Barched {
 
     public static class EnchantmentHelper {
 
+        private static final ResourceLocation LUNGE_ID = ResourceLocation.withDefaultNamespace("lunge");
+
         public static void doLungeEffects(ServerLevel serverLevel, Entity entity) {
             if (entity instanceof LivingEntity livingEntity) {
                 Barched.EnchantmentHelper.runIterationOnItem(entity.getWeaponItem(), EquipmentSlot.MAINHAND, livingEntity, (holder, i, enchantedItemInUse) -> {
@@ -373,7 +375,7 @@ public final class Barched {
                     // only for minecraft:lunge while leaving other post-piercing
                     // enchantments unaffected.
                     boolean isLunge = holder.unwrapKey()
-                            .map(key -> key.location().equals(net.minecraft.resources.ResourceLocation.withDefaultNamespace("lunge")))
+                            .map(key -> key.location().equals(LUNGE_ID))
                             .orElse(false);
                     if (isLunge && entity instanceof net.minecraft.world.entity.player.Player player
                             && !player.isCreative()
@@ -387,31 +389,27 @@ public final class Barched {
         }
 
         public static void runIterationOnItem(net.minecraft.world.item.ItemStack itemStack, EnchantmentHelper.EnchantmentVisitor enchantmentVisitor) {
-            ItemEnchantments itemEnchantments = (ItemEnchantments)itemStack.getOrDefault(net.minecraft.core.component.DataComponents.ENCHANTMENTS, ItemEnchantments.EMPTY);
-            Iterator var3 = itemEnchantments.entrySet().iterator();
-
-            while(var3.hasNext()) {
-                Object2IntMap.Entry<Holder<Enchantment>> entry = (Object2IntMap.Entry)var3.next();
-                enchantmentVisitor.accept((Holder)entry.getKey(), entry.getIntValue());
+            ItemEnchantments itemEnchantments = itemStack.getOrDefault(net.minecraft.core.component.DataComponents.ENCHANTMENTS, ItemEnchantments.EMPTY);
+            for (Object2IntMap.Entry<Holder<Enchantment>> entry : itemEnchantments.entrySet()) {
+                enchantmentVisitor.accept(entry.getKey(), entry.getIntValue());
             }
-
         }
 
         public static void runIterationOnItem(net.minecraft.world.item.ItemStack itemStack, EquipmentSlot equipmentSlot, LivingEntity livingEntity, EnchantmentHelper.EnchantmentInSlotVisitor enchantmentInSlotVisitor) {
-            if (!itemStack.isEmpty()) {
-                ItemEnchantments itemEnchantments = (ItemEnchantments)itemStack.get(net.minecraft.core.component.DataComponents.ENCHANTMENTS);
-                if (itemEnchantments != null && !itemEnchantments.isEmpty()) {
-                    EnchantedItemInUse enchantedItemInUse = new EnchantedItemInUse(itemStack, equipmentSlot, livingEntity);
-                    Iterator var6 = itemEnchantments.entrySet().iterator();
+            if (itemStack.isEmpty()) {
+                return;
+            }
 
-                    while(var6.hasNext()) {
-                        Object2IntMap.Entry<Holder<Enchantment>> entry = (Object2IntMap.Entry)var6.next();
-                        Holder<Enchantment> holder = (Holder)entry.getKey();
-                        if (((Enchantment)holder.value()).matchingSlot(equipmentSlot)) {
-                            enchantmentInSlotVisitor.accept(holder, entry.getIntValue(), enchantedItemInUse);
-                        }
-                    }
+            ItemEnchantments itemEnchantments = itemStack.get(net.minecraft.core.component.DataComponents.ENCHANTMENTS);
+            if (itemEnchantments == null || itemEnchantments.isEmpty()) {
+                return;
+            }
 
+            EnchantedItemInUse enchantedItemInUse = new EnchantedItemInUse(itemStack, equipmentSlot, livingEntity);
+            for (Object2IntMap.Entry<Holder<Enchantment>> entry : itemEnchantments.entrySet()) {
+                Holder<Enchantment> holder = entry.getKey();
+                if (holder.value().matchingSlot(equipmentSlot)) {
+                    enchantmentInSlotVisitor.accept(holder, entry.getIntValue(), enchantedItemInUse);
                 }
             }
         }

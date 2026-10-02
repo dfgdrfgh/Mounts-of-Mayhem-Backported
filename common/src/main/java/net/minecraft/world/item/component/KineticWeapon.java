@@ -27,7 +27,6 @@ import zzik2.barched.bridge.entity.LivingEntityBridge;
 import zzik2.barched.bridge.level.LevelBridge;
 
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -83,60 +82,50 @@ public record KineticWeapon(int contactCooldownTicks, int delayTicks, Optional<C
          Vec3 vec3 = livingEntity.getLookAngle();
          double d = vec3.dot(getMotion(livingEntity));
          float f = livingEntity instanceof Player ? 1.0F : 0.2F;
-         AttackRange attackRange = ((LivingEntityBridge) livingEntity).entityAttackRange();
+         LivingEntityBridge livingBridge = (LivingEntityBridge) livingEntity;
+         AttackRange attackRange = livingBridge.entityAttackRange();
          double e = livingEntity.getAttributeBaseValue(Attributes.ATTACK_DAMAGE);
          boolean bl = false;
-         Iterator var14 = ((Collection) Barched.ProjectileUtil.getHitEntitiesAlong(livingEntity, attackRange, (entityx) -> {
-            return PiercingWeapon.canHitEntity(livingEntity, entityx);
-         }, ClipContext.Block.COLLIDER).map((blockHitResult) -> {
-            return List.of();
-         }, (collection) -> {
-            return collection;
-         })).iterator();
+         Collection<EntityHitResult> hits = Barched.ProjectileUtil.getHitEntitiesAlong(
+                 livingEntity,
+                 attackRange,
+                 entityx -> PiercingWeapon.canHitEntity(livingEntity, entityx),
+                 ClipContext.Block.COLLIDER
+         ).map(blockHitResult -> List.<EntityHitResult>of(), collection -> collection);
 
-         while(true) {
-            Object entity;
-            double h;
-            boolean bl3;
-            boolean bl4;
-            boolean bl5;
-            do {
-               boolean bl2;
-               do {
-                  if (!var14.hasNext()) {
-                     if (bl) {
-                        livingEntity.level().broadcastEntityEvent(livingEntity, (byte)2);
-                        if (livingEntity instanceof ServerPlayer) {
-                           ServerPlayer serverPlayer = (ServerPlayer)livingEntity;
-                           Barched.CriteriaTriggers.SPEAR_MOBS_TRIGGER.trigger(serverPlayer, ((LivingEntityBridge) livingEntity).stabbedEntities((entityx) -> {
-                              return entityx instanceof LivingEntity;
-                           }));
-                        }
-                     }
+         KineticWeapon.Condition dismountCondition = this.dismountConditions.orElse(null);
+         KineticWeapon.Condition knockbackCondition = this.knockbackConditions.orElse(null);
+         KineticWeapon.Condition damageCondition = this.damageConditions.orElse(null);
 
-                     return;
-                  }
+         for (EntityHitResult entityHitResult : hits) {
+            Entity entity = entityHitResult.getEntity();
+            if (entity instanceof EnderDragonPart enderDragonPart) {
+               entity = enderDragonPart.parentMob;
+            }
 
-                  EntityHitResult entityHitResult = (EntityHitResult)var14.next();
-                  entity = entityHitResult.getEntity();
-                  if (entity instanceof EnderDragonPart) {
-                     EnderDragonPart enderDragonPart = (EnderDragonPart)entity;
-                     entity = enderDragonPart.parentMob;
-                  }
+            if (livingBridge.wasRecentlyStabbed(entity, this.contactCooldownTicks)) {
+               continue;
+            }
 
-                  bl2 = ((LivingEntityBridge) livingEntity).wasRecentlyStabbed((Entity)entity, this.contactCooldownTicks);
-               } while(bl2);
+            livingBridge.rememberStabbedEntity(entity);
+            double g = vec3.dot(getMotion(entity));
+            double h = Math.max(0.0D, d - g);
+            boolean bl3 = dismountCondition != null && dismountCondition.test(j, d, h, (double)f);
+            boolean bl4 = knockbackCondition != null && knockbackCondition.test(j, d, h, (double)f);
+            boolean bl5 = damageCondition != null && damageCondition.test(j, d, h, (double)f);
+            if (!bl3 && !bl4 && !bl5) {
+               continue;
+            }
 
-               ((LivingEntityBridge) livingEntity).rememberStabbedEntity((Entity)entity);
-               double g = vec3.dot(getMotion((Entity)entity));
-               h = Math.max(0.0D, d - g);
-               bl3 = this.dismountConditions.isPresent() && ((KineticWeapon.Condition)this.dismountConditions.get()).test(j, d, h, (double)f);
-               bl4 = this.knockbackConditions.isPresent() && ((KineticWeapon.Condition)this.knockbackConditions.get()).test(j, d, h, (double)f);
-               bl5 = this.damageConditions.isPresent() && ((KineticWeapon.Condition)this.damageConditions.get()).test(j, d, h, (double)f);
-            } while(!bl3 && !bl4 && !bl5);
+            float k = (float)e + (float)Mth.floor(h * (double)this.damageMultiplier);
+            bl |= livingBridge.stabAttack(equipmentSlot, entity, k, bl5, bl4, bl3);
+         }
 
-            float k = (float)e + (float) Mth.floor(h * (double)this.damageMultiplier);
-            bl |= ((LivingEntityBridge) livingEntity).stabAttack(equipmentSlot, (Entity)entity, k, bl5, bl4, bl3);
+         if (bl) {
+            livingEntity.level().broadcastEntityEvent(livingEntity, (byte)2);
+            if (livingEntity instanceof ServerPlayer serverPlayer) {
+               Barched.CriteriaTriggers.SPEAR_MOBS_TRIGGER.trigger(serverPlayer, livingBridge.stabbedEntities(entityx -> entityx instanceof LivingEntity));
+            }
          }
       }
    }

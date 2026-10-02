@@ -150,7 +150,9 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityBr
     @Inject(method = "startUsingItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;gameEvent(Lnet/minecraft/core/Holder;)V", shift = At.Shift.AFTER))
     private void barched$startUsingItem(InteractionHand interactionHand, CallbackInfo ci) {
         if (this.useItem.has(Barched.DataComponents.KINETIC_WEAPON)) {
-            this.recentKineticEnemies = new Object2LongOpenHashMap();
+            Object2LongOpenHashMap<Entity> recentEnemies = new Object2LongOpenHashMap<>();
+            recentEnemies.defaultReturnValue(Long.MIN_VALUE);
+            this.recentKineticEnemies = recentEnemies;
         }
     }
 
@@ -221,11 +223,10 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityBr
     public boolean wasRecentlyStabbed(Entity entity, int i) {
         if (this.recentKineticEnemies == null) {
             return false;
-        } else if (this.recentKineticEnemies.containsKey(entity)) {
-            return this.level().getGameTime() - this.recentKineticEnemies.getLong(entity) < (long)i;
-        } else {
-            return false;
         }
+
+        long lastHitTime = this.recentKineticEnemies.getLong(entity);
+        return lastHitTime != Long.MIN_VALUE && this.level().getGameTime() - lastHitTime < (long)i;
     }
 
 
@@ -360,8 +361,9 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityBr
 
     @Unique
     private void onKineticHit() {
-        if (this.level().getGameTime() - this.lastKineticHitFeedbackTime > 10L) {
-            this.lastKineticHitFeedbackTime = this.level().getGameTime();
+        long gameTime = this.level().getGameTime();
+        if (gameTime - this.lastKineticHitFeedbackTime > 10L) {
+            this.lastKineticHitFeedbackTime = gameTime;
             KineticWeapon kineticWeapon = (KineticWeapon)this.useItem.get(Barched.DataComponents.KINETIC_WEAPON);
             if (kineticWeapon != null) {
                 kineticWeapon.makeLocalHitSound(this);
