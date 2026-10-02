@@ -3,7 +3,7 @@
   "id": "mombackport",
   "version": "${version}",
   "name": "MoM Backport",
-  "description": "Backports the Mounts of Mayhem update from Minecraft 1.21.11 to 1.21.1.",
+  "description": "Backports the Mounts of Mayhem update to 1.21.1.",
   "authors": [
     "zzik2"
   ],
