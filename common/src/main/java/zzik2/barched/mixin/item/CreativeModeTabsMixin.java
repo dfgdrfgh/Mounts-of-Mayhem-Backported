@@ -42,14 +42,14 @@ public class CreativeModeTabsMixin {
             target = "Lnet/minecraft/world/item/CreativeModeTab$Output;accept(Lnet/minecraft/world/level/ItemLike;)V"
         )
     )
-    private static void barched$placeNetheriteHorseArmorBeforeDiamond(
+    private static void barched$placeNetheriteHorseArmorAfterDiamond(
         CreativeModeTab.Output output,
         ItemLike item
     ) {
+        output.accept(item);
         if (item == Items.DIAMOND_HORSE_ARMOR) {
             output.accept(Barched.Items.NETHERITE_HORSE_ARMOR);
         }
-        output.accept(item);
     }
 
     @Inject(method = "method_51325", at = @At(value = "FIELD", target = "Lnet/minecraft/world/item/Items;WOLF_ARMOR:Lnet/minecraft/world/item/Item;", opcode = Opcodes.GETSTATIC, shift = At.Shift.AFTER))
