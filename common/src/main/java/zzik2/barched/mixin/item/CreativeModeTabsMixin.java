@@ -32,7 +32,7 @@ public class CreativeModeTabsMixin {
         output.accept(Barched.Items.ZOMBIE_NAUTILUS_SPAWN_EGG);
     }
 
-    @Inject(method = "method_51325", at = @At(value = "FIELD", target = "Lnet/minecraft/world/item/Items;DIAMOND_HORSE_ARMOR:Lnet/minecraft/world/item/Item;", opcode = Opcodes.GETSTATIC, shift = At.Shift.AFTER))
+    @Inject(method = "method_51325", at = @At(value = "FIELD", target = "Lnet/minecraft/world/item/Items;DIAMOND_HORSE_ARMOR:Lnet/minecraft/world/item/Item;", opcode = Opcodes.GETSTATIC, shift = At.Shift.BEFORE))
     private static void barched$acceptNetheriteHorseArmor(CreativeModeTab.ItemDisplayParameters itemDisplayParameters, CreativeModeTab.Output output, CallbackInfo ci) {
         output.accept(Barched.Items.NETHERITE_HORSE_ARMOR);
     }
