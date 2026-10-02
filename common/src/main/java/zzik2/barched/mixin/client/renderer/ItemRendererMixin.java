@@ -75,7 +75,6 @@ public class ItemRendererMixin {
                 Items.ZOMBIE_HORSE_SPAWN_EGG,
                 BarchedClient.ItemRenderer.ZOMBIE_HORSE_SPAWN_EGG_MODEL
         );
-        this.itemModelShaper.rebuildCache();
     }
 
     @Inject(method = "onResourceManagerReload", at = @At("HEAD"))
