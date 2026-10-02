@@ -110,13 +110,13 @@ def verify(jar, platform):
             metadata = json.loads(archive.read("fabric.mod.json"))
             assert metadata["id"] == "mombackport" and metadata["name"] == "MoM Backport"
             assert metadata["version"] == "1.0"
-            assert metadata["description"] == "Backports the Mounts of Mayhem update to 1.21.1."
+            assert metadata["description"] == "Backports the Mounts of Mayhem update to 1.21.1"
             assert metadata["icon"] == icon
         else:
             metadata = archive.read("META-INF/neoforge.mods.toml").decode()
             assert 'modId = "mombackport"' in metadata and 'displayName = "MoM Backport"' in metadata
             assert 'version = "1.0"' in metadata
-            assert "Backports the Mounts of Mayhem update to 1.21.1." in metadata
+            assert "Backports the Mounts of Mayhem update to 1.21.1" in metadata
             assert f'logoFile = "{icon}"' in metadata
     print(f"Verified recovered content, resources, mixins, identity, icon, and safe reflection packaging: {jar.name}")
 

@@ -8,6 +8,7 @@ import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -67,6 +68,25 @@ public class ItemRendererMixin {
 
     @Unique private ItemDisplayContext barched$itemDisplayContext;
     @Unique private ItemStack barched$itemStack;
+
+    @Inject(method = "<init>", at = @At("TAIL"))
+    private void barched$registerZombieHorseSpawnEggModel(CallbackInfo ci) {
+        this.itemModelShaper.register(
+                Items.ZOMBIE_HORSE_SPAWN_EGG,
+                BarchedClient.ItemRenderer.ZOMBIE_HORSE_SPAWN_EGG_MODEL
+        );
+        this.itemModelShaper.rebuildCache();
+    }
+
+    @Inject(method = "onResourceManagerReload", at = @At("HEAD"))
+    private void barched$keepZombieHorseSpawnEggModel(ResourceManager resourceManager, CallbackInfo ci) {
+        // Resource packs may replace minecraft:zombie_horse_spawn_egg, so keep the
+        // vanilla item permanently mapped to MoMBackport's private model instead.
+        this.itemModelShaper.register(
+                Items.ZOMBIE_HORSE_SPAWN_EGG,
+                BarchedClient.ItemRenderer.ZOMBIE_HORSE_SPAWN_EGG_MODEL
+        );
+    }
 
     @Inject(method = "render", at = @At("HEAD"))
     private void barched$captureItemStack(ItemStack itemStack, ItemDisplayContext itemDisplayContext, boolean bl, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, int j, BakedModel bakedModel, CallbackInfo ci) {
