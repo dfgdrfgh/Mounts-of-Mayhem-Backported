@@ -11,7 +11,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwingAnimationType;
 import zzik2.barched.bridge.item.ItemStackBridge;
-import zzik2.zreflex.enumeration.ZEnumTool;
 import zzik2.zreflex.reflection.ZReflectionTool;
 
 public class BarchedClient {
@@ -23,7 +22,7 @@ public class BarchedClient {
 
     public static class ArmPose {
 
-        public static final HumanoidModel.ArmPose SPEAR = ZEnumTool.addConstant(HumanoidModel.ArmPose.class, "SPEAR", new Class<?>[] {boolean.class}, false);
+        public static final HumanoidModel.ArmPose SPEAR = HumanoidModel.ArmPose.valueOf("SPEAR");
     }
 
     public static class SkeletonModel {

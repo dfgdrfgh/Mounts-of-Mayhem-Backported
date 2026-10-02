@@ -69,6 +69,24 @@ def verify(jar, platform):
             required.add(f"assets/minecraft/textures/item/{material}_nautilus_armor.png")
         assert not required - names, f"Missing recovered content: {sorted(required - names)}"
         assert not any("copper_horse_armor" in name for name in names), "Copper Horse Armor is outside this backport's scope"
+        forbidden_classes = {
+            "zzik2/zreflex/internal/UnsafeAccess.class",
+            "zzik2/zreflex/enumeration/ZEnumTool.class",
+            "zzik2/zreflex/enumeration/ZEnumTool$EnumException.class",
+        }
+        assert not forbidden_classes & names, f"Unsafe ZReflex classes packaged: {sorted(forbidden_classes & names)}"
+        forbidden_markers = (
+            b"sun.misc.Unsafe",
+            b"sun/misc/Unsafe",
+            b"jdk.internal.misc.Unsafe",
+            b"jdk/internal/misc/Unsafe",
+            b"IMPL_LOOKUP",
+            b"theUnsafe",
+        )
+        for class_name in (name for name in names if name.endswith(".class")):
+            payload = archive.read(class_name)
+            for marker in forbidden_markers:
+                assert marker not in payload, f"Unsafe reflection marker {marker!r} found in {class_name}"
         for name in names:
             if name.endswith(".json"):
                 json.loads(archive.read(name))
@@ -88,7 +106,7 @@ def verify(jar, platform):
             metadata = archive.read("META-INF/neoforge.mods.toml").decode()
             assert 'modId = "mombackport"' in metadata and 'displayName = "MoM Backport"' in metadata
             assert f'logoFile = "{icon}"' in metadata
-    print(f"Verified recovered content, resources, mixins, identity, and icon: {jar.name}")
+    print(f"Verified recovered content, resources, mixins, identity, icon, and safe reflection packaging: {jar.name}")
 
 
 if __name__ == "__main__":

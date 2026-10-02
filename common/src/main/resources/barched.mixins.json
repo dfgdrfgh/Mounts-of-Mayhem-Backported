@@ -115,6 +115,7 @@
     "level.ServerLevelMixin",
     "level.ServerPlayerMixin",
     "level.WorldBorderMixin",
+    "network.ServerboundPlayerActionPacket$ActionMixin",
     "network.ServerGamePacketListenerImplMixin",
     "phys.Vec3Mixin",
     "server.commands.SummonCommandMixin",

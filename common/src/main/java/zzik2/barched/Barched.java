@@ -47,7 +47,6 @@ import zzik2.barched.bridge.entity.AbstractHorseBridge;
 import zzik2.barched.bridge.entity.EntityBridge;
 import zzik2.barched.bridge.level.LevelBridge;
 import zzik2.barched.data.BarchedBiomeModifications;
-import zzik2.zreflex.enumeration.ZEnumTool;
 import zzik2.zreflex.reflection.ZReflectionTool;
 
 import java.util.*;
@@ -251,10 +250,8 @@ public final class Barched {
     }
 
     public static class UseAnim {
-        public static final net.minecraft.world.item.UseAnim BARCHED$SPEAR = ZEnumTool.addConstant(
-                net.minecraft.world.item.UseAnim.class,
-                "BARCHED$SPEAR"
-        );
+        public static final net.minecraft.world.item.UseAnim BARCHED$SPEAR =
+                net.minecraft.world.item.UseAnim.valueOf("BARCHED$SPEAR");
     }
 
     public static class ItemTags {
@@ -293,7 +290,8 @@ public final class Barched {
     }
 
     public static class ServerboundPlayerActionPacket$Action {
-        public static final ServerboundPlayerActionPacket.Action STAB = ZEnumTool.addConstant(ServerboundPlayerActionPacket.Action.class, "STAB");
+        public static final ServerboundPlayerActionPacket.Action STAB =
+                ServerboundPlayerActionPacket.Action.valueOf("STAB");
     }
 
     public static class DataComponents {

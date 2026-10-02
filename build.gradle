@@ -41,8 +41,6 @@ subprojects {
     dependencies {
         minecraft "net.minecraft:minecraft:$rootProject.minecraft_version"
         mappings loom.officialMojangMappings()
-
-        implementation("kr.zzik2:zreflex:$rootProject.zreflex_version")
     }
 
     java {
