@@ -7,8 +7,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.enchantment.EnchantedItemInUse;
 import net.minecraft.world.item.enchantment.LevelBasedValue;
 import net.minecraft.world.phys.Vec3;
-import org.joml.Quaternionf;
-import org.joml.Vector3d;
+import zzik2.barched.bridge.Vec3Bridge;
 import zzik2.barched.bridge.entity.PlayerBridge;
 
 public record ApplyEntityImpulse(Vec3 direction, Vec3 coordinateScale, LevelBasedValue magnitude) implements EnchantmentEntityEffect {
@@ -26,17 +25,16 @@ public record ApplyEntityImpulse(Vec3 direction, Vec3 coordinateScale, LevelBase
 
    @Override
    public void apply(ServerLevel serverLevel, int i, EnchantedItemInUse enchantedItemInUse, Entity entity, Vec3 vec3) {
-      // 26.3 rotates the configured local impulse by the entity's look
-      // quaternion directly. Recreate Entity#getLookQuaternion here because
-      // 1.21.1 does not expose that helper.
-      float radians = ((float)Math.PI / 180.0F);
-      Quaternionf look = new Quaternionf()
-              .rotationY(-entity.getYRot() * radians)
-              .rotateX(entity.getXRot() * radians);
-      Vector3d direction = look.transform(this.direction.x, this.direction.y, this.direction.z, new Vector3d())
-              .mul(this.coordinateScale.x, this.coordinateScale.y, this.coordinateScale.z)
-              .mul(this.magnitude.calculate(i));
-      entity.addDeltaMovement(new Vec3(direction.x, direction.y, direction.z));
+      // Match the proven 1.21.1 Backported-Spears approach: derive the
+      // local impulse from the entity's actual look vector instead of
+      // reconstructing it from raw yaw/pitch fields. This avoids the
+      // off-axis correction seen when those rotations disagree.
+      Vec3 look = entity.getLookAngle();
+      Vec3 impulse = ((Vec3Bridge) look)
+              .addLocalCoordinates(this.direction)
+              .multiply(this.coordinateScale)
+              .scale((double)this.magnitude.calculate(i));
+      entity.addDeltaMovement(impulse);
 
       // Use 1.21.1's native motion-sync flags instead of sending an
       // immediate velocity packet. This mirrors how Vanilla Backport adapts
