@@ -8,8 +8,6 @@ import net.minecraft.client.model.HorseModel;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
@@ -20,6 +18,7 @@ import net.minecraft.world.item.AnimalArmorItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.DyedItemColor;
+import zzik2.barched.client.nautilus.NautilusEquipmentRenderType;
 
 @Environment(EnvType.CLIENT)
 public class UndeadHorseArmorLayer<T extends AbstractHorse, M extends HorseModel<T>> extends RenderLayer<T, M> {
@@ -75,15 +74,20 @@ public class UndeadHorseArmorLayer<T extends AbstractHorse, M extends HorseModel
          texture = DIAMOND;
       }
 
-      VertexConsumer base = ItemRenderer.getArmorFoilBuffer(
-              multiBufferSource,
-              RenderType.armorCutoutNoCull(texture),
-              itemStack.hasFoil()
-      );
+      // 1.21.1's armor RenderType uses a perspective scale for depth layering.
+      // Under the mount inventory's orthographic camera that visibly shrinks/slides
+      // the equipment away from the horse. Reuse the 1.21.11-style projection-aware
+      // equipment layer already used by Nautilus armor.
+      VertexConsumer base = multiBufferSource.getBuffer(NautilusEquipmentRenderType.armor(texture));
       this.model.renderToBuffer(poseStack, base, packedLight, OverlayTexture.NO_OVERLAY, color);
 
+      if (itemStack.hasFoil()) {
+         VertexConsumer glint = multiBufferSource.getBuffer(NautilusEquipmentRenderType.glint());
+         this.model.renderToBuffer(poseStack, glint, packedLight, OverlayTexture.NO_OVERLAY, -1);
+      }
+
       if (itemStack.is(Items.LEATHER_HORSE_ARMOR)) {
-         VertexConsumer overlay = multiBufferSource.getBuffer(RenderType.armorCutoutNoCull(LEATHER_OVERLAY));
+         VertexConsumer overlay = multiBufferSource.getBuffer(NautilusEquipmentRenderType.armor(LEATHER_OVERLAY));
          this.model.renderToBuffer(poseStack, overlay, packedLight, OverlayTexture.NO_OVERLAY, -1);
       }
    }
