@@ -2,9 +2,10 @@ package net.minecraft.world.item.enchantment.effects;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.enchantment.EnchantedItemInUse;
 import net.minecraft.world.item.enchantment.LevelBasedValue;
 import net.minecraft.world.phys.Vec3;
@@ -29,11 +30,17 @@ public record ApplyEntityImpulse(Vec3 direction, Vec3 coordinateScale, LevelBase
       Vec3 vec32 = entity.getLookAngle();
       Vec3 vec33 = ((Vec3Bridge) vec32).addLocalCoordinates(this.direction).multiply(this.coordinateScale).scale((double)this.magnitude.calculate(i));
       entity.addDeltaMovement(vec33);
-      entity.hurtMarked = true;
-      entity.hasImpulse = true;
-      if (entity instanceof Player) {
-         Player player = (Player)entity;
-         ((PlayerBridge) player).applyPostImpulseGraceTime(10);
+
+      // 26.3 sends the impulse to the lunging player immediately instead of
+      // waiting for the normal entity tracker. For other entities, the old
+      // 1.21.1 hasImpulse flag is the equivalent of modern syncVelocity.
+      if (entity instanceof ServerPlayer serverPlayer) {
+         serverPlayer.connection.send(new ClientboundSetEntityMotionPacket(entity));
+         entity.hurtMarked = false;
+         entity.hasImpulse = false;
+         ((PlayerBridge) serverPlayer).applyPostImpulseGraceTime(10);
+      } else {
+         entity.hasImpulse = true;
       }
 
    }

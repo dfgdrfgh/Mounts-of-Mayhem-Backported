@@ -365,9 +365,22 @@ public final class Barched {
     public static class EnchantmentHelper {
 
         public static void doLungeEffects(ServerLevel serverLevel, Entity entity) {
-            if (entity instanceof LivingEntity) {
-                LivingEntity livingEntity = (LivingEntity)entity;
+            if (entity instanceof LivingEntity livingEntity) {
                 Barched.EnchantmentHelper.runIterationOnItem(entity.getWeaponItem(), EquipmentSlot.MAINHAND, livingEntity, (holder, i, enchantedItemInUse) -> {
+                    // Modern Lunge (26.1+) moved the player hunger/creative check into
+                    // the enchantment requirements. 1.21.1's PlayerPredicate cannot
+                    // express the food predicate, so emulate that requirement here
+                    // only for minecraft:lunge while leaving other post-piercing
+                    // enchantments unaffected.
+                    boolean isLunge = holder.unwrapKey()
+                            .map(key -> key.location().equals(net.minecraft.resources.ResourceLocation.withDefaultNamespace("lunge")))
+                            .orElse(false);
+                    if (isLunge && entity instanceof net.minecraft.world.entity.player.Player player
+                            && !player.isCreative()
+                            && player.getFoodData().getFoodLevel() < 7) {
+                        return;
+                    }
+
                     ((EnchantmentBridge) (Object) holder.value()).doLunge(serverLevel, i, enchantedItemInUse, entity);
                 });
             }

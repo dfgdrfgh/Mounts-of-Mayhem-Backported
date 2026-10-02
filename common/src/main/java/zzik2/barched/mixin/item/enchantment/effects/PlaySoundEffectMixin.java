@@ -33,12 +33,15 @@ public abstract class PlaySoundEffectMixin implements EnchantmentEntityEffect {
     @Inject(method = "apply", at =  @At("HEAD"), cancellable = true)
     private void barched$apply(ServerLevel serverLevel, int i, EnchantedItemInUse enchantedItemInUse, Entity entity, Vec3 vec3, CallbackInfo ci) {
         if (this.soundEvent == Barched.SoundEvents.LUNGE_1) {
-            RandomSource randomSource = entity.getRandom();
             if (!entity.isSilent()) {
+                RandomSource randomSource = entity.getRandom();
                 int j = Mth.clamp(i - 1, 0, SPEAR_SOUNDS.size() - 1);
                 ((LevelBridge) serverLevel).playSound(null, vec3.x(), vec3.y(), vec3.z(), SPEAR_SOUNDS.get(j), entity.getSoundSource(), this.volume.sample(randomSource), this.pitch.sample(randomSource));
-                ci.cancel();
             }
+            // LUNGE_1 is the 1.21.1-compatible sentinel for the modern
+            // three-sound list, so never fall through to vanilla's single
+            // sound implementation.
+            ci.cancel();
         }
     }
 }

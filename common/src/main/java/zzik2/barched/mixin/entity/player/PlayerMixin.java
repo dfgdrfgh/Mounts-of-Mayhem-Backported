@@ -133,9 +133,9 @@ public abstract class PlayerMixin extends LivingEntity implements PlayerBridge {
 
     @Override
     public void lungeForwardMaybe() {
-        if (this.hasEnoughFoodToDoExhaustiveManoeuvres()) {
-            this.super$lungeForwardMaybe();
-        }
+        // Modern versions always run the post-piercing hook. Lunge itself
+        // decides whether it can apply through its enchantment requirements.
+        this.super$lungeForwardMaybe();
     }
 
     @Override
