@@ -76,28 +76,41 @@ jobs:
           if-no-files-found: warn
           archive: true
 
-      - name: Upload Fabric JARs
+      - name: Generate JAR checksums
+        if: always()
+        shell: bash
+        run: |
+          find fabric/build/libs -maxdepth 1 -type f -name '*.jar' \
+            ! -name '*-sources.jar' ! -name '*-all.jar' ! -name '*-dev-shadow.jar' \
+            -print0 | sort -z | xargs -0 sha256sum > fabric/build/libs/SHA256SUMS.txt
+          find neoforge/build/libs -maxdepth 1 -type f -name '*.jar' \
+            ! -name '*-sources.jar' ! -name '*-all.jar' ! -name '*-dev-shadow.jar' \
+            -print0 | sort -z | xargs -0 sha256sum > neoforge/build/libs/SHA256SUMS.txt
+
+      - name: Upload Fabric build
         if: always()
         uses: actions/upload-artifact@v7.0.1
         with:
-          name: MoMBackport-fabric
+          name: MoMBackport-fabric-1.0
           path: |
             fabric/build/libs/*.jar
             !fabric/build/libs/*-sources.jar
             !fabric/build/libs/*-all.jar
             !fabric/build/libs/*-dev-shadow.jar
+            fabric/build/libs/SHA256SUMS.txt
           if-no-files-found: error
-          archive: false
+          archive: true
 
-      - name: Upload NeoForge JARs
+      - name: Upload NeoForge build
         if: always()
         uses: actions/upload-artifact@v7.0.1
         with:
-          name: MoMBackport-neoforge
+          name: MoMBackport-neoforge-1.0
           path: |
             neoforge/build/libs/*.jar
             !neoforge/build/libs/*-sources.jar
             !neoforge/build/libs/*-all.jar
             !neoforge/build/libs/*-dev-shadow.jar
+            neoforge/build/libs/SHA256SUMS.txt
           if-no-files-found: error
-          archive: false
+          archive: true
